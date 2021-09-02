@@ -59,6 +59,9 @@ The King can never be captured, therefore the Player is forced to move the King 
 #### 1.4.2 Checkmate
 If none of the moves above can be performed the King is not able to escape from the check, and the game is therefore finished.
 
+#### 1.4.3 Patt
+If the Player is only able to move his King into an endangered position, the game is considered to be a draw.
+
 # 2. Graphical User Interface (GUI)
 The program will provide a [GUI](Chess_GUI_Template.pdf) for the Players. The GUI is divided in several frames:
 
