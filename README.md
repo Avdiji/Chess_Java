@@ -2,7 +2,7 @@
 
 ## 1. Rules
 In this section the Rules of this game are briefly explained. For more detailed information check out http://www.sakkpalota.hu/index.php/en/chess/rules.
-###1.1 Starting the Game
+### 1.1 Starting the Game
 In the starting position, square a1 is always black. The queen is always on her own colour, next to the king in the middle. White starts the game, afterwards the players alternately move.
 
 ### 1.2 Chess Piece Moves
