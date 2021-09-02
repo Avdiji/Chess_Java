@@ -7,6 +7,7 @@ public class Main_Game {
     public static void main(String... args){
         EChessPieces a = EChessPieces.BISHOP_BLACK;
         System.out.println(EChessPieces.BISHOP_BLACK.getPath());
+        Position b = new Position('g',1);
 
     }
 }
