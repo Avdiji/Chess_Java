@@ -26,7 +26,7 @@ public enum EChessPieces {
 
     /**
      * Constructor receives a String to initialize {@link #path}
-     * @param path
+     * @param path path of the image of this chess piece
      */
     EChessPieces(final String path){
         this.path = path;
@@ -34,7 +34,7 @@ public enum EChessPieces {
 
     /**
      * Getter for {@link #path}
-     * @return path
+     * @return path path of the image of this chess piece
      */
     public String getPath(){
         return path;

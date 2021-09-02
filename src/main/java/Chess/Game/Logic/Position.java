@@ -8,11 +8,11 @@ package Chess.Game.Logic;
 public class Position {
 
     /**
-     * column of the current Position (j-value)
+     * column of the current Position (i-value)
      **/
     private final char column;
     /**
-     * row of the current Position (i - value)
+     * row of the current Position (j - value)
      **/
     private final int row;
 
@@ -20,8 +20,8 @@ public class Position {
      * Constructor initializes {@link #column}
      * and {@link #row}, in this order.
      *
-     * @param column
-     * @param row
+     * @param column column of the position
+     * @param row row of the position
      * @throws IllegalArgumentException if column is not a alphanumerical,
      *                                  lowercase letter from a - h, or row is not a number from 1 - 8
      */
