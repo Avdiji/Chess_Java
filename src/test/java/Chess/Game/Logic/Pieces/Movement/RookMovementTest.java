@@ -1,7 +1,7 @@
-package Chess.Game.Logic.Pieces.Rules;
+package Chess.Game.Logic.Pieces.Movement;
 
 //TODO
-class PawnRulesTest implements IPieceRulesTest{
+class RookMovementTest implements IPieceMovementTest {
 
     @Override
     public void test_getPotentialPosition_white() {

@@ -1,4 +1,4 @@
-package Chess.Game.Logic.Pieces.Rules;
+package Chess.Game.Logic.Pieces.Movement;
 
 import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Position;
@@ -11,7 +11,7 @@ import java.util.Set;
  * Interface contains all the rules a Chess - Piece needs to have,
  * to be able to function independently from other pieces
  */
-public interface IChessFieldRules {
+public interface IChessFieldMovement {
 
     /**
      * Method return a list of positions that could theoretically be reached by the white piece,
@@ -36,9 +36,8 @@ public interface IChessFieldRules {
      *
      * @param currentPosition the current Position of the Piece
      * @param target          the position of the target of the Piece
-     * @throws IllegalArgumentException if the EChessPiece doesn't fit to the current class
-     *
      * @return true if the targeted position can be occupied by the by the piece on the current position
+     * @throws IllegalArgumentException if the EChessPiece doesn't fit to the current class
      */
     public boolean canOccupyPosition(final Position currentPosition, final EChessPieces currentPiece, final Position target);
 }

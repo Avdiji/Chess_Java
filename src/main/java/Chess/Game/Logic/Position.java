@@ -1,5 +1,7 @@
 package Chess.Game.Logic;
 
+import java.util.Objects;
+
 /**
  * @author Fitor Avdiji
  * <p>
@@ -58,4 +60,16 @@ public class Position {
         return String.format("(Row: %c, Column: %d)", row, column);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Position position = (Position) o;
+        return row == position.row && column == position.column;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(row, column);
+    }
 }

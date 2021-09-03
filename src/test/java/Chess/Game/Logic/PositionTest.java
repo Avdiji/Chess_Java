@@ -44,4 +44,14 @@ class PositionTest {
         Assertions.assertEquals("(Row: a, Column: 1)", pos1.toString());
     }
 
+    @Test
+    public void test_equals() {
+        //TODO
+    }
+
+    @Test
+    public void test_hashcode() {
+        //TODO
+    }
+
 }

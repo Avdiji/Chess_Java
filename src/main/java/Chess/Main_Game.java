@@ -1,22 +1,21 @@
 package Chess;
 
-import Chess.Game.GUI.GameWindow;
-import Chess.Game.Logic.Pieces.EChessPieces;
-import Chess.Game.Logic.Pieces.Rules.IChessFieldRules;
-import Chess.Game.Logic.Pieces.Rules.PawnRules;
+import Chess.Game.Logic.Pieces.Movement.IChessFieldMovement;
+import Chess.Game.Logic.Pieces.Movement.RookMovement;
 import Chess.Game.Logic.Position;
 
 public class Main_Game {
 
-    public static void main(String... args){
+    public static void main(String... args) {
 //        GameWindow a = new GameWindow();
 
-        Position pos1 = new Position('a',2);
+        Position pos1 = new Position('a', 1);
         Position pos2 = new Position('h', 2);
-        Position pos3 = new Position('d', 4);
-        IChessFieldRules pawn = new PawnRules();
+        Position pos3 = new Position('a', 4);
+        IChessFieldMovement pawn = new RookMovement();
 
-        System.out.println(pawn.getPotentialPositions_white(pos3));
+        pawn.getPotentialPositions_white(pos1).forEach(System.out::println);
+        System.out.println(pawn.getPotentialPositions_white(pos1).size());
 
 
     }
