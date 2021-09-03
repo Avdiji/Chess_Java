@@ -1,7 +1,20 @@
 package Chess.Game.Logic.Pieces.Rules;
 
-import static org.junit.jupiter.api.Assertions.*;
+//TODO
+class RookRulesTest implements IPieceRulesTest{
 
-class RookRulesTest {
+    @Override
+    public void test_getPotentialPosition_white() {
 
+    }
+
+    @Override
+    public void test_getPotentialPosition_black() {
+
+    }
+
+    @Override
+    public void test_canOccupyPosition() {
+
+    }
 }
