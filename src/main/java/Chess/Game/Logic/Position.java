@@ -23,7 +23,7 @@ public class Position {
      * and {@link #column}, in this order.
      *
      * @param column column of the position
-     * @param row row of the position
+     * @param row    row of the position
      * @throws IllegalArgumentException if column is not a alphanumerical,
      *                                  lowercase letter from a - h, or row is not a number from 1 - 8
      */
@@ -56,7 +56,7 @@ public class Position {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("(Row: %c, Column: %d)", row, column);
     }
 

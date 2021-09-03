@@ -10,7 +10,7 @@ import java.util.Set;
 
 /**
  * @author Fitor Avdiji
- *
+ * <p>
  * Class tests the method of the class emptyFieldRules
  */
 class emptyFieldMovementTest implements IPieceMovementTest {

@@ -8,7 +8,8 @@ import java.util.Set;
 
 /**
  * @author Fitor Avdiji
- * Class implements every move the pawn could potentially execute
+ * <p>
+ * Class implements every move the emptyField could potentially execute
  */
 public class emptyFieldMovement implements IChessFieldMovement {
 
@@ -24,7 +25,7 @@ public class emptyFieldMovement implements IChessFieldMovement {
 
     @Override
     public boolean canOccupyPosition(Position currentPosition, EChessPieces currentPiece, Position target) {
-        if(currentPiece != EChessPieces.EMPTY){
+        if (currentPiece != EChessPieces.EMPTY) {
             throw new IllegalArgumentException("currentPiece must be EMPTY!");
         }
         return false;

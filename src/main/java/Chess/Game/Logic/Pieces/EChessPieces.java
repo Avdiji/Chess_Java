@@ -2,7 +2,7 @@ package Chess.Game.Logic.Pieces;
 
 /**
  * @author Fitor Avdiji
- *
+ * <p>
  * Enum contains all the pieces with each color (12 Pieces) and their corresponding path
  */
 public enum EChessPieces {
@@ -21,22 +21,26 @@ public enum EChessPieces {
     KING_BLACK("src/main/resources/Pieces/Black/king_black.png"),
     EMPTY("");
 
-    /** variable contains the path to the corresponding piece **/
+    /**
+     * variable contains the path to the corresponding piece
+     **/
     private final String path;
 
     /**
      * Constructor receives a String to initialize {@link #path}
+     *
      * @param path path of the image of this chess piece
      */
-    EChessPieces(final String path){
+    EChessPieces(final String path) {
         this.path = path;
     }
 
     /**
      * Getter for {@link #path}
+     *
      * @return path path of the image of this chess piece
      */
-    public String getPath(){
+    public String getPath() {
         return path;
     }
 }

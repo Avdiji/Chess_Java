@@ -16,12 +16,12 @@ public class RookMovement implements IChessFieldMovement {
     @Override
     public Set<Position> getPotentialPositions_white(Position currentPosition) {
         Set<Position> result = new HashSet<>();
-        char hlp = 'a';
+
         for (int i = 1; i < 9; ++i) {
             if (i != currentPosition.getColumn())
                 result.add(new Position(currentPosition.getRow(), i));
-            if (hlp + i - 1 != currentPosition.getRow())
-                result.add(new Position((char) (hlp + i - 1), currentPosition.getColumn()));
+            if ('a' + i - 1 != currentPosition.getRow())
+                result.add(new Position((char) ('a' + i - 1), currentPosition.getColumn()));
         }
         return result;
     }

@@ -23,7 +23,7 @@ public interface IPieceMovementTest {
     public static final Position pos_black_endPosition = new Position('d', 1);
 
     // positions for both
-    public static final Position pos_middle = new Position('d',4);
+    public static final Position pos_middle = new Position('d', 4);
 
     /**
      * Method tests, whether the Method getPotentialPosition_white from Interface IChessFieldRules works as expected

@@ -17,18 +17,23 @@ public class PawnMovement implements IChessFieldMovement {
     public Set<Position> getPotentialPositions_white(final Position currentPosition) {
         Set<Position> result = new HashSet<>();
 
-        if (currentPosition.getColumn() != 8) {
-            result.add(new Position(currentPosition.getRow(), currentPosition.getColumn() + 1));
-            if (currentPosition.getColumn() == 2)
-                result.add(new Position(currentPosition.getRow(), currentPosition.getColumn() + 2));
-            if (currentPosition.getRow() == 'a')
-                result.add(new Position((char) (currentPosition.getRow() + 1), currentPosition.getColumn() + 1));
-            else if (currentPosition.getRow() == 'h')
-                result.add(new Position((char) (currentPosition.getRow() - 1), currentPosition.getColumn() + 1));
-            else {
-                result.add(new Position((char) (currentPosition.getRow() + 1), currentPosition.getColumn() + 1));
-                result.add(new Position((char) (currentPosition.getRow() - 1), currentPosition.getColumn() + 1));
+        int directionX[] = {0, 1, -1};
+        int directionY[] = {1, 1, 1};
+
+        if (currentPosition.getColumn() == 2)
+            result.add(new Position(currentPosition.getRow(), currentPosition.getColumn() + 2));
+
+        for (int i = 0; i < directionX.length; ++i) {
+
+            char posX = (char) (currentPosition.getRow() + directionX[i]);
+            int posY = currentPosition.getColumn() + directionY[i];
+
+            try {
+                result.add(new Position(posX, posY));
+            } catch (IllegalArgumentException e) {
+                continue;
             }
+
         }
         return result;
     }
@@ -37,17 +42,21 @@ public class PawnMovement implements IChessFieldMovement {
     public Set<Position> getPotentialPositions_black(Position currentPosition) {
         Set<Position> result = new HashSet<>();
 
-        if (currentPosition.getColumn() != 1) {
-            result.add(new Position(currentPosition.getRow(), currentPosition.getColumn() - 1));
-            if (currentPosition.getColumn() == 7)
-                result.add(new Position(currentPosition.getRow(), currentPosition.getColumn() - 2));
-            if (currentPosition.getRow() == 'a')
-                result.add(new Position((char) (currentPosition.getRow() + 1), currentPosition.getColumn() - 1));
-            else if (currentPosition.getRow() == 'h')
-                result.add(new Position((char) (currentPosition.getRow() - 1), currentPosition.getColumn() - 1));
-            else {
-                result.add(new Position((char) (currentPosition.getRow() + 1), currentPosition.getColumn() - 1));
-                result.add(new Position((char) (currentPosition.getRow() - 1), currentPosition.getColumn() - 1));
+        int directionX[] = {0, 1, -1};
+        int directionY[] = {-1, -1, -1};
+
+        if (currentPosition.getColumn() == 7)
+            result.add(new Position(currentPosition.getRow(), currentPosition.getColumn() - 2));
+
+        for (int i = 0; i < directionX.length; ++i) {
+
+            char posX = (char) (currentPosition.getRow() + directionX[i]);
+            int posY = currentPosition.getColumn() + directionY[i];
+
+            try {
+                result.add(new Position(posX, posY));
+            } catch (IllegalArgumentException e) {
+                continue;
             }
         }
         return result;

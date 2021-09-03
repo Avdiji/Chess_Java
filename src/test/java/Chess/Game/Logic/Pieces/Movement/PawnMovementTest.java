@@ -56,22 +56,22 @@ class PawnMovementTest implements IPieceMovementTest {
     public void test_getPotentialPosition_black() {
         Set<Position> expected = new HashSet<>();
         // left pawn start
-        expected.add(new Position('a',6));
-        expected.add(new Position('a',5));
-        expected.add(new Position('b',6));
+        expected.add(new Position('a', 6));
+        expected.add(new Position('a', 5));
+        expected.add(new Position('b', 6));
         Assertions.assertEquals(expected, pawnRules.getPotentialPositions_black(pos_black_leftPawnStart));
         expected.clear();
         // right pawn start
-        expected.add(new Position('h',6));
-        expected.add(new Position('h',5));
-        expected.add(new Position('g',6));
+        expected.add(new Position('h', 6));
+        expected.add(new Position('h', 5));
+        expected.add(new Position('g', 6));
         Assertions.assertEquals(expected, pawnRules.getPotentialPositions_black(pos_black_rightPawnStart));
         expected.clear();
         // middle pawn start
-        expected.add(new Position('d',6));
-        expected.add(new Position('d',5));
-        expected.add(new Position('e',6));
-        expected.add(new Position('c',6));
+        expected.add(new Position('d', 6));
+        expected.add(new Position('d', 5));
+        expected.add(new Position('e', 6));
+        expected.add(new Position('c', 6));
         Assertions.assertEquals(expected, pawnRules.getPotentialPositions_black(pos_black_midPawnStart));
         expected.clear();
         // middle
@@ -99,8 +99,8 @@ class PawnMovementTest implements IPieceMovementTest {
         Assertions.assertTrue(pawnRules.canOccupyPosition(pos_black_midPawnStart, EChessPieces.PAWN_BLACK, possibleBlack));
         Assertions.assertFalse(pawnRules.canOccupyPosition(pos_white_midPawnStart, EChessPieces.PAWN_BLACK, possibleBlack));
 
-        Assertions.assertThrows(IllegalArgumentException.class, () ->{
-           pawnRules.canOccupyPosition(pos_white_midPawnStart, EChessPieces.EMPTY, possibleWhite);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            pawnRules.canOccupyPosition(pos_white_midPawnStart, EChessPieces.EMPTY, possibleWhite);
         });
     }
 }

@@ -14,63 +14,89 @@ import java.awt.GridLayout;
 
 /**
  * @author Fitor Avdiji
- *
+ * <p>
  * Class includes all the GUI for the Game Window
  */
-public class GameWindow extends JFrame implements IChessFrame{
+public class GameWindow extends JFrame implements IChessFrame {
 
     private JButton[] dumbthis2 = new JButton[64];
 
-    /** Sizes used for the GUI in the Game Window **/
+    /**
+     * Sizes used for the GUI in the Game Window
+     **/
     private static final int MARGIN_BORDER_GRAVE[] = {100, 100, 100, 100};
     private static final int MARGIN_BOARD[] = {70, 40, 40, 40};
-    private static final int MARGIN_TITLE[] = {30, 30, 0 ,30};
+    private static final int MARGIN_TITLE[] = {30, 30, 0, 30};
     private static final int SIZE_TITLE = 50;
     private static final int SIZE_GRAVE_LABEL = 20;
 
-    /** Strings used for the GUI in the Game Window **/
+    /**
+     * Strings used for the GUI in the Game Window
+     **/
     private static final String TITLE = "Avdiji's Chess";
     private static final String GRAVE_WHITE_LABEL = "Grave White";
     private static final String GRAVE_BLACK_LABEL = "Grave Black";
     private static final String FORFEIT_WHITE = "Forfeit White";
     private static final String FORFEIT_BLACK = "Forfeit Black";
 
-    /** Label with the Title of the Game Window **/
+    /**
+     * Label with the Title of the Game Window
+     **/
     private JLabel title;
 
-    /** Board with all positions and the Pieces **/
+    /**
+     * Board with all positions and the Pieces
+     **/
     private JPanel chessBoard;
-    /** The Chess Board with the pieces only **/
+    /**
+     * The Chess Board with the pieces only
+     **/
     private JPanel chessPieces;
 
-    /** RHS of the Game Window **/
+    /**
+     * RHS of the Game Window
+     **/
     private JPanel panel_LHS;
-    /** Label of the grave white **/
+    /**
+     * Label of the grave white
+     **/
     private JLabel grave_label_white;
-    /** The Grave containing the white pieces **/
+    /**
+     * The Grave containing the white pieces
+     **/
     private JPanel grave_white;
-    /** Surrender button white player **/
+    /**
+     * Surrender button white player
+     **/
     private JButton ff_white;
 
-    /** LHS of the Game Window **/
+    /**
+     * LHS of the Game Window
+     **/
     private JPanel panel_RHS;
-    /** Label of the grave black **/
+    /**
+     * Label of the grave black
+     **/
     private JLabel grave_label_black;
-    /** The Grave containing the black pieces **/
+    /**
+     * The Grave containing the black pieces
+     **/
     private JPanel grave_black;
-    /** Surrender button black player **/
+    /**
+     * Surrender button black player
+     **/
     private JButton ff_black;
 
     /**
      * Constructor
      */
-    public GameWindow(){
-        for(int i = 0; i < 64; ++i){
+    public GameWindow() {
+        for (int i = 0; i < 64; ++i) {
             dumbthis2[i] = new JButton();
             dumbthis2[i].setPreferredSize(new Dimension(IChessField.SIZE_FIELD, IChessField.SIZE_FIELD));
-            if(i % 2 == 0){
+            if (i % 2 == 0) {
                 dumbthis2[i].setBackground(IChessField.COLOR_FIELD_WHITE);
-            }else{
+            } else {
                 dumbthis2[i].setBackground(IChessField.COLOR_FIELD_BLACK);
             }
         }
@@ -80,7 +106,7 @@ public class GameWindow extends JFrame implements IChessFrame{
     }
 
     @Override
-    public void initMainFrame(){
+    public void initMainFrame() {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.getContentPane().setBackground(COLOR_BACKGROUND);
         this.setLocationRelativeTo(null);
@@ -91,8 +117,10 @@ public class GameWindow extends JFrame implements IChessFrame{
         this.setVisible(true);
     }
 
-    /** Method initializes {@link #title} **/
-    private void initTitle(){
+    /**
+     * Method initializes {@link #title}
+     **/
+    private void initTitle() {
         title = new JLabel(TITLE);
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setForeground(COLOR_LABEL);
@@ -100,13 +128,14 @@ public class GameWindow extends JFrame implements IChessFrame{
         title.setBorder(new EmptyBorder(MARGIN_TITLE[0], MARGIN_TITLE[1], MARGIN_TITLE[2], MARGIN_TITLE[3]));
     }
 
-    /** Method initializes and puts together following components: <br>
+    /**
+     * Method initializes and puts together following components: <br>
      * - {@link #panel_RHS} <br>
      * - {@link #grave_label_black} <br>
      * - {@link #grave_black} <br>
      * - {@link #ff_black} <br>
      */
-    private void initPanel_RHS(){
+    private void initPanel_RHS() {
         panel_RHS = new JPanel();
         panel_RHS.setBackground(COLOR_BACKGROUND);
         panel_RHS.setBorder(new EmptyBorder(MARGIN_BORDER_GRAVE[0], MARGIN_BORDER_GRAVE[1], MARGIN_BORDER_GRAVE[2], MARGIN_BORDER_GRAVE[3]));
@@ -116,10 +145,10 @@ public class GameWindow extends JFrame implements IChessFrame{
         grave_label_black.setForeground(COLOR_LABEL);
         grave_label_black.setHorizontalAlignment(JLabel.CENTER);
         grave_label_black.setVerticalAlignment(JLabel.CENTER);
-        grave_label_black.setFont(new Font("Arial Black", Font.BOLD,SIZE_GRAVE_LABEL));
+        grave_label_black.setFont(new Font("Arial Black", Font.BOLD, SIZE_GRAVE_LABEL));
 
         grave_black = new JPanel();
-        grave_black.setLayout(new GridLayout(8,2));
+        grave_black.setLayout(new GridLayout(8, 2));
         grave_black.setBackground(IChessField.COLOR_FIELD_WHITE);
 
         ff_black = new JButton(FORFEIT_BLACK);
@@ -128,17 +157,18 @@ public class GameWindow extends JFrame implements IChessFrame{
         ff_black.setForeground(COLOR_LABEL);
 
         panel_RHS.add(grave_label_black, BorderLayout.NORTH);
-        panel_RHS.add(grave_black,BorderLayout.CENTER);
+        panel_RHS.add(grave_black, BorderLayout.CENTER);
         panel_RHS.add(ff_black, BorderLayout.SOUTH);
     }
 
-    /** Method initializes and puts together following components: <br>
+    /**
+     * Method initializes and puts together following components: <br>
      * - {@link #panel_LHS} <br>
      * - {@link #grave_label_white} <br>
      * - {@link #grave_white} <br>
      * - {@link #ff_white} <br>
      */
-    private void initPanel_LHS(){
+    private void initPanel_LHS() {
         panel_LHS = new JPanel();
         panel_LHS.setBackground(COLOR_BACKGROUND);
         panel_LHS.setBorder(new EmptyBorder(MARGIN_BORDER_GRAVE[0], MARGIN_BORDER_GRAVE[1], MARGIN_BORDER_GRAVE[2], MARGIN_BORDER_GRAVE[3]));
@@ -148,10 +178,10 @@ public class GameWindow extends JFrame implements IChessFrame{
         grave_label_white.setForeground(COLOR_LABEL);
         grave_label_white.setHorizontalAlignment(JLabel.CENTER);
         grave_label_white.setVerticalAlignment(JLabel.CENTER);
-        grave_label_white.setFont(new Font("Arial Black", Font.BOLD,SIZE_GRAVE_LABEL));
+        grave_label_white.setFont(new Font("Arial Black", Font.BOLD, SIZE_GRAVE_LABEL));
 
         grave_white = new JPanel();
-        grave_white.setLayout(new GridLayout(8,2));
+        grave_white.setLayout(new GridLayout(8, 2));
         grave_white.setBackground(IChessField.COLOR_FIELD_BLACK);
 
         ff_white = new JButton(FORFEIT_WHITE);
@@ -160,7 +190,7 @@ public class GameWindow extends JFrame implements IChessFrame{
         ff_white.setForeground(COLOR_LABEL);
 
         panel_LHS.add(grave_label_white, BorderLayout.NORTH);
-        panel_LHS.add(grave_white,BorderLayout.CENTER);
+        panel_LHS.add(grave_white, BorderLayout.CENTER);
         panel_LHS.add(ff_white, BorderLayout.SOUTH);
     }
 
@@ -169,14 +199,14 @@ public class GameWindow extends JFrame implements IChessFrame{
      * {@link #chessBoard}<br>
      * {@link #chessPieces}
      */
-    private void initChessBoard(){
+    private void initChessBoard() {
         chessBoard = new JPanel();
         chessBoard.setBackground(COLOR_BACKGROUND);
         chessBoard.setBorder(new EmptyBorder(MARGIN_BOARD[0], MARGIN_BOARD[1], MARGIN_BOARD[2], MARGIN_BOARD[3]));
 
         chessPieces = new JPanel();
-        chessPieces.setLayout(new GridLayout(8,8));
-        for(JButton x : dumbthis2){
+        chessPieces.setLayout(new GridLayout(8, 8));
+        for (JButton x : dumbthis2) {
             chessPieces.add(x);
         }
 
@@ -184,7 +214,7 @@ public class GameWindow extends JFrame implements IChessFrame{
     }
 
     @Override
-    public void initComponents(){
+    public void initComponents() {
         initTitle();
         initPanel_RHS();
         initPanel_LHS();
@@ -193,10 +223,10 @@ public class GameWindow extends JFrame implements IChessFrame{
 
     @Override
     public void addComponents() {
-        this.add(title,BorderLayout.NORTH);
+        this.add(title, BorderLayout.NORTH);
         this.add(panel_RHS, BorderLayout.EAST);
         this.add(panel_LHS, BorderLayout.WEST);
-        this.add(chessBoard,BorderLayout.CENTER);
+        this.add(chessBoard, BorderLayout.CENTER);
     }
 
 
