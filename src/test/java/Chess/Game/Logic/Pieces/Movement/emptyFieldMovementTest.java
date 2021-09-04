@@ -18,7 +18,6 @@ class emptyFieldMovementTest implements IPieceMovementTest {
     private IChessFieldMovement emptyRules = new emptyFieldMovement();
     private Set<Position> emptySet = new HashSet<>();
 
-
     @Test
     @Override
     public void test_getPotentialPosition_white() {

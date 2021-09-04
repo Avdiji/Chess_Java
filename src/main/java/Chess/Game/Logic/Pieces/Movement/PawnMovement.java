@@ -33,7 +33,6 @@ public class PawnMovement implements IChessFieldMovement {
             } catch (IllegalArgumentException e) {
                 continue;
             }
-
         }
         return result;
     }

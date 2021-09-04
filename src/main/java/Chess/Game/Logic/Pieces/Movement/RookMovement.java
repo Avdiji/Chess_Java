@@ -17,7 +17,7 @@ public class RookMovement implements IChessFieldMovement {
     public Set<Position> getPotentialPositions_white(Position currentPosition) {
         Set<Position> result = new HashSet<>();
 
-        for (int i = 1; i < 9; ++i) {
+        for (int i = 1; i <= 8; ++i) {
             if (i != currentPosition.getColumn())
                 result.add(new Position(currentPosition.getRow(), i));
             if ('a' + i - 1 != currentPosition.getRow())

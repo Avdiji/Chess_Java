@@ -57,6 +57,5 @@ public class BishopMovement implements IChessFieldMovement {
             throw new IllegalArgumentException("The currentPiece must be a Bishop!");
         }
         return getPotentialPositions_white(currentPosition).contains(target);
-
     }
 }

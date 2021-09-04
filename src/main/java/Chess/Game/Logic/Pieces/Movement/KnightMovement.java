@@ -16,8 +16,8 @@ public class KnightMovement implements IChessFieldMovement {
     public Set<Position> getPotentialPositions_white(Position currentPosition) {
         Set<Position> result = new HashSet<>();
 
-        int directionX[] = {-1, 1, 2, 2, 1, -1, -2, -2};
-        int directionY[] = {2, 2, 1, -1, -2, -2, 1, -1};
+        int directionX[] = {2, 2, -2, -2, 1, -1, 1, -1};
+        int directionY[] = {1, -1, 1, -1, 2, 2, -2, -2};
 
         for (int i = 0; i < directionX.length; ++i) {
 
@@ -29,7 +29,6 @@ public class KnightMovement implements IChessFieldMovement {
             } catch (IllegalArgumentException e) {
                 continue;
             }
-
         }
         return result;
     }

@@ -11,11 +11,23 @@ import java.util.Set;
 /**
  * @author Fitor Avdiji
  * <p>
- * Class to test the pawn rules
+ * Class to test the pawn Moveset
  */
 class PawnMovementTest implements IPieceMovementTest {
 
     private PawnMovement pawnRules = new PawnMovement();
+
+    // positions (from whites perspective)
+    private static final Position pos_white_leftPawnStart = new Position('a', 2);
+    private static final Position pos_white_rightPawnStart = new Position('h', 2);
+    private static final Position pos_white_midPawnStart = new Position('d', 2);
+    private static final Position pos_white_endPosition = new Position('d', 8);
+
+    // positions (from blacks perspective)
+    private static final Position pos_black_leftPawnStart = new Position('a', 7);
+    private static final Position pos_black_rightPawnStart = new Position('h', 7);
+    private static final Position pos_black_midPawnStart = new Position('d', 7);
+    private static final Position pos_black_endPosition = new Position('d', 1);
 
     @Override
     @Test
@@ -48,7 +60,6 @@ class PawnMovementTest implements IPieceMovementTest {
         expected.clear();
         //end
         Assertions.assertEquals(expected, pawnRules.getPotentialPositions_white(pos_white_endPosition));
-
     }
 
     @Test
@@ -82,8 +93,6 @@ class PawnMovementTest implements IPieceMovementTest {
         expected.clear();
         // end
         Assertions.assertEquals(expected, pawnRules.getPotentialPositions_black(pos_black_endPosition));
-
-
     }
 
     @Test

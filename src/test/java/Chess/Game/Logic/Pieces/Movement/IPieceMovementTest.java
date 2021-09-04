@@ -10,19 +10,13 @@ import org.junit.jupiter.api.Test;
  */
 public interface IPieceMovementTest {
 
-    // positions (from whites perspective)
-    public static final Position pos_white_leftPawnStart = new Position('a', 2);
-    public static final Position pos_white_rightPawnStart = new Position('h', 2);
-    public static final Position pos_white_midPawnStart = new Position('d', 2);
-    public static final Position pos_white_endPosition = new Position('d', 8);
-
-    // positions (from blacks perspective)
-    public static final Position pos_black_leftPawnStart = new Position('a', 7);
-    public static final Position pos_black_rightPawnStart = new Position('h', 7);
-    public static final Position pos_black_midPawnStart = new Position('d', 7);
-    public static final Position pos_black_endPosition = new Position('d', 1);
-
-    // positions for both
+    // corners white
+    public static final Position pos_white_cornerLeft = new Position('a', 1);
+    public static final Position pos_white_cornerRight = new Position('h', 1);
+    // corners black
+    public static final Position pos_black_cornerLeft = new Position('a', 8);
+    public static final Position pos_black_cornerRight = new Position('h', 8);
+    // middle
     public static final Position pos_middle = new Position('d', 4);
 
     /**
