@@ -2,6 +2,7 @@ package Chess.Game.Logic.Pieces;
 
 import Chess.Game.Logic.Position;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +16,13 @@ class KingTest implements IChessPieceTest {
 
     IChessPiece king;
 
+    @Test
+    @Override
+    public void test_Constructor() {
+
+    }
+
+    @Test
     @Override
     public void test_getPotentialPositions() {
         Set<Position> expected = new HashSet<>();
@@ -43,6 +51,7 @@ class KingTest implements IChessPieceTest {
         expected.add(new Position('c', 4));
         expected.add(new Position('c', 5));
         Assertions.assertEquals(expected, king.getPotentialPositions());
+        expected.clear();
 
         //test black corner left
         king = new King(pos_black_cornerLeft, EChessPieces.KING_BLACK, chessField);
@@ -71,6 +80,7 @@ class KingTest implements IChessPieceTest {
         Assertions.assertEquals(expected, king.getPotentialPositions());
     }
 
+    @Test
     @Override
     public void test_canCapturePosition() {
 
@@ -86,6 +96,7 @@ class KingTest implements IChessPieceTest {
         Assertions.assertFalse(king.canCapturePosition(impossible));
     }
 
+    @Test
     @Override
     public void test_canActuallyCapturePosition() {
 

@@ -18,6 +18,12 @@ class RookTest implements IChessPieceTest {
 
     @Test
     @Override
+    public void test_Constructor() {
+
+    }
+
+    @Test
+    @Override
     public void test_getPotentialPositions() {
         test_getPotentialPositions_white();
         test_getPotentialPositions_black();
@@ -153,6 +159,7 @@ class RookTest implements IChessPieceTest {
 
     }
 
+    @Test
     @Override
     public void test_canActuallyCapturePosition() {
 

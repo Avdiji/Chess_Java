@@ -18,6 +18,12 @@ class BishopTest implements IChessPieceTest {
 
     @Test
     @Override
+    public void test_Constructor() {
+
+    }
+
+    @Test
+    @Override
     public void test_getPotentialPositions() {
         test_getPotentialPositions_white();
         test_getPotentialPositions_black();
@@ -107,6 +113,7 @@ class BishopTest implements IChessPieceTest {
         Assertions.assertEquals(expected, bishop.getPotentialPositions());
     }
 
+    @Test
     @Override
     public void test_canCapturePosition() {
         Position possible = new Position('a', 1);
@@ -121,6 +128,7 @@ class BishopTest implements IChessPieceTest {
         Assertions.assertFalse(bishop.canCapturePosition(impossible));
     }
 
+    @Test
     @Override
     public void test_canActuallyCapturePosition() {
 

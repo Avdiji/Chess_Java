@@ -16,6 +16,8 @@ public interface IChessPieceTest {
     // middle
     public static final Position pos_middle = new Position('d', 4);
 
+    /** Test the Constructor of the Subclasses of IChessPiece **/
+    public void test_Constructor();
     /** Test the Method getPotentialPositions from the Interface IChessPiece **/
     public void test_getPotentialPositions();
     /** Test the Method canCapturePosition from the Interface IChessPiece **/

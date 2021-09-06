@@ -19,6 +19,12 @@ class emptyTest implements IChessPieceTest{
 
     @Test
     @Override
+    public void test_Constructor() {
+
+    }
+
+    @Test
+    @Override
     public void test_getPotentialPositions() {
         Assertions.assertEquals(emptySet, empty.getPotentialPositions());
     }

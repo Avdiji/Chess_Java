@@ -20,6 +20,12 @@ class QueenTest implements IChessPieceTest {
 
     @Test
     @Override
+    public void test_Constructor() {
+
+    }
+
+    @Test
+    @Override
     public void test_getPotentialPositions() {
         Set<Position> expected = new HashSet<>();
         // test white corner left
@@ -88,6 +94,7 @@ class QueenTest implements IChessPieceTest {
         Assertions.assertFalse(queen.canCapturePosition(impossible));
     }
 
+    @Test
     @Override
     public void test_canActuallyCapturePosition() {
 

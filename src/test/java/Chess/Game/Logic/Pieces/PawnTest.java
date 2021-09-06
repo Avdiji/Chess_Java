@@ -30,6 +30,12 @@ class PawnTest implements IChessPieceTest{
 
     @Test
     @Override
+    public void test_Constructor() {
+
+    }
+
+    @Test
+    @Override
     public void test_getPotentialPositions() {
         Set<Position> expected = new HashSet<>();
         // left pawn start
@@ -115,7 +121,7 @@ class PawnTest implements IChessPieceTest{
         Assertions.assertFalse(pawn.canCapturePosition(possibleBlack));
     }
 
-    //TODO
+    @Test
     @Override
     public void test_canActuallyCapturePosition() {
 
