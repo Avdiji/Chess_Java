@@ -1,6 +1,6 @@
 package Chess.Game.GUI;
 
-import Chess.Game.Logic.Pieces.IChessField;
+import Chess.Game.Logic.Pieces.IChessPiece;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -93,11 +93,11 @@ public class GameWindow extends JFrame implements IChessFrame {
     public GameWindow() {
         for (int i = 0; i < 64; ++i) {
             dumbthis2[i] = new JButton();
-            dumbthis2[i].setPreferredSize(new Dimension(IChessField.SIZE_FIELD, IChessField.SIZE_FIELD));
+            dumbthis2[i].setPreferredSize(new Dimension(IChessPiece.SIZE_FIELD, IChessPiece.SIZE_FIELD));
             if (i % 2 == 0) {
-                dumbthis2[i].setBackground(IChessField.COLOR_FIELD_WHITE);
+                dumbthis2[i].setBackground(IChessPiece.COLOR_FIELD_WHITE);
             } else {
-                dumbthis2[i].setBackground(IChessField.COLOR_FIELD_BLACK);
+                dumbthis2[i].setBackground(IChessPiece.COLOR_FIELD_BLACK);
             }
         }
         initComponents();
@@ -149,10 +149,10 @@ public class GameWindow extends JFrame implements IChessFrame {
 
         grave_black = new JPanel();
         grave_black.setLayout(new GridLayout(8, 2));
-        grave_black.setBackground(IChessField.COLOR_FIELD_WHITE);
+        grave_black.setBackground(IChessPiece.COLOR_FIELD_WHITE);
 
         ff_black = new JButton(FORFEIT_BLACK);
-        ff_black.setPreferredSize(new Dimension(2 * IChessField.SIZE_FIELD, IChessField.SIZE_FIELD));
+        ff_black.setPreferredSize(new Dimension(2 * IChessPiece.SIZE_FIELD, IChessPiece.SIZE_FIELD));
         ff_black.setBackground(COLOR_BUTTON_BACKGROUND);
         ff_black.setForeground(COLOR_LABEL);
 
@@ -182,10 +182,10 @@ public class GameWindow extends JFrame implements IChessFrame {
 
         grave_white = new JPanel();
         grave_white.setLayout(new GridLayout(8, 2));
-        grave_white.setBackground(IChessField.COLOR_FIELD_BLACK);
+        grave_white.setBackground(IChessPiece.COLOR_FIELD_BLACK);
 
         ff_white = new JButton(FORFEIT_WHITE);
-        ff_white.setPreferredSize(new Dimension(2 * IChessField.SIZE_FIELD, IChessField.SIZE_FIELD));
+        ff_white.setPreferredSize(new Dimension(2 * IChessPiece.SIZE_FIELD, IChessPiece.SIZE_FIELD));
         ff_white.setBackground(COLOR_BUTTON_BACKGROUND);
         ff_white.setForeground(COLOR_LABEL);
 
