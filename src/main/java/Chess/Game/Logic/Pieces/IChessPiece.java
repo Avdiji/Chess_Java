@@ -12,19 +12,17 @@ import java.util.Set;
  */
 public interface IChessPiece {
 
-    /**
-     * Size of a Field in the Chess Board in px
-     **/
+    /** Size of a Field in the Chess Board in px **/
     public static final int SIZE_FIELD = 100;
 
-    /**
-     * Color for the white field
-     **/
+    /** Color for the white field **/
     public static final Color COLOR_FIELD_WHITE = new Color(0x8fbc8f);
-    /**
-     * Color for the black field
-     **/
+    /** Color for the black field **/
     public static final Color COLOR_FIELD_BLACK = new Color(0x166646);
+    /** Color of a marked field **/
+    public static final Color COLOR_FIELD_MARKED = new Color(0x039be5);
+    /** Color of an endangered field **/
+    public static final Color COLOR_FIELD_ENDANGERED = new Color(0xec7c26);
 
     /**
      * Method returns a Set of Positions the Piece on the current Position could theoretically capture at some point of the game.
@@ -50,7 +48,9 @@ public interface IChessPiece {
     public boolean canActuallyCapturePosition(final Position target);
 
     /**
-     * The Method creates and adds the Image of the Piece to the Piece
+     * The Method initializes the Piece
+     *
+     * @param backgroundColor
      */
-    public void addImage();
+    public void initPiece(final Color backgroundColor);
 }

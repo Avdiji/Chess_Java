@@ -36,8 +36,8 @@ public class Rook extends AChessPiece {
         for (int i = 1; i <= 8; ++i) {
             if (i != super.getPosition().getColumn())
                 result.add(new Position(super.getPosition().getRow(), i));
-            if ('a' + i - 1 != super.getPosition().getRow())
-                result.add(new Position((char) ('a' + i - 1), super.getPosition().getColumn()));
+            if ('A' + i - 1 != super.getPosition().getRow())
+                result.add(new Position((char) ('A' + i - 1), super.getPosition().getColumn()));
         }
         return result;
     }

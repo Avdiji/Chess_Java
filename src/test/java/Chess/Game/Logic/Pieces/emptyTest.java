@@ -32,7 +32,7 @@ class emptyTest implements IChessPieceTest{
     @Test
     @Override
     public void test_canCapturePosition() {
-        Assertions.assertFalse(empty.canCapturePosition(new Position('d', 5)));
+        Assertions.assertFalse(empty.canCapturePosition(new Position('D', 5)));
     }
 
     @Override

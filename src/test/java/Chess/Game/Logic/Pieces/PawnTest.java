@@ -17,16 +17,16 @@ class PawnTest implements IChessPieceTest{
     IChessPiece pawn = new Pawn(pos_white_leftPawnStart, EChessPieces.PAWN_WHITE, chessField);
 
     // positions (from whites perspective)
-    private static final Position pos_white_leftPawnStart = new Position('a', 2);
-    private static final Position pos_white_rightPawnStart = new Position('h', 2);
-    private static final Position pos_white_midPawnStart = new Position('d', 2);
-    private static final Position pos_white_endPosition = new Position('d', 8);
+    private static final Position pos_white_leftPawnStart = new Position('A', 2);
+    private static final Position pos_white_rightPawnStart = new Position('H', 2);
+    private static final Position pos_white_midPawnStart = new Position('D', 2);
+    private static final Position pos_white_endPosition = new Position('D', 8);
 
     // positions (from blacks perspective)
-    private static final Position pos_black_leftPawnStart = new Position('a', 7);
-    private static final Position pos_black_rightPawnStart = new Position('h', 7);
-    private static final Position pos_black_midPawnStart = new Position('d', 7);
-    private static final Position pos_black_endPosition = new Position('d', 1);
+    private static final Position pos_black_leftPawnStart = new Position('A', 7);
+    private static final Position pos_black_rightPawnStart = new Position('H', 7);
+    private static final Position pos_black_midPawnStart = new Position('D', 7);
+    private static final Position pos_black_endPosition = new Position('D', 1);
 
     @Test
     @Override
@@ -39,31 +39,31 @@ class PawnTest implements IChessPieceTest{
     public void test_getPotentialPositions() {
         Set<Position> expected = new HashSet<>();
         // left pawn start
-        expected.add(new Position('a', 3));
-        expected.add(new Position('b', 3));
-        expected.add(new Position('a', 4));
+        expected.add(new Position('A', 3));
+        expected.add(new Position('B', 3));
+        expected.add(new Position('A', 4));
         Assertions.assertEquals(expected, pawn.getPotentialPositions());
         expected.clear();
         //right pawn start
         pawn = new Pawn(pos_white_rightPawnStart, EChessPieces.PAWN_WHITE, chessField);
-        expected.add(new Position('g', 3));
-        expected.add(new Position('h', 4));
-        expected.add(new Position('h', 3));
+        expected.add(new Position('G', 3));
+        expected.add(new Position('H', 4));
+        expected.add(new Position('H', 3));
         Assertions.assertEquals(expected, pawn.getPotentialPositions());
         expected.clear();
         //middle pawn start
         pawn = new Pawn(pos_white_midPawnStart, EChessPieces.PAWN_WHITE, chessField);
-        expected.add(new Position('d', 3));
-        expected.add(new Position('d', 4));
-        expected.add(new Position('c', 3));
-        expected.add(new Position('e', 3));
+        expected.add(new Position('D', 3));
+        expected.add(new Position('D', 4));
+        expected.add(new Position('C', 3));
+        expected.add(new Position('E', 3));
         Assertions.assertEquals(expected, pawn.getPotentialPositions());
         expected.clear();
         // middle
         pawn = new Pawn(pos_middle, EChessPieces.PAWN_WHITE, chessField);
-        expected.add(new Position('e', 5));
-        expected.add(new Position('c', 5));
-        expected.add(new Position('d', 5));
+        expected.add(new Position('E', 5));
+        expected.add(new Position('C', 5));
+        expected.add(new Position('D', 5));
         Assertions.assertEquals(expected, pawn.getPotentialPositions());
         expected.clear();
         //end
@@ -72,31 +72,31 @@ class PawnTest implements IChessPieceTest{
 
         // left pawn start
         pawn = new Pawn(pos_black_leftPawnStart, EChessPieces.PAWN_BLACK, chessField);
-        expected.add(new Position('a', 6));
-        expected.add(new Position('a', 5));
-        expected.add(new Position('b', 6));
+        expected.add(new Position('A', 6));
+        expected.add(new Position('A', 5));
+        expected.add(new Position('B', 6));
         Assertions.assertEquals(expected, pawn.getPotentialPositions());
         expected.clear();
         // right pawn start
         pawn = new Pawn(pos_black_rightPawnStart, EChessPieces.PAWN_BLACK, chessField);
-        expected.add(new Position('h', 6));
-        expected.add(new Position('h', 5));
-        expected.add(new Position('g', 6));
+        expected.add(new Position('H', 6));
+        expected.add(new Position('H', 5));
+        expected.add(new Position('G', 6));
         Assertions.assertEquals(expected, pawn.getPotentialPositions());
         expected.clear();
         // middle pawn start
         pawn = new Pawn(pos_black_midPawnStart, EChessPieces.PAWN_BLACK, chessField);
-        expected.add(new Position('d', 6));
-        expected.add(new Position('d', 5));
-        expected.add(new Position('e', 6));
-        expected.add(new Position('c', 6));
+        expected.add(new Position('D', 6));
+        expected.add(new Position('D', 5));
+        expected.add(new Position('E', 6));
+        expected.add(new Position('C', 6));
         Assertions.assertEquals(expected, pawn.getPotentialPositions());
         expected.clear();
         // middle
         pawn = new Pawn(pos_middle, EChessPieces.PAWN_BLACK, chessField);
-        expected.add(new Position('d', 3));
-        expected.add(new Position('e', 3));
-        expected.add(new Position('c', 3));
+        expected.add(new Position('D', 3));
+        expected.add(new Position('E', 3));
+        expected.add(new Position('C', 3));
         Assertions.assertEquals(expected, pawn.getPotentialPositions());
         expected.clear();
         // end
@@ -107,8 +107,8 @@ class PawnTest implements IChessPieceTest{
     @Test
     @Override
     public void test_canCapturePosition() {
-        Position possibleWhite = new Position('d', 3);
-        Position possibleBlack = new Position('d', 6);
+        Position possibleWhite = new Position('D', 3);
+        Position possibleBlack = new Position('D', 6);
 
         pawn = new Pawn(pos_white_midPawnStart, EChessPieces.PAWN_WHITE, chessField);
         Assertions.assertTrue(pawn.canCapturePosition(possibleWhite));

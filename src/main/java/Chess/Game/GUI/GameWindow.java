@@ -1,6 +1,11 @@
 package Chess.Game.GUI;
 
+import Chess.Game.Logic.ChessField;
+import Chess.Game.Logic.Pieces.AChessPiece;
+import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Pieces.IChessPiece;
+import Chess.Game.Logic.Pieces.Pawn;
+import Chess.Game.Logic.Position;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -8,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -19,87 +26,54 @@ import java.awt.GridLayout;
  */
 public class GameWindow extends JFrame implements IChessFrame {
 
-    private JButton[] dumbthis2 = new JButton[64];
-
-    /**
-     * Sizes used for the GUI in the Game Window
-     **/
+    /** Sizes used for the GUI in the Game Window **/
     private static final int MARGIN_BORDER_GRAVE[] = {100, 100, 100, 100};
     private static final int MARGIN_BOARD[] = {70, 40, 40, 40};
     private static final int MARGIN_TITLE[] = {30, 30, 0, 30};
     private static final int SIZE_TITLE = 50;
     private static final int SIZE_GRAVE_LABEL = 20;
 
-    /**
-     * Strings used for the GUI in the Game Window
-     **/
+    /** Strings used for the GUI in the Game Window **/
     private static final String TITLE = "Avdiji's Chess";
     private static final String GRAVE_WHITE_LABEL = "Grave White";
     private static final String GRAVE_BLACK_LABEL = "Grave Black";
     private static final String FORFEIT_WHITE = "Forfeit White";
     private static final String FORFEIT_BLACK = "Forfeit Black";
 
-    /**
-     * Label with the Title of the Game Window
-     **/
+    /** Label with the Title of the Game Window **/
     private JLabel title;
 
-    /**
-     * Board with all positions and the Pieces
-     **/
+    /** Board with all positions and the Pieces **/
     private JPanel chessBoard;
-    /**
-     * The Chess Board with the pieces only
-     **/
+    /** The Chess Board with the pieces only **/
     private JPanel chessPieces;
 
-    /**
-     * RHS of the Game Window
-     **/
+    /** RHS of the Game Window **/
     private JPanel panel_LHS;
-    /**
-     * Label of the grave white
-     **/
+    /** Label of the grave white **/
     private JLabel grave_label_white;
-    /**
-     * The Grave containing the white pieces
-     **/
+    /** The Grave containing the white pieces **/
     private JPanel grave_white;
-    /**
-     * Surrender button white player
-     **/
+    /** Surrender button white player **/
     private JButton ff_white;
 
-    /**
-     * LHS of the Game Window
-     **/
+    /** LHS of the Game Window **/
     private JPanel panel_RHS;
-    /**
-     * Label of the grave black
-     **/
+    /** Label of the grave black **/
     private JLabel grave_label_black;
-    /**
-     * The Grave containing the black pieces
-     **/
+    /** The Grave containing the black pieces **/
     private JPanel grave_black;
-    /**
-     * Surrender button black player
-     **/
+    /** Surrender button black player **/
     private JButton ff_black;
 
-    /**
-     * Constructor
-     */
-    public GameWindow() {
-        for (int i = 0; i < 64; ++i) {
-            dumbthis2[i] = new JButton();
-            dumbthis2[i].setPreferredSize(new Dimension(IChessPiece.SIZE_FIELD, IChessPiece.SIZE_FIELD));
-            if (i % 2 == 0) {
-                dumbthis2[i].setBackground(IChessPiece.COLOR_FIELD_WHITE);
-            } else {
-                dumbthis2[i].setBackground(IChessPiece.COLOR_FIELD_BLACK);
-            }
-        }
+    private ChessField chessField;
+
+
+    /** Constructor */
+    public GameWindow(final ChessField chessField) {
+
+        this.chessField = chessField;
+
         initComponents();
         initMainFrame();
         addComponents();
@@ -206,8 +180,8 @@ public class GameWindow extends JFrame implements IChessFrame {
 
         chessPieces = new JPanel();
         chessPieces.setLayout(new GridLayout(8, 8));
-        for (JButton x : dumbthis2) {
-            chessPieces.add(x);
+        for(int i = 0; i < 64; ++i){
+            chessPieces.add(chessField.getField().get(i));
         }
 
         chessBoard.add(chessPieces);

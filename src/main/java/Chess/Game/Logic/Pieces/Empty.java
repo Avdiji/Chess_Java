@@ -35,11 +35,6 @@ public class Empty extends AChessPiece{
     }
 
     @Override
-    public boolean canCapturePosition(Position target) {
-        return false;
-    }
-
-    @Override
     public boolean canActuallyCapturePosition(Position target) {
         return false;
     }

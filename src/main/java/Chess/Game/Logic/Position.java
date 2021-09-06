@@ -28,8 +28,8 @@ public class Position {
      *                                  lowercase letter from a - h, or row is not a number from 1 - 8
      */
     public Position(final char row, final int column) {
-        if (row < 'a' || row > 'h')
-            throw new IllegalArgumentException("The column must be between a - h inclusive!");
+        if (row < 'A' || row > 'H')
+            throw new IllegalArgumentException("The column must be between A - H inclusive!");
         else if (column < 1 || column > 8)
             throw new IllegalArgumentException("The row must be between 1 - 8 inclusive!");
 

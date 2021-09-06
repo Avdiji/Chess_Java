@@ -33,41 +33,41 @@ class BishopTest implements IChessPieceTest {
         Set<Position> expected = new HashSet<>();
         // test white corner left
         bishop = new Bishop(pos_white_cornerLeft, EChessPieces.BISHOP_WHITE, chessField);
-        expected.add(new Position('b', 2));
-        expected.add(new Position('c', 3));
-        expected.add(new Position('d', 4));
-        expected.add(new Position('e', 5));
-        expected.add(new Position('f', 6));
-        expected.add(new Position('g', 7));
-        expected.add(new Position('h', 8));
+        expected.add(new Position('B', 2));
+        expected.add(new Position('C', 3));
+        expected.add(new Position('D', 4));
+        expected.add(new Position('E', 5));
+        expected.add(new Position('F', 6));
+        expected.add(new Position('G', 7));
+        expected.add(new Position('H', 8));
         Assertions.assertEquals(expected, bishop.getPotentialPositions());
         expected.clear();
         // test white corner right
         bishop = new Bishop(pos_white_cornerRight, EChessPieces.BISHOP_WHITE, chessField);
-        expected.add(new Position('g', 2));
-        expected.add(new Position('f', 3));
-        expected.add(new Position('e', 4));
-        expected.add(new Position('d', 5));
-        expected.add(new Position('c', 6));
-        expected.add(new Position('b', 7));
-        expected.add(new Position('a', 8));
+        expected.add(new Position('G', 2));
+        expected.add(new Position('F', 3));
+        expected.add(new Position('E', 4));
+        expected.add(new Position('D', 5));
+        expected.add(new Position('C', 6));
+        expected.add(new Position('B', 7));
+        expected.add(new Position('A', 8));
         Assertions.assertEquals(expected, bishop.getPotentialPositions());
         expected.clear();
         // test middle
         bishop = new Bishop(pos_middle, EChessPieces.BISHOP_WHITE, chessField);
-        expected.add(new Position('a', 1));
-        expected.add(new Position('b', 2));
-        expected.add(new Position('c', 3));
-        expected.add(new Position('e', 5));
-        expected.add(new Position('f', 6));
-        expected.add(new Position('g', 7));
-        expected.add(new Position('h', 8));
-        expected.add(new Position('a', 7));
-        expected.add(new Position('b', 6));
-        expected.add(new Position('c', 5));
-        expected.add(new Position('e', 3));
-        expected.add(new Position('f', 2));
-        expected.add(new Position('g', 1));
+        expected.add(new Position('A', 1));
+        expected.add(new Position('B', 2));
+        expected.add(new Position('C', 3));
+        expected.add(new Position('E', 5));
+        expected.add(new Position('F', 6));
+        expected.add(new Position('G', 7));
+        expected.add(new Position('H', 8));
+        expected.add(new Position('A', 7));
+        expected.add(new Position('B', 6));
+        expected.add(new Position('C', 5));
+        expected.add(new Position('E', 3));
+        expected.add(new Position('F', 2));
+        expected.add(new Position('G', 1));
         Assertions.assertEquals(expected, bishop.getPotentialPositions());
     }
 
@@ -75,49 +75,49 @@ class BishopTest implements IChessPieceTest {
         Set<Position> expected = new HashSet<>();
         // test black corner left
         bishop = new Bishop(pos_black_cornerLeft, EChessPieces.BISHOP_BLACK, chessField);
-        expected.add(new Position('b', 7));
-        expected.add(new Position('c', 6));
-        expected.add(new Position('d', 5));
-        expected.add(new Position('e', 4));
-        expected.add(new Position('f', 3));
-        expected.add(new Position('g', 2));
-        expected.add(new Position('h', 1));
+        expected.add(new Position('B', 7));
+        expected.add(new Position('C', 6));
+        expected.add(new Position('D', 5));
+        expected.add(new Position('E', 4));
+        expected.add(new Position('F', 3));
+        expected.add(new Position('G', 2));
+        expected.add(new Position('H', 1));
         Assertions.assertEquals(expected, bishop.getPotentialPositions());
         expected.clear();
         // test black corner right
         bishop = new Bishop(pos_black_cornerRight, EChessPieces.BISHOP_BLACK, chessField);
-        expected.add(new Position('g', 7));
-        expected.add(new Position('f', 6));
-        expected.add(new Position('e', 5));
-        expected.add(new Position('d', 4));
-        expected.add(new Position('c', 3));
-        expected.add(new Position('b', 2));
-        expected.add(new Position('a', 1));
+        expected.add(new Position('G', 7));
+        expected.add(new Position('F', 6));
+        expected.add(new Position('E', 5));
+        expected.add(new Position('D', 4));
+        expected.add(new Position('C', 3));
+        expected.add(new Position('B', 2));
+        expected.add(new Position('A', 1));
         Assertions.assertEquals(expected, bishop.getPotentialPositions());
         expected.clear();
         // test middle
         bishop = new Bishop(pos_middle, EChessPieces.BISHOP_BLACK, chessField);
-        expected.add(new Position('a', 1));
-        expected.add(new Position('b', 2));
-        expected.add(new Position('c', 3));
-        expected.add(new Position('e', 5));
-        expected.add(new Position('f', 6));
-        expected.add(new Position('g', 7));
-        expected.add(new Position('h', 8));
-        expected.add(new Position('a', 7));
-        expected.add(new Position('b', 6));
-        expected.add(new Position('c', 5));
-        expected.add(new Position('e', 3));
-        expected.add(new Position('f', 2));
-        expected.add(new Position('g', 1));
+        expected.add(new Position('A', 1));
+        expected.add(new Position('B', 2));
+        expected.add(new Position('C', 3));
+        expected.add(new Position('E', 5));
+        expected.add(new Position('F', 6));
+        expected.add(new Position('G', 7));
+        expected.add(new Position('H', 8));
+        expected.add(new Position('A', 7));
+        expected.add(new Position('B', 6));
+        expected.add(new Position('C', 5));
+        expected.add(new Position('E', 3));
+        expected.add(new Position('F', 2));
+        expected.add(new Position('G', 1));
         Assertions.assertEquals(expected, bishop.getPotentialPositions());
     }
 
     @Test
     @Override
     public void test_canCapturePosition() {
-        Position possible = new Position('a', 1);
-        Position impossible = new Position('h', 1);
+        Position possible = new Position('A', 1);
+        Position impossible = new Position('H', 1);
 
         bishop = new Bishop(pos_middle, EChessPieces.BISHOP_WHITE, chessField);
         Assertions.assertTrue(bishop.canCapturePosition(possible));

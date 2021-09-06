@@ -82,8 +82,8 @@ class QueenTest implements IChessPieceTest {
     @Override
     public void test_canCapturePosition() {
 
-        Position possible = new Position('a', 1);
-        Position impossible = new Position('h', 1);
+        Position possible = new Position('A', 1);
+        Position impossible = new Position('H', 1);
 
         queen = new Queen(pos_middle, EChessPieces.QUEEN_WHITE, chessField);
         Assertions.assertTrue(queen.canCapturePosition(possible));

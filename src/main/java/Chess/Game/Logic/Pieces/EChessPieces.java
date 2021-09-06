@@ -1,5 +1,8 @@
 package Chess.Game.Logic.Pieces;
 
+import Chess.Game.Logic.ChessField;
+import Chess.Game.Logic.Position;
+
 /**
  * @author Fitor Avdiji
  * <p>
