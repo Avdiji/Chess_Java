@@ -1,7 +1,11 @@
 package Chess.Game.Logic.Pieces;
+import Chess.Game.Logic.ChessFieldButton;
+import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Position;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Fitor Avdiji
@@ -32,6 +36,19 @@ public class King implements IChessPiece{
                 continue;
             }
         }
+        return result;
+    }
+
+    @Override
+    public Set<Position> getActualPositions(Position currentPosition, EPlayerColor currentPlayerColor, List<ChessFieldButton> field) {
+        Set<Position> result = getPotentialPositions(currentPosition);
+        Set<Position> toRemove = field.stream()
+                .filter(button -> result.contains(button.getPosition()))
+                .filter(button -> button.getPlayerColor() == currentPlayerColor)
+                .map(ChessFieldButton::getPosition)
+                .collect(Collectors.toSet());
+
+        result.removeAll(toRemove);
         return result;
     }
 }

@@ -9,17 +9,21 @@ import Chess.Game.Logic.Pieces.Knight;
 import Chess.Game.Logic.Pieces.Pawn;
 import Chess.Game.Logic.Pieces.Queen;
 import Chess.Game.Logic.Pieces.Rook;
+import Chess.Game.Logic.Player.EPlayerColor;
 
+import java.util.List;
 import java.util.Set;
 
 /**
  * @author Fitor Avdiji
- *
+ * <p>
  * Class calculates the movement of a Piece
  */
 public class ChessPieceMovement {
 
-    /** All the possible pieces **/
+    /**
+     * All the possible pieces
+     **/
     private final IChessPiece pawn;
     private final IChessPiece rook;
     private final IChessPiece bishop;
@@ -30,7 +34,7 @@ public class ChessPieceMovement {
 
     /**
      * Constructor Initializes:<br>
-     *
+     * <p>
      * {@link #pawn}<br>
      * {@link #rook}<br>
      * {@link #bishop}<br>
@@ -39,7 +43,7 @@ public class ChessPieceMovement {
      * {@link #queen}<br>
      * {@link #empty}
      */
-    public ChessPieceMovement(){
+    public ChessPieceMovement() {
         pawn = new Pawn();
         rook = new Rook();
         bishop = new Bishop();
@@ -50,21 +54,25 @@ public class ChessPieceMovement {
     }
 
     /**
-     * Method returns a Set of potential moves the Piece could make
-     * @param currentPosition current Position of the Piece
-     * @param currentPiece type of the current Piece
-     * @return A Set of potential positions
+     * Method returns a Set of potential moves thePiece could make
+     *
+     * @param currentPosition    currentPosition of the Piece
+     * @param currentPlayerColor Player Color of the Piece (Black/White)
+     * @param field              Field the piece is located in
+     * @param currentPiece       type of the current Piece
+     * @return A Set of possible moves of the selected Piece
      */
-    public Set<Position> getPotentialMoves(final Position currentPosition, final EChessPieces currentPiece){
-        ((Pawn)pawn).setType(currentPiece);
-        return switch (currentPiece){
-            case PAWN_WHITE, PAWN_BLACK -> pawn.getPotentialPositions(currentPosition);
-            case ROOK_WHITE, ROOK_BLACK -> rook.getPotentialPositions(currentPosition);
-            case BISHOP_WHITE, BISHOP_BLACK -> bishop.getPotentialPositions(currentPosition);
-            case KNIGHT_WHITE, KNIGHT_BLACK -> knight.getPotentialPositions(currentPosition);
-            case KING_WHITE, KING_BLACK -> king.getPotentialPositions(currentPosition);
-            case QUEEN_WHITE, QUEEN_BLACK -> queen.getPotentialPositions(currentPosition);
-            case EMPTY -> empty.getPotentialPositions(currentPosition);
+    public Set<Position> getActualMoves(final Position currentPosition, final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field, final EChessPieces currentPiece) {
+        if (currentPiece == EChessPieces.PAWN_WHITE || currentPiece == EChessPieces.PAWN_BLACK)
+            ((Pawn) pawn).setType(currentPiece);
+        return switch (currentPiece) {
+            case PAWN_WHITE, PAWN_BLACK -> pawn.getActualPositions(currentPosition, currentPlayerColor, field);
+            case ROOK_WHITE, ROOK_BLACK -> rook.getActualPositions(currentPosition, currentPlayerColor, field);
+            case BISHOP_WHITE, BISHOP_BLACK -> bishop.getActualPositions(currentPosition, currentPlayerColor, field);
+            case KNIGHT_WHITE, KNIGHT_BLACK -> knight.getActualPositions(currentPosition, currentPlayerColor, field);
+            case KING_WHITE, KING_BLACK -> king.getActualPositions(currentPosition, currentPlayerColor, field);
+            case QUEEN_WHITE, QUEEN_BLACK -> queen.getActualPositions(currentPosition, currentPlayerColor, field);
+            case EMPTY -> empty.getActualPositions(currentPosition, currentPlayerColor, field);
         };
     }
 

@@ -2,6 +2,7 @@ package Chess.Game.Logic;
 
 import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Pieces.IChessPiece;
+import Chess.Game.Logic.Player.EPlayerColor;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -27,9 +28,7 @@ public class ChessField {
     /** Listener for all the Pieces **/
     private ActionListener pieceListener;
 
-    /**
-     * Constructor initializes {@link #movement}
-     */
+    /** Constructor initializes {@link #movement} */
     public ChessField() {
         movement = new ChessPieceMovement();
     }
@@ -42,17 +41,30 @@ public class ChessField {
         return field;
     }
 
-    //TODO
-    private void swapPieces(ChessFieldButton currentButton) {
-        ChessFieldButton markedButton = field.stream().filter(ChessFieldButton::isMarked).findAny().get();
-        EChessPieces tmp = markedButton.getType();
-
-        markedButton.setType(currentButton.getType());
-        currentButton.setType(tmp);
-
+    /** Method removes all disables every marking on the field */
+    private void removeMarkings(){
         field.stream().filter(ChessFieldButton::isMarked).forEach(piece -> piece.setMarked(false));
         field.stream().filter(ChessFieldButton::isEndangered).forEach(piece -> piece.setEndangered(false));
-        field.forEach(ChessFieldButton::renderPiece);
+        field.stream().forEach(ChessFieldButton::renderPiece);
+    }
+
+    /**
+     * Method captures a Button
+     *
+     * @param capturedButton Button that has been captured
+     */
+    private void capturePiece(ChessFieldButton capturedButton) {
+        ChessFieldButton markedButton = field.stream().filter(ChessFieldButton::isMarked).findAny().get();
+        EChessPieces tmp_type = markedButton.getType();
+        EPlayerColor tmp_player = markedButton.getPlayerColor();
+
+        capturedButton.setType(tmp_type);
+        capturedButton.setPlayerColor(tmp_player);
+
+        markedButton.setType(EChessPieces.EMPTY);
+        markedButton.setPlayerColor(EPlayerColor.NONE);
+
+        removeMarkings();
     }
 
     /**
@@ -61,12 +73,13 @@ public class ChessField {
      * @param currentButton Button that has been clicked
      */
     private void markButtons(ChessFieldButton currentButton) {
-        field.stream().filter(ChessFieldButton::isMarked).forEach(piece -> piece.setMarked(false));
-        field.stream().filter(ChessFieldButton::isEndangered).forEach(piece -> piece.setEndangered(false));
+        removeMarkings();
         currentButton.setMarked(true);
         field.stream().filter(button -> movement
-                .getPotentialMoves(
+                .getActualMoves(
                         currentButton.getPosition(),
+                        currentButton.getPlayerColor(),
+                        field,
                         currentButton.getType())
                 .contains(button.getPosition()))
                 .forEach(match -> match.setEndangered(true));
@@ -79,7 +92,7 @@ public class ChessField {
             public void actionPerformed(ActionEvent e) {
                 ChessFieldButton currentButton = (ChessFieldButton) e.getSource();
                 if (currentButton.isEndangered()) {
-                    swapPieces(currentButton);
+                    capturePiece(currentButton);
                 } else {
                     markButtons(currentButton);
                 }
@@ -94,20 +107,22 @@ public class ChessField {
      */
     public void initField(final String initPath) {
         initPieceListener();
-
         field = new ArrayList<>();
+
         try (BufferedReader br = new BufferedReader(new FileReader(initPath))) {
+
             String line;
             while ((line = br.readLine()) != null) {
+
                 String values[] = line.split(";");
                 char tmp_row = values[0].length() > 1 ? values[0].charAt(1) : values[0].charAt(0);
                 int tmp_column = Integer.parseInt(values[1]);
-
                 Color tmp_background = switch (values[3]) {
                     case "WHITE" -> IChessPiece.COLOR_FIELD_WHITE;
                     case "BLACK" -> IChessPiece.COLOR_FIELD_BLACK;
                     default -> throw new IllegalStateException("Unexpected value: " + values[3]);
                 };
+
                 ChessFieldButton tmp_button = new ChessFieldButton(new Position(tmp_row, tmp_column), EChessPieces.valueOf(values[2]), tmp_background);
                 tmp_button.initPiece();
                 tmp_button.addActionListener(pieceListener);

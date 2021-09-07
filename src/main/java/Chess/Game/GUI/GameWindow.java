@@ -70,17 +70,6 @@ public class GameWindow extends JFrame implements IChessFrame {
         addComponents();
     }
 
-    @Override
-    public void initMainFrame() {
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        this.getContentPane().setBackground(COLOR_BACKGROUND);
-        this.setLocationRelativeTo(null);
-        this.setLayout(new BorderLayout());
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setUndecorated(true);
-        this.setVisible(true);
-    }
-
     /** Method initializes {@link #title} **/
     private void initTitle() {
         title = new JLabel(TITLE);
@@ -186,6 +175,17 @@ public class GameWindow extends JFrame implements IChessFrame {
         this.add(panel_RHS, BorderLayout.EAST);
         this.add(panel_LHS, BorderLayout.WEST);
         this.add(panel_chessBoard, BorderLayout.CENTER);
+    }
+
+    @Override
+    public void initMainFrame() {
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.getContentPane().setBackground(COLOR_BACKGROUND);
+        this.setLocationRelativeTo(null);
+        this.setLayout(new BorderLayout());
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setUndecorated(true);
+        this.setVisible(true);
     }
 
 

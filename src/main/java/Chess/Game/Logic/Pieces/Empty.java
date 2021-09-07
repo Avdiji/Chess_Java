@@ -1,8 +1,11 @@
 package Chess.Game.Logic.Pieces;
 
+import Chess.Game.Logic.ChessFieldButton;
+import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Position;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,6 +21,11 @@ public class Empty implements IChessPiece {
 
     @Override
     public Set<Position> getPotentialPositions(final Position currentPosition) {
+        return new HashSet<>();
+    }
+
+    @Override
+    public Set<Position> getActualPositions(Position currentPosition, EPlayerColor currentPlayerColor, List<ChessFieldButton> field) {
         return new HashSet<>();
     }
 }

@@ -1,8 +1,12 @@
 package Chess.Game.Logic.Pieces;
 
 import Chess.Game.Logic.ChessField;
+import Chess.Game.Logic.ChessFieldButton;
+import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Position;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -26,6 +30,14 @@ public class Queen implements IChessPiece {
 
         result = bishopHlp.getPotentialPositions(currentPosition);
         result.addAll(rookHlp.getPotentialPositions(currentPosition));
+        return result;
+    }
+
+    //TODO
+    @Override
+    public Set<Position> getActualPositions(Position currentPosition, EPlayerColor currentPlayerColor, List<ChessFieldButton> field) {
+        Set<Position> result = new HashSet<>();
+
         return result;
     }
 }
