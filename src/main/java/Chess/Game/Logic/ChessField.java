@@ -1,18 +1,6 @@
 package Chess.Game.Logic;
-
-import Chess.Game.Logic.Pieces.AChessPiece;
-import Chess.Game.Logic.Pieces.Bishop;
 import Chess.Game.Logic.Pieces.EChessPieces;
-import Chess.Game.Logic.Pieces.Empty;
 import Chess.Game.Logic.Pieces.IChessPiece;
-import Chess.Game.Logic.Pieces.King;
-import Chess.Game.Logic.Pieces.Knight;
-import Chess.Game.Logic.Pieces.Pawn;
-import Chess.Game.Logic.Pieces.Queen;
-import Chess.Game.Logic.Pieces.Rook;
-import Chess.Game.Logic.Player.EPlayerColor;
-import Chess.Game.Logic.Player.Player;
-
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,15 +21,10 @@ public class ChessField {
     /**
      * field of the Chess Game
      **/
-    private List<AChessPiece> field;
-    /**
-     * Players
-     **/
-    private Player[] players;
-    /**
-     * Color of the current Player
-     **/
-    private EPlayerColor currentTurn;
+    private List<ChessFieldButton> field;
+
+    private ChessPieceMovement movement;
+
     /**
      * Listener for all the Pieces
      **/
@@ -51,6 +34,33 @@ public class ChessField {
      * Constructor
      */
     public ChessField() {
+        movement = new ChessPieceMovement();
+    }
+
+    private void swapPieces(ChessFieldButton currentButton){
+        ChessFieldButton markedButton = field.stream().filter(ChessFieldButton::isMarked).findAny().get();
+        EChessPieces tmp = markedButton.getType();
+
+        markedButton.setType(currentButton.getType());
+        currentButton.setType(tmp);
+
+        field.stream().filter(ChessFieldButton::isMarked).forEach(piece -> piece.setMarked(false));
+        field.stream().filter(ChessFieldButton::isEndangered).forEach(piece -> piece.setEndangered(false));
+        field.forEach(ChessFieldButton::renderPiece);
+    }
+
+    private void markButtons(ChessFieldButton currentButton) {
+        field.stream().filter(ChessFieldButton::isMarked).forEach(piece -> piece.setMarked(false));
+        field.stream().filter(ChessFieldButton::isEndangered).forEach(piece -> piece.setEndangered(false));
+        currentButton.setMarked(true);
+
+        field.stream()
+                .filter(button ->
+                        movement.getPotentialMoves(currentButton.getPosition(),
+                                currentButton.getType())
+                                .contains(button.getPosition()))
+                .forEach(match -> match.setEndangered(true));
+
     }
 
     /**
@@ -58,7 +68,7 @@ public class ChessField {
      *
      * @return field
      */
-    public List<AChessPiece> getField() {
+    public List<ChessFieldButton> getField() {
         return field;
     }
 
@@ -69,46 +79,13 @@ public class ChessField {
         pieceListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                field.stream().filter(piece -> piece.isMarked() || piece.isEndangered()).forEach(piece -> piece.setMarked(false));
-                field.stream().filter(piece -> piece.isMarked() || piece.isEndangered()).forEach(piece -> piece.setEndangered(false));
-
-                ((AChessPiece) e.getSource()).setMarked(true);
-                ((AChessPiece) e.getSource()).getPotentialPositions().stream()
-                        .forEach(endangeredPos -> field.stream()
-                                .filter(f -> f.getPosition().equals(endangeredPos))
-                                .forEach(match -> match.setEndangered(true)));
-
+                ChessFieldButton currentButton = (ChessFieldButton) e.getSource();
+                if(currentButton.isEndangered()){
+                    swapPieces(currentButton);
+                }else {
+                    markButtons(currentButton);
+                }
             }
-        };
-    }
-
-    /**
-     * Method returns a Piece corresponding to the parameters
-     *
-     * @param pieceString String representing the piece
-     * @param pos         position of the Piece to be returned
-     * @param field       field the piece will be located in
-     * @return A Piece corresponding to the parameters
-     */
-    public AChessPiece getPieceObject(final String pieceString, final Position pos) {
-        char tmp_row = pos.getRow();
-        int tmp_column = pos.getColumn();
-        return switch (pieceString) {
-            case "PAWN_WHITE" -> new Pawn(new Position(tmp_row, tmp_column), EChessPieces.PAWN_WHITE, this);
-            case "PAWN_BLACK" -> new Pawn(new Position(tmp_row, tmp_column), EChessPieces.PAWN_BLACK, this);
-            case "ROOK_WHITE" -> new Rook(new Position(tmp_row, tmp_column), EChessPieces.ROOK_WHITE, this);
-            case "ROOK_BLACK" -> new Rook(new Position(tmp_row, tmp_column), EChessPieces.ROOK_BLACK, this);
-            case "BISHOP_WHITE" -> new Bishop(new Position(tmp_row, tmp_column), EChessPieces.BISHOP_WHITE, this);
-            case "BISHOP_BLACK" -> new Bishop(new Position(tmp_row, tmp_column), EChessPieces.BISHOP_BLACK, this);
-            case "KNIGHT_WHITE" -> new Knight(new Position(tmp_row, tmp_column), EChessPieces.KNIGHT_WHITE, this);
-            case "KNIGHT_BLACK" -> new Knight(new Position(tmp_row, tmp_column), EChessPieces.KNIGHT_BLACK, this);
-            case "KING_WHITE" -> new King(new Position(tmp_row, tmp_column), EChessPieces.KING_WHITE, this);
-            case "KING_BLACK" -> new King(new Position(tmp_row, tmp_column), EChessPieces.KING_BLACK, this);
-            case "QUEEN_WHITE" -> new Queen(new Position(tmp_row, tmp_column), EChessPieces.QUEEN_WHITE, this);
-            case "QUEEN_BLACK" -> new Queen(new Position(tmp_row, tmp_column), EChessPieces.QUEEN_BLACK, this);
-            case "EMPTY" -> new Empty(new Position(tmp_row, tmp_column), EChessPieces.EMPTY, this);
-            default -> throw new IllegalStateException("Unexpected value: " + pieceString);
         };
     }
 
@@ -133,10 +110,12 @@ public class ChessField {
                     case "BLACK" -> IChessPiece.COLOR_FIELD_BLACK;
                     default -> throw new IllegalStateException("Unexpected value: " + values[3]);
                 };
-                AChessPiece tmp_field = getPieceObject(values[2],new Position(tmp_row, tmp_column));
-                tmp_field.initPiece(tmp_background);
-                tmp_field.addActionListener(pieceListener);
-                field.add(tmp_field);
+
+                ChessFieldButton tmp_button = new ChessFieldButton(new Position(tmp_row, tmp_column), EChessPieces.valueOf(values[2]), tmp_background);
+                tmp_button.initPiece();
+                tmp_button.addActionListener(pieceListener);
+                field.add(tmp_button);
+
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

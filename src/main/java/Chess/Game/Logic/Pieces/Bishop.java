@@ -11,26 +11,13 @@ import java.util.Set;
  * <p>
  * Class represents a Bishop-Piece
  */
-public class Bishop extends AChessPiece {
+public class Bishop implements IChessPiece {
 
-    /**
-     * Constructor
-     *
-     * @param position   position of the Bishop
-     * @param piece      type of the Bishop (black/white)
-     * @param chessField chessField the Bishop is located in
-     * @throws IllegalArgumentException if the piece has a invalid type
-     */
-    public Bishop(Position position, EChessPieces piece, ChessField chessField) {
-        super(position, piece, chessField);
-
-        if (piece != EChessPieces.BISHOP_WHITE && piece != EChessPieces.BISHOP_BLACK) {
-            throw new IllegalArgumentException("The type of piece must be a Bishop!");
-        }
+    public Bishop() {
     }
 
     @Override
-    public Set<Position> getPotentialPositions() {
+    public Set<Position> getPotentialPositions(final Position currentPosition) {
         Set<Position> result = new HashSet<>();
 
         // combination of every direction the bishop could go
@@ -42,8 +29,8 @@ public class Bishop extends AChessPiece {
             for (int j = 0; j < directionX.length; ++j) {
 
                 // x,y coordinate
-                char posX = (char) (super.getPosition().getRow() + directionX[j]);
-                int posY = super.getPosition().getColumn() + directionY[j];
+                char posX = (char) (currentPosition.getRow() + directionX[j]);
+                int posY = currentPosition.getColumn() + directionY[j];
 
                 // increment/decrement the direction value so that the bishop goes to the next field in the next iteration
                 directionX[j] += directionX[j] > 0 ? 1 : -1;
@@ -61,10 +48,5 @@ public class Bishop extends AChessPiece {
             }
         }
         return result;
-    }
-
-    @Override
-    public boolean canActuallyCapturePosition(Position target) {
-        return false;
     }
 }

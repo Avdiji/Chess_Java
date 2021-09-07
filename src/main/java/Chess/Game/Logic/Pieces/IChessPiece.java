@@ -29,28 +29,5 @@ public interface IChessPiece {
      *
      * @return A Set of all the Positions the Piece could theoretically capture at some Point of the Game, from the current Position
      */
-    public Set<Position> getPotentialPositions();
-
-    /**
-     * Method returns true if the piece would be theoretically able to somehow reach the target within 1 round from its current position.
-     *
-     * @param target          the position of the target of the Piece
-     * @return true if the targeted position can be occupied by the by the piece on the current position
-     */
-    public boolean canCapturePosition(final Position target);
-
-    /**
-     * The Method checks, whether the current Piece can actually move to the target, considering every other piece on the gameField
-     *
-     * @param target          the Position of the target of the Piece
-     * @return true if the Piece can move from the currentPosition to the target, while also considering the chessfield
-     */
-    public boolean canActuallyCapturePosition(final Position target);
-
-    /**
-     * The Method initializes the Piece
-     *
-     * @param backgroundColor
-     */
-    public void initPiece(final Color backgroundColor);
+    public Set<Position> getPotentialPositions(final Position currentPosition);
 }

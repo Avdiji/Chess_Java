@@ -46,4 +46,5 @@ public enum EChessPieces {
     public String getPath() {
         return path;
     }
+
 }

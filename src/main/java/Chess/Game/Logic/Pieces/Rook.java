@@ -11,39 +11,21 @@ import java.util.Set;
  *
  * Class represents a Rook-Piece
  */
-public class Rook extends AChessPiece {
+public class Rook implements IChessPiece {
 
-    /**
-     * Constructor
-     *
-     * @param position   position of the Rook
-     * @param piece      type of the Rook (black/white)
-     * @param chessField chessField the Rook is located in
-     * @throws IllegalArgumentException if the piece has a invalid type
-     */
-    public Rook(Position position, EChessPieces piece, ChessField chessField) {
-        super(position, piece, chessField);
-
-        if(piece != EChessPieces.ROOK_WHITE && piece != EChessPieces.ROOK_BLACK){
-            throw new IllegalArgumentException("The type of piece must be a Rook!");
-        }
+    public Rook() {
     }
 
     @Override
-    public Set<Position> getPotentialPositions() {
+    public Set<Position> getPotentialPositions(final Position currentPosition) {
         Set<Position> result = new HashSet<>();
 
         for (int i = 1; i <= 8; ++i) {
-            if (i != super.getPosition().getColumn())
-                result.add(new Position(super.getPosition().getRow(), i));
-            if ('A' + i - 1 != super.getPosition().getRow())
-                result.add(new Position((char) ('A' + i - 1), super.getPosition().getColumn()));
+            if (i != currentPosition.getColumn())
+                result.add(new Position(currentPosition.getRow(), i));
+            if ('A' + i - 1 != currentPosition.getRow())
+                result.add(new Position((char) ('A' + i - 1), currentPosition.getColumn()));
         }
         return result;
-    }
-
-    @Override
-    public boolean canActuallyCapturePosition(Position target) {
-        return false;
     }
 }

@@ -11,26 +11,19 @@ import java.util.Set;
  * <p>
  * Class represents a Pawn-Piece
  */
-public class Pawn extends AChessPiece {
+public class Pawn implements IChessPiece {
 
-    /**
-     * Constructor
-     *
-     * @param position   position of the Pawn
-     * @param piece      type of the pawn (black/white)
-     * @param chessField chessField the pawn is located in
-     * @throws IllegalArgumentException if the piece has a invalid type
-     */
-    public Pawn(Position position, EChessPieces piece, ChessField chessField) {
-        super(position, piece, chessField);
+    private EChessPieces type;
 
-        if (piece != EChessPieces.PAWN_WHITE && piece != EChessPieces.PAWN_BLACK) {
-            throw new IllegalArgumentException("The type of the Piece must be a Pawn!");
-        }
+    public Pawn() {
+    }
+
+    public void setType(final EChessPieces type){
+        this.type = type;
     }
 
     @Override
-    public Set<Position> getPotentialPositions() {
+    public Set<Position> getPotentialPositions(final Position currentPosition) {
         Set<Position> result = new HashSet<>();
 
         int directionX_white[] = {0, 1, -1};
@@ -38,14 +31,14 @@ public class Pawn extends AChessPiece {
         int directionX_black[] = {0, 1, -1};
         int directionY_black[] = {-1, -1, -1};
 
-        if (super.getPiece() == EChessPieces.PAWN_WHITE) {
-            if (super.getPosition().getColumn() == 2)
-                result.add(new Position(super.getPosition().getRow(), super.getPosition().getColumn() + 2));
+        if (type == EChessPieces.PAWN_WHITE) {
+            if (currentPosition.getColumn() == 2)
+                result.add(new Position(currentPosition.getRow(), currentPosition.getColumn() + 2));
 
             for (int i = 0; i < directionX_white.length; ++i) {
 
-                char posX = (char) (super.getPosition().getRow() + directionX_white[i]);
-                int posY = super.getPosition().getColumn() + directionY_white[i];
+                char posX = (char) (currentPosition.getRow() + directionX_white[i]);
+                int posY = currentPosition.getColumn() + directionY_white[i];
 
                 try {
                     result.add(new Position(posX, posY));
@@ -54,13 +47,13 @@ public class Pawn extends AChessPiece {
                 }
             }
         } else {
-            if (super.getPosition().getColumn() == 7)
-                result.add(new Position(super.getPosition().getRow(), super.getPosition().getColumn() - 2));
+            if (currentPosition.getColumn() == 7)
+                result.add(new Position(currentPosition.getRow(), currentPosition.getColumn() - 2));
 
             for (int i = 0; i < directionX_black.length; ++i) {
 
-                char posX = (char) (super.getPosition().getRow() + directionX_black[i]);
-                int posY = super.getPosition().getColumn() + directionY_black[i];
+                char posX = (char) (currentPosition.getRow() + directionX_black[i]);
+                int posY = currentPosition.getColumn() + directionY_black[i];
 
                 try {
                     result.add(new Position(posX, posY));
@@ -70,11 +63,6 @@ public class Pawn extends AChessPiece {
             }
         }
         return result;
-    }
-
-    @Override
-    public boolean canActuallyCapturePosition(Position target) {
-        return false;
     }
 
 }
