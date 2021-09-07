@@ -13,6 +13,7 @@ import java.util.Set;
  */
 public class Rook implements IChessPiece {
 
+    /** Default Constructor **/
     public Rook() {
     }
 

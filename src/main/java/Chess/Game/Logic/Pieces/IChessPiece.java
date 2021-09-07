@@ -30,4 +30,5 @@ public interface IChessPiece {
      * @return A Set of all the Positions the Piece could theoretically capture at some Point of the Game, from the current Position
      */
     public Set<Position> getPotentialPositions(final Position currentPosition);
+
 }

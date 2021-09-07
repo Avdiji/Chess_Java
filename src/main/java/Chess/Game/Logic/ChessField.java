@@ -1,6 +1,8 @@
 package Chess.Game.Logic;
+
 import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Pieces.IChessPiece;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,26 +20,30 @@ import java.util.List;
  */
 public class ChessField {
 
-    /**
-     * field of the Chess Game
-     **/
+    /** field of the Chess Game **/
     private List<ChessFieldButton> field;
-
+    /** Movements of the Pieces **/
     private ChessPieceMovement movement;
-
-    /**
-     * Listener for all the Pieces
-     **/
+    /** Listener for all the Pieces **/
     private ActionListener pieceListener;
 
     /**
-     * Constructor
+     * Constructor initializes {@link #movement}
      */
     public ChessField() {
         movement = new ChessPieceMovement();
     }
 
-    private void swapPieces(ChessFieldButton currentButton){
+    /**
+     * Getter for {@link #field}
+     * @return field
+     */
+    public List<ChessFieldButton> getField() {
+        return field;
+    }
+
+    //TODO
+    private void swapPieces(ChessFieldButton currentButton) {
         ChessFieldButton markedButton = field.stream().filter(ChessFieldButton::isMarked).findAny().get();
         EChessPieces tmp = markedButton.getType();
 
@@ -49,40 +55,32 @@ public class ChessField {
         field.forEach(ChessFieldButton::renderPiece);
     }
 
+    /**
+     * Method marks every endangered button, depending on the currently marked button
+     *
+     * @param currentButton Button that has been clicked
+     */
     private void markButtons(ChessFieldButton currentButton) {
         field.stream().filter(ChessFieldButton::isMarked).forEach(piece -> piece.setMarked(false));
         field.stream().filter(ChessFieldButton::isEndangered).forEach(piece -> piece.setEndangered(false));
         currentButton.setMarked(true);
-
-        field.stream()
-                .filter(button ->
-                        movement.getPotentialMoves(currentButton.getPosition(),
-                                currentButton.getType())
-                                .contains(button.getPosition()))
+        field.stream().filter(button -> movement
+                .getPotentialMoves(
+                        currentButton.getPosition(),
+                        currentButton.getType())
+                .contains(button.getPosition()))
                 .forEach(match -> match.setEndangered(true));
-
     }
 
-    /**
-     * Getter for {@link #field}
-     *
-     * @return field
-     */
-    public List<ChessFieldButton> getField() {
-        return field;
-    }
-
-    /**
-     * Method initializes {@link #pieceListener}
-     */
+    /** Method initializes {@link #pieceListener} */
     private void initPieceListener() {
         pieceListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ChessFieldButton currentButton = (ChessFieldButton) e.getSource();
-                if(currentButton.isEndangered()){
+                if (currentButton.isEndangered()) {
                     swapPieces(currentButton);
-                }else {
+                } else {
                     markButtons(currentButton);
                 }
             }
@@ -110,12 +108,10 @@ public class ChessField {
                     case "BLACK" -> IChessPiece.COLOR_FIELD_BLACK;
                     default -> throw new IllegalStateException("Unexpected value: " + values[3]);
                 };
-
                 ChessFieldButton tmp_button = new ChessFieldButton(new Position(tmp_row, tmp_column), EChessPieces.valueOf(values[2]), tmp_background);
                 tmp_button.initPiece();
                 tmp_button.addActionListener(pieceListener);
                 field.add(tmp_button);
-
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

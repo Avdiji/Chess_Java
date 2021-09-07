@@ -12,7 +12,7 @@ import java.util.Set;
  */
 public class Queen implements IChessPiece {
 
-
+    /** Default Constructor **/
     public Queen() {
     }
 

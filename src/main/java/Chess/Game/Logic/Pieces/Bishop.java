@@ -1,8 +1,5 @@
 package Chess.Game.Logic.Pieces;
-
-import Chess.Game.Logic.ChessField;
 import Chess.Game.Logic.Position;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,8 +10,8 @@ import java.util.Set;
  */
 public class Bishop implements IChessPiece {
 
-    public Bishop() {
-    }
+    /** Default Constructor **/
+    public Bishop() {}
 
     @Override
     public Set<Position> getPotentialPositions(final Position currentPosition) {

@@ -38,9 +38,9 @@ public class GameWindow extends JFrame implements IChessFrame {
     private JLabel title;
 
     /** Board with all positions and the Pieces **/
-    private JPanel chessBoard;
+    private JPanel panel_chessBoard;
     /** The Chess Board with the pieces only **/
-    private JPanel chessPieces;
+    private JPanel panel_chessPieces;
 
     /** RHS of the Game Window **/
     private JPanel panel_LHS;
@@ -59,15 +59,12 @@ public class GameWindow extends JFrame implements IChessFrame {
     private JPanel grave_black;
     /** Surrender button black player **/
     private JButton ff_black;
-
+    /** ChessField the Game is being played on **/
     private ChessField chessField;
-
 
     /** Constructor */
     public GameWindow(final ChessField chessField) {
-
         this.chessField = chessField;
-
         initComponents();
         initMainFrame();
         addComponents();
@@ -78,16 +75,13 @@ public class GameWindow extends JFrame implements IChessFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.getContentPane().setBackground(COLOR_BACKGROUND);
         this.setLocationRelativeTo(null);
-
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setUndecorated(true);
         this.setVisible(true);
     }
 
-    /**
-     * Method initializes {@link #title}
-     **/
+    /** Method initializes {@link #title} **/
     private void initTitle() {
         title = new JLabel(TITLE);
         title.setHorizontalAlignment(JLabel.CENTER);
@@ -164,21 +158,18 @@ public class GameWindow extends JFrame implements IChessFrame {
 
     /**
      * Method initializes following components of the Chess Board:<br>
-     * {@link #chessBoard}<br>
-     * {@link #chessPieces}
+     * {@link #panel_chessBoard}<br>
+     * {@link #panel_chessPieces}
      */
     private void initChessBoard() {
-        chessBoard = new JPanel();
-        chessBoard.setBackground(COLOR_BACKGROUND);
-        chessBoard.setBorder(new EmptyBorder(MARGIN_BOARD[0], MARGIN_BOARD[1], MARGIN_BOARD[2], MARGIN_BOARD[3]));
+        panel_chessBoard = new JPanel();
+        panel_chessBoard.setBackground(COLOR_BACKGROUND);
+        panel_chessBoard.setBorder(new EmptyBorder(MARGIN_BOARD[0], MARGIN_BOARD[1], MARGIN_BOARD[2], MARGIN_BOARD[3]));
 
-        chessPieces = new JPanel();
-        chessPieces.setLayout(new GridLayout(8, 8));
-        for(int i = 0; i < 64; ++i){
-            chessPieces.add(chessField.getField().get(i));
-        }
-
-        chessBoard.add(chessPieces);
+        panel_chessPieces = new JPanel();
+        panel_chessPieces.setLayout(new GridLayout(8, 8));
+        chessField.getField().forEach(piece -> panel_chessPieces.add(piece));
+        panel_chessBoard.add(panel_chessPieces);
     }
 
     @Override
@@ -194,7 +185,7 @@ public class GameWindow extends JFrame implements IChessFrame {
         this.add(title, BorderLayout.NORTH);
         this.add(panel_RHS, BorderLayout.EAST);
         this.add(panel_LHS, BorderLayout.WEST);
-        this.add(chessBoard, BorderLayout.CENTER);
+        this.add(panel_chessBoard, BorderLayout.CENTER);
     }
 
 

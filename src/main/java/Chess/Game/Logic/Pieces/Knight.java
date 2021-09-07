@@ -13,6 +13,7 @@ import java.util.Set;
  */
 public class Knight implements IChessPiece {
 
+    /** Default Constructor **/
     public Knight() {
     }
 

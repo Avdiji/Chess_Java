@@ -13,11 +13,17 @@ import java.util.Set;
  */
 public class Pawn implements IChessPiece {
 
+    /** Type of the Pawn (black/white) **/
     private EChessPieces type;
 
+    /** Default Constructor **/
     public Pawn() {
     }
 
+    /**
+     * Setter for {@link #type}
+     * @param type new type of the Piece
+     */
     public void setType(final EChessPieces type){
         this.type = type;
     }

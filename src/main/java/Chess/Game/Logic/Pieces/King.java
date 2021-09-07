@@ -1,8 +1,5 @@
 package Chess.Game.Logic.Pieces;
-
-import Chess.Game.Logic.ChessField;
 import Chess.Game.Logic.Position;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +10,7 @@ import java.util.Set;
  */
 public class King implements IChessPiece{
 
+    /** Default Constructor **/
     public King() {
     }
 
