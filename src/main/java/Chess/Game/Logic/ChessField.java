@@ -49,25 +49,6 @@ public class ChessField {
     }
 
     /**
-     * Method captures a Button
-     *
-     * @param capturedButton Button that has been captured
-     */
-    private void capturePiece(ChessFieldButton capturedButton) {
-        ChessFieldButton markedButton = field.stream().filter(ChessFieldButton::isMarked).findAny().get();
-        EChessPieces tmp_type = markedButton.getType();
-        EPlayerColor tmp_player = markedButton.getPlayerColor();
-
-        capturedButton.setType(tmp_type);
-        capturedButton.setPlayerColor(tmp_player);
-
-        markedButton.setType(EChessPieces.EMPTY);
-        markedButton.setPlayerColor(EPlayerColor.NONE);
-
-        removeMarkings();
-    }
-
-    /**
      * Method marks every endangered button, depending on the currently marked button
      *
      * @param currentButton Button that has been clicked
@@ -92,7 +73,7 @@ public class ChessField {
             public void actionPerformed(ActionEvent e) {
                 ChessFieldButton currentButton = (ChessFieldButton) e.getSource();
                 if (currentButton.isEndangered()) {
-                    capturePiece(currentButton);
+                    removeMarkings();
                 } else {
                     markButtons(currentButton);
                 }

@@ -7,7 +7,7 @@ public class Main_Game {
 
     public static void main(String... args) {
         ChessField chessField = new ChessField();
-        chessField.initField("src/main/resources/initilization/initNoPawn.csv");
+        chessField.initField("src/main/resources/initilization/initilization_default.csv");
         GameWindow a = new GameWindow(chessField);
     }
 }
