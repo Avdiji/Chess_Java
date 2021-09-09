@@ -21,6 +21,9 @@ import java.util.List;
  */
 public class ChessField {
 
+    /** Amount of fields (width and length) **/
+    public static final int AMOUNT_OF_FIELDS = 8;
+
     /** field of the Chess Game **/
     private List<ChessFieldButton> field;
     /** Movements of the Pieces **/

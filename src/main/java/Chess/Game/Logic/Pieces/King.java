@@ -1,7 +1,9 @@
 package Chess.Game.Logic.Pieces;
+
 import Chess.Game.Logic.ChessFieldButton;
 import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Position;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,17 +11,24 @@ import java.util.stream.Collectors;
 
 /**
  * @author Fitor Avdiji
- *
+ * <p>
  * Class represents a King-Piece
  */
-public class King implements IChessPiece{
+public class King implements IChessPiece {
 
-    /** Default Constructor **/
+    /**
+     * Default Constructor
+     **/
     public King() {
     }
 
-    @Override
-    public Set<Position> getPotentialPositions(final Position currentPosition) {
+    /**
+     * Method return all moves the King could potentially execute
+     *
+     * @param currentPosition current Position of the King
+     * @return all Moves the King can execute from his current Position, while ignoring all other pieces
+     */
+    private Set<Position> getPotentialPositions(final Position currentPosition) {
         Set<Position> result = new HashSet<>();
 
         int directionX[] = {0, 1, 1, 1, 0, -1, -1, -1};

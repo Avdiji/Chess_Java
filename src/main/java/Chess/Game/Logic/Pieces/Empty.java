@@ -15,13 +15,10 @@ import java.util.Set;
  */
 public class Empty implements IChessPiece {
 
-    /** Default Constructor **/
+    /**
+     * Default Constructor
+     **/
     public Empty() {
-    }
-
-    @Override
-    public Set<Position> getPotentialPositions(final Position currentPosition) {
-        return new HashSet<>();
     }
 
     @Override

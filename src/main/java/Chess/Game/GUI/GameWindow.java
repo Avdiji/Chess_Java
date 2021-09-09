@@ -30,11 +30,11 @@ import java.util.List;
 public class GameWindow extends JFrame implements IChessFrame {
 
     /** Sizes used for the GUI in the Game Window **/
-    private static final int MARGIN_BORDER_GRAVE[] = {70, 50, 50, 150};
+    private static final int MARGIN_BORDER_GRAVE[] = {70, 50, 100, 150};
     private static final int MARGIN_BOARD[] = {70, 40, 40, 40};
     private static final int MARGIN_TITLE[] = {30, 30, 0, 30};
     private static final int SIZE_TITLE = 50;
-    private static final int SIZE_GRAVE_LABEL = 20;
+    private static final int SIZE_GRAVE_LABEL = 15;
 
     /** Strings used for the GUI in the Game Window **/
     private static final String TITLE = "Chess";
@@ -106,7 +106,7 @@ public class GameWindow extends JFrame implements IChessFrame {
             grave_black.add(tmp_button);
         }
         ff_black = new JButton(FORFEIT_BLACK);
-        ff_black.setPreferredSize(new Dimension(2 * IChessPiece.SIZE_FIELD, IChessPiece.SIZE_FIELD));
+        ff_black.setPreferredSize(new Dimension(2 * IChessPiece.SIZE_FIELD, IChessPiece.SIZE_FIELD / 2));
         ff_black.setFont(new Font("Arial Black", Font.BOLD, SIZE_GRAVE_LABEL));
         ff_black.setBackground(COLOR_BUTTON_BACKGROUND);
         ff_black.setForeground(COLOR_LABEL);
@@ -135,7 +135,7 @@ public class GameWindow extends JFrame implements IChessFrame {
             grave_white.add(tmp_button);
         }
         ff_white = new JButton(FORFEIT_WHITE);
-        ff_white.setPreferredSize(new Dimension(2 * IChessPiece.SIZE_FIELD, IChessPiece.SIZE_FIELD));
+        ff_white.setPreferredSize(new Dimension(2 * IChessPiece.SIZE_FIELD, IChessPiece.SIZE_FIELD / 2));
         ff_white.setFont(new Font("Arial Black", Font.BOLD, SIZE_GRAVE_LABEL));
         ff_white.setBackground(COLOR_BUTTON_BACKGROUND);
         ff_white.setForeground(COLOR_LABEL);

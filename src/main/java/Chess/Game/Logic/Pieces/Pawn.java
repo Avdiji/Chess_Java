@@ -1,5 +1,6 @@
 package Chess.Game.Logic.Pieces;
 
+import Chess.Game.Logic.ChessField;
 import Chess.Game.Logic.ChessFieldButton;
 import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Position;
@@ -40,8 +41,14 @@ public class Pawn implements IChessPiece {
     }
 
     //TODO get rid of the spaghetti code
-    @Override
-    public Set<Position> getPotentialPositions(final Position currentPosition) {
+
+    /**
+     * Method returns a Set of all moves the Pawn could theoretically execute
+     *
+     * @param currentPosition current Position of the Pawn
+     * @return All Moves the pawn could theoretically execute
+     */
+    private Set<Position> getPotentialPositions(final Position currentPosition) {
         Set<Position> result = new HashSet<>();
 
         int directionX[] = {0, 1, -1};
@@ -63,7 +70,7 @@ public class Pawn implements IChessPiece {
                 }
             }
         } else {
-            if (currentPosition.getColumn() == 7)
+            if (currentPosition.getColumn() == ChessField.AMOUNT_OF_FIELDS - 1)
                 result.add(new Position(currentPosition.getRow(), currentPosition.getColumn() - 2));
 
             for (int i = 0; i < directionX.length; ++i) {

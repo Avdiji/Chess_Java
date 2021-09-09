@@ -1,6 +1,5 @@
 package Chess.Game.Logic.Pieces;
 
-import Chess.Game.Logic.ChessField;
 import Chess.Game.Logic.ChessFieldButton;
 import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Position;
@@ -17,12 +16,19 @@ import java.util.stream.Collectors;
  */
 public class Knight implements IChessPiece {
 
-    /** Default Constructor **/
+    /**
+     * Default Constructor
+     **/
     public Knight() {
     }
 
-    @Override
-    public Set<Position> getPotentialPositions(final Position currentPosition) {
+    /**
+     * Method returns a Set of Positions the Knight could theoretically execute
+     *
+     * @param currentPosition current Position of the Knight
+     * @return All the Moves the knight could theoretically execute
+     */
+    private Set<Position> getPotentialPositions(final Position currentPosition) {
         Set<Position> result = new HashSet<>();
 
         int directionX[] = {2, 2, -2, -2, 1, -1, 1, -1};

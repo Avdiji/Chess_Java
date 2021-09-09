@@ -30,7 +30,7 @@ public class Position {
     public Position(final char row, final int column) {
         if (row < 'A' || row > 'H')
             throw new IllegalArgumentException("The column must be between A - H inclusive!");
-        else if (column < 1 || column > 8)
+        else if (column < 1 || column > ChessField.AMOUNT_OF_FIELDS)
             throw new IllegalArgumentException("The row must be between 1 - 8 inclusive!");
 
         this.row = row;

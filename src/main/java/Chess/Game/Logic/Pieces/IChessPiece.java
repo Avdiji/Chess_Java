@@ -27,14 +27,6 @@ public interface IChessPiece {
     /** Color of an endangered field **/
     public static final Color COLOR_FIELD_ENDANGERED = new Color(0xec7c26);
 
-    //TODO set this to private
-    /**
-     * Method returns a Set of Positions the Piece on the current Position could theoretically capture at some point of the game.
-     *
-     * @return A Set of all the Positions the Piece could theoretically capture at some Point of the Game, from the current Position
-     */
-    public Set<Position> getPotentialPositions(final Position currentPosition);
-
     /**
      * Method returns a Set of Positions the Piece on the current Position can actually capture
      *
