@@ -1,6 +1,7 @@
 package Chess.Game.Logic;
 
 import Chess.Game.Logic.Pieces.EChessPieces;
+import Chess.Game.Logic.Pieces.Empty;
 import Chess.Game.Logic.Pieces.IChessPiece;
 import Chess.Game.Logic.Player.EPlayerColor;
 
@@ -116,7 +117,15 @@ public class ChessFieldButton extends JButton {
      */
     public void setEndangered(final boolean endangered) {
         this.endangered = endangered;
-        this.setBackground(endangered ? IChessPiece.COLOR_FIELD_ENDANGERED : backgroundColor);
+        if(type == EChessPieces.EMPTY){
+            if(endangered){
+                this.setIcon(new ImageIcon(EChessPieces.EMPTY.getPath()));
+            }else{
+                this.setIcon(new ImageIcon());
+            }
+        }else {
+            this.setBackground(endangered ? IChessPiece.COLOR_FIELD_ENDANGERED : backgroundColor);
+        }
     }
 
     /**
@@ -146,7 +155,11 @@ public class ChessFieldButton extends JButton {
 
     /** Method renders the Button (sets the icon) */
     public void renderPiece() {
-        this.setIcon(new ImageIcon(type.getPath()));
+        if(type == EChessPieces.EMPTY){
+            this.setIcon(new ImageIcon());
+        }else {
+            this.setIcon(new ImageIcon(type.getPath()));
+        }
     }
 
 }

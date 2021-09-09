@@ -21,7 +21,7 @@ public interface IChessPiece {
     /** Color for the white field **/
     public static final Color COLOR_FIELD_WHITE = new Color(0x8fbc8f);
     /** Color for the black field **/
-    public static final Color COLOR_FIELD_BLACK = new Color(0x166646);
+    public static final Color COLOR_FIELD_BLACK = new Color(0x1E7B56);
     /** Color of a marked field **/
     public static final Color COLOR_FIELD_MARKED = new Color(0x039be5);
     /** Color of an endangered field **/

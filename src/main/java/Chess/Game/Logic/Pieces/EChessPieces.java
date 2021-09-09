@@ -19,7 +19,7 @@ public enum EChessPieces {
     QUEEN_BLACK("src/main/resources/Pieces/Black/queen_black.png"),
     KING_WHITE("src/main/resources/Pieces/White/king_white.png"),
     KING_BLACK("src/main/resources/Pieces/Black/king_black.png"),
-    EMPTY("");
+    EMPTY("src/main/resources/Pieces/empty.png");
 
     /**
      * variable contains the path to the corresponding piece
