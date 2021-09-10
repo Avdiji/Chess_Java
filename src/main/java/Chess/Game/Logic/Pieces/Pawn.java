@@ -6,6 +6,7 @@ import Chess.Game.Logic.Position;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,13 +28,8 @@ public class Pawn implements IChessPiece {
      *
      * @param currentPosition current Position of the Pawn
      * @return All Moves the pawn could theoretically execute
-     * @throws IllegalArgumentException if playerColor is not black or white
      */
     private Set<Position> getPotentialPositions(final Position currentPosition, EPlayerColor playerColor) {
-        if (playerColor != EPlayerColor.WHITE && playerColor != EPlayerColor.BLACK) {
-            throw new IllegalArgumentException("The Color of the Pawn must be black or white!");
-        }
-
         Set<Position> result = new HashSet<>();
 
         int directionX[] = {0, 1, -1};
@@ -62,6 +58,7 @@ public class Pawn implements IChessPiece {
         Set<Position> result;
         Set<Position> potential = getPotentialPositions(currentPosition, currentPlayerColor);
 
+        // the Positions in front of the Pawn
         Set<ChessFieldButton> front = field.stream()
                 .filter(button -> button.getPosition().getRow() == currentPosition.getRow() && potential.contains(button.getPosition()))
                 .collect(Collectors.toSet());
@@ -74,6 +71,8 @@ public class Pawn implements IChessPiece {
                 front.clear();
             }
         }
+
+        // the Positions diagonal to the Pawn
         Set<ChessFieldButton> diagonal = field.stream()
                 .filter(button -> button.getPosition().getRow() != currentPosition.getRow() && potential.contains(button.getPosition()))
                 .collect(Collectors.toSet());
@@ -85,19 +84,42 @@ public class Pawn implements IChessPiece {
         result = front.stream().map(ChessFieldButton::getPosition).collect(Collectors.toSet());
         result.addAll(diagonal.stream().map(ChessFieldButton::getPosition).collect(Collectors.toSet()));
 
-        // check if there are any enPassant
-        if(field.stream().filter(ChessFieldButton::enabledEnPassant).count() > 0){
-            Position enPassant = field.stream()
-                    .filter(button -> button.enabledEnPassant())
-                    .filter(button ->
-                            button.getPosition().getRow() == currentPosition.getRow() + 1 ||
-                                    button.getPosition().getRow() == currentPosition.getRow() - 1)
-                    .map(ChessFieldButton::getPosition).findFirst().get();
+        // The En Passant
+        Position enPassant = findEnPassant(currentPosition, currentPlayerColor, field);
+        if (findEnPassant(currentPosition, currentPlayerColor, field) != null) {
+            result.add(enPassant);
+        }
 
-            result.add(new Position(enPassant.getRow(),
-                    currentPlayerColor == EPlayerColor.WHITE ?
-                            enPassant.getColumn() + 1 :
-                            enPassant.getColumn() - 1));
+        return result;
+    }
+
+    /**
+     * The Method finds a Position the Pawn on currentPosition can move to, by using an En Passant.
+     * If there is no such position the Method will return null
+     *
+     * @param currentPosition    current Position of the Pawn
+     * @param currentPlayerColor current Color of the Pawn
+     * @param field              field the Pawn is located in
+     * @return a Position the Pawn can move to using the en Passant or null
+     */
+    private Position findEnPassant(final Position currentPosition, final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field) {
+        Position result = null;
+        if (field.stream().filter(ChessFieldButton::enabledEnPassant).count() > 0) {
+            try {
+                Position enPassant = field.stream()
+                        .filter(button -> button.enabledEnPassant())
+                        .filter(button -> button.getPosition().getColumn() == currentPosition.getColumn())
+                        .filter(button ->
+                                button.getPosition().getRow() == currentPosition.getRow() + 1 ||
+                                        button.getPosition().getRow() == currentPosition.getRow() - 1)
+                        .map(ChessFieldButton::getPosition).findFirst().get();
+
+                result = new Position(enPassant.getRow(),
+                        currentPlayerColor == EPlayerColor.WHITE ?
+                                enPassant.getColumn() + 1 :
+                                enPassant.getColumn() - 1);
+            } catch (NoSuchElementException e) {
+            }
         }
         return result;
     }
@@ -111,26 +133,25 @@ public class Pawn implements IChessPiece {
      * @param field       field the game is being played in
      */
     public void enableEnPassant(final ChessFieldButton currentPawn, final ChessFieldButton destination, final List<ChessFieldButton> field) {
-
         field.stream()
                 .filter(button -> button.enabledEnPassant())
                 .filter(button -> button.isMissedEnPassant())
                 .forEach(button -> button.setEnPassant(false));
 
         int tmp_steps = Math.abs(currentPawn.getPosition().getColumn() - destination.getPosition().getColumn());
-            Set<ChessFieldButton> potentialPawns = field.stream()
-                    .filter(button -> button.getPlayerColor() != currentPawn.getPlayerColor() && button.getPlayerColor() != EPlayerColor.NONE)
-                    .filter(button ->
-                            button.getPosition().getRow() == destination.getPosition().getRow() + 1 ||
-                                    button.getPosition().getRow() == destination.getPosition().getRow() - 1)
-                    .filter(button -> button.getType() == EChessPieces.PAWN_WHITE || button.getType() == EChessPieces.PAWN_BLACK)
-                    .filter(button -> button.getPosition().getColumn() == destination.getPosition().getColumn())
-                    .collect(Collectors.toSet());
+        Set<ChessFieldButton> potentialPawns = field.stream()
+                .filter(button -> button.getPlayerColor() != currentPawn.getPlayerColor() && button.getPlayerColor() != EPlayerColor.NONE)
+                .filter(button ->
+                        button.getPosition().getRow() == destination.getPosition().getRow() + 1 ||
+                                button.getPosition().getRow() == destination.getPosition().getRow() - 1)
+                .filter(button -> button.getType() == EChessPieces.PAWN_WHITE || button.getType() == EChessPieces.PAWN_BLACK)
+                .filter(button -> button.getPosition().getColumn() == destination.getPosition().getColumn())
+                .collect(Collectors.toSet());
 
-            if (tmp_steps > 1 && potentialPawns.size() > 0) {
-                destination.setEnPassant(true);
-                destination.setMissedEnPassant(true);
-            }
+        if (tmp_steps > 1 && potentialPawns.size() > 0) {
+            destination.setEnPassant(true);
+            destination.setMissedEnPassant(true);
         }
+    }
 
 }
