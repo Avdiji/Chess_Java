@@ -82,6 +82,7 @@ public class Pawn implements IChessPiece {
                 .collect(Collectors.toSet()));
 
         result = front.stream().map(ChessFieldButton::getPosition).collect(Collectors.toSet());
+        result.addAll(diagonal.stream().map(ChessFieldButton::getPosition).collect(Collectors.toSet()));
 
         // The En Passant
         Position enPassant = findEnPassant(currentPosition, currentPlayerColor, field);
