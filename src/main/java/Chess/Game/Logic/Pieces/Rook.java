@@ -29,7 +29,7 @@ public class Rook implements IChessPiece {
         int directionX[] = {0, 0, 1, -1};
         int directionY[] = {1, -1, 0, 0};
 
-        for (int i = 0; i < ChessField.AMOUNT_OF_FIELDS - 1; ++i) {
+        for (int i = 0; i < 7; ++i) {
             for (int j = 0; j < directionX.length; ++j) {
                 char row = (char) (currentPosition.getRow() + directionX[j]);
                 int column = currentPosition.getColumn() + directionY[j];

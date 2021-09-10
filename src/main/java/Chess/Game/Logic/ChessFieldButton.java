@@ -30,6 +30,11 @@ public class ChessFieldButton extends JButton {
     private boolean marked;
     private boolean endangered;
 
+    /** True if a Pawn has moved next to another Pawn,
+     * in a way that enables the other Pawn to execute the EnPassant **/
+    private boolean enPassant;
+    private boolean missedEnPassant; // to check whether the enPassant has been used or not
+
     /**
      * Constructor initializes following variables:<br>
      * <p>
@@ -49,6 +54,9 @@ public class ChessFieldButton extends JButton {
         this.backgroundColor = backgroundColor;
         marked = false;
         endangered = false;
+
+        enPassant = false;
+        missedEnPassant = false;
 
         playerColor = type.toString().contains("WHITE") ?
                 EPlayerColor.WHITE : (type.toString().contains("BLACK") ?
@@ -95,6 +103,23 @@ public class ChessFieldButton extends JButton {
      * @return playerColor
      */
     public EPlayerColor getPlayerColor(){ return playerColor; }
+
+    /**
+     * Getter for {@link #enPassant}
+     * If true this Piece has enabled the Pawn next to it to execute the enPassant
+     * @return enPassant
+     */
+    public boolean enabledEnPassant(){
+        return enPassant;
+    }
+
+    /**
+     * Getter for {@link #missedEnPassant}
+     * @return missedEnPassant
+     */
+    public boolean isMissedEnPassant(){
+        return missedEnPassant;
+    }
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
 
@@ -143,6 +168,22 @@ public class ChessFieldButton extends JButton {
     public void setPlayerColor(final EPlayerColor playerColor){
         this.playerColor = playerColor;
     }
+
+    /**
+     * Setter for {@link #enPassant}
+     * @param value new value for enPassant
+     */
+    public void setEnPassant(final boolean value){
+        enPassant = value;
+    }
+
+    /**
+     * Setter for {@link #missedEnPassant}
+     * @param value
+     */
+    public void setMissedEnPassant(final boolean value){
+        missedEnPassant = value;
+    }
     //SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER //
     //SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER //
 
@@ -161,5 +202,4 @@ public class ChessFieldButton extends JButton {
             this.setIcon(new ImageIcon(type.getPath()));
         }
     }
-
 }

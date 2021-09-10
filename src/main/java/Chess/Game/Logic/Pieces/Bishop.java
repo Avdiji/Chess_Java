@@ -29,7 +29,7 @@ public class Bishop implements IChessPiece {
         int directionX[] = {1, 1, -1, -1};
         int directionY[] = {1, -1, 1, -1};
 
-        for (int i = 0; i < ChessField.AMOUNT_OF_FIELDS - 1; ++i) {
+        for (int i = 0; i < 7; ++i) {
             for (int j = 0; j < directionX.length; ++j) {
                 char row = (char) (currentPosition.getRow() + directionX[j]);
                 int column = currentPosition.getColumn() + directionY[j];

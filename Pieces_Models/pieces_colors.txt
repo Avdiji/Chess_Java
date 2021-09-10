@@ -1,0 +1,6 @@
+Colors:
+ - black figure: 2d2d2d
+ - white figure: FFFFFF
+
+	
+	

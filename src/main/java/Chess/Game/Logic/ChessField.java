@@ -3,6 +3,7 @@ package Chess.Game.Logic;
 import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Pieces.IChessPiece;
 import Chess.Game.Logic.Player.EPlayerColor;
+import Chess.Game.Logic.Player.Player;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -21,9 +22,6 @@ import java.util.List;
  */
 public class ChessField {
 
-    /** Amount of fields (width and length) **/
-    public static final int AMOUNT_OF_FIELDS = 8;
-
     /** field of the Chess Game **/
     private List<ChessFieldButton> field;
     /** Movements of the Pieces **/
@@ -31,21 +29,83 @@ public class ChessField {
     /** Listener for all the Pieces **/
     private ActionListener pieceListener;
 
-    /** Constructor initializes {@link #movement} */
-    public ChessField() {
+    /** Players **/
+    private final Player player1;
+    private final Player player2;
+    /** Color to determine which players turn it is **/
+    private EPlayerColor currentPlayerColor;
+
+    /**
+     * Constructor initializes:<br>
+     * {@link #player1}
+     * {@link #player2}
+     * {@link #movement}
+     *
+     * @param player1 player1
+     * @param player2 player2
+     */
+    public ChessField(final Player player1, final Player player2) {
+        this.player1 = player1;
+        this.player2 = player2;
+        currentPlayerColor = player1.getPlayerColor();
         movement = new ChessPieceMovement();
     }
 
+    //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
+    //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
+
     /**
      * Getter for {@link #field}
+     *
      * @return field
      */
     public List<ChessFieldButton> getField() {
         return field;
     }
 
-    /** Method removes all disables every marking on the field */
-    private void removeMarkings(){
+    /**
+     * Getter for {@link #currentPlayerColor}
+     *
+     * @return currentPlayerColor
+     */
+    public EPlayerColor getCurrentPlayerColor() {
+        return currentPlayerColor;
+    }
+
+    /**
+     * Getter for {@link #player1}
+     *
+     * @return player1
+     */
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    /**
+     * Getter for {@link #player2}
+     *
+     * @return player2
+     */
+    public Player getPlayer2() {
+        return player2;
+    }
+    //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
+    //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
+
+    /**
+     * Setter for {@link #currentPlayerColor}
+     *
+     * @param currentPlayerColor change the Color of the current Player to this param
+     */
+    public void setCurrentPlayerColor(final EPlayerColor currentPlayerColor) {
+        this.currentPlayerColor = currentPlayerColor;
+    }
+
+
+    /**
+     * Method removes all disables every marking on the field
+     */
+    private void removeMarkings() {
         field.stream().filter(ChessFieldButton::isMarked).forEach(piece -> piece.setMarked(false));
         field.stream().filter(ChessFieldButton::isEndangered).forEach(piece -> piece.setEndangered(false));
         field.stream().forEach(ChessFieldButton::renderPiece);
@@ -69,16 +129,27 @@ public class ChessField {
                 .forEach(match -> match.setEndangered(true));
     }
 
-    /** Method initializes {@link #pieceListener} */
+    /**
+     * Method initializes {@link #pieceListener}
+     */
     private void initPieceListener() {
         pieceListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ChessFieldButton currentButton = (ChessFieldButton) e.getSource();
-                if (currentButton.isEndangered()) {
-                    removeMarkings();
-                } else {
-                    markButtons(currentButton);
+                if (currentButton.getPlayerColor() == currentPlayerColor) {
+
+                    if (currentButton.isEndangered()) {
+                        // there must be a marked button if an endangered button has been pressed, therefore no checks are needed
+                        ChessFieldButton markedButton = field.stream().filter(ChessFieldButton::isMarked).findAny().get();
+                        movement.updateEnPassant(markedButton, currentButton, field);
+                        setCurrentPlayerColor(currentPlayerColor == player1.getPlayerColor() ?
+                                player2.getPlayerColor() :
+                                player1.getPlayerColor());
+                        removeMarkings();
+                    } else {
+                        markButtons(currentButton);
+                    }
                 }
             }
         };

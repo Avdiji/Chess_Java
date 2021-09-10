@@ -63,8 +63,6 @@ public class ChessPieceMovement {
      * @return A Set of possible moves of the selected Piece
      */
     public Set<Position> getActualMoves(final Position currentPosition, final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field, final EChessPieces currentPiece) {
-        if (currentPiece == EChessPieces.PAWN_WHITE || currentPiece == EChessPieces.PAWN_BLACK)
-            ((Pawn) pawn).setType(currentPiece);
         return switch (currentPiece) {
             case PAWN_WHITE, PAWN_BLACK -> pawn.getActualPositions(currentPosition, currentPlayerColor, field);
             case ROOK_WHITE, ROOK_BLACK -> rook.getActualPositions(currentPosition, currentPlayerColor, field);
@@ -76,5 +74,16 @@ public class ChessPieceMovement {
         };
     }
 
+
+    /**
+     * Method sets enPassant for currentButton
+     *
+     * @param currentButton the currentButton
+     * @param destination   destination of currentButton
+     * @param field         field the game is being played in
+     */
+    public void updateEnPassant(final ChessFieldButton currentButton, final ChessFieldButton destination, final List<ChessFieldButton> field) {
+        ((Pawn) pawn).enableEnPassant(currentButton, destination, field);
+    }
 
 }
