@@ -29,7 +29,7 @@ public class Pawn implements IChessPiece {
      * @param currentPosition current Position of the Pawn
      * @return All Moves the pawn could theoretically execute
      */
-    private Set<Position> getPotentialPositions(final Position currentPosition, EPlayerColor playerColor) {
+    private Set<Position> getPotentialPositions(final Position currentPosition, EPlayerColor playerColor, List<ChessFieldButton> field) {
         Set<Position> result = new HashSet<>();
 
         int directionX[] = {0, 1, -1};
@@ -41,9 +41,9 @@ public class Pawn implements IChessPiece {
             result.add(new Position(currentPosition.getRow(), currentPosition.getColumn() + directionFromBase));
 
         for (int i = 0; i < directionX.length; ++i) {
+
             char posX = (char) (currentPosition.getRow() + directionX[i]);
             int posY = currentPosition.getColumn() + directionY[i];
-
             try {
                 result.add(new Position(posX, posY));
             } catch (IllegalArgumentException e) {
@@ -55,8 +55,8 @@ public class Pawn implements IChessPiece {
 
     @Override
     public Set<Position> getActualPositions(Position currentPosition, EPlayerColor currentPlayerColor, List<ChessFieldButton> field) {
-        Set<Position> result;
-        Set<Position> potential = getPotentialPositions(currentPosition, currentPlayerColor);
+        Set<Position> result = new HashSet<>();
+        Set<Position> potential = getPotentialPositions(currentPosition, currentPlayerColor, field);
 
         // the Positions in front of the Pawn
         Set<ChessFieldButton> front = field.stream()
@@ -82,14 +82,12 @@ public class Pawn implements IChessPiece {
                 .collect(Collectors.toSet()));
 
         result = front.stream().map(ChessFieldButton::getPosition).collect(Collectors.toSet());
-        result.addAll(diagonal.stream().map(ChessFieldButton::getPosition).collect(Collectors.toSet()));
 
         // The En Passant
         Position enPassant = findEnPassant(currentPosition, currentPlayerColor, field);
         if (findEnPassant(currentPosition, currentPlayerColor, field) != null) {
             result.add(enPassant);
         }
-
         return result;
     }
 
@@ -106,6 +104,7 @@ public class Pawn implements IChessPiece {
         Position result = null;
         if (field.stream().filter(ChessFieldButton::enabledEnPassant).count() > 0) {
             try {
+                // find the Field that will be captured after executing the En Passant from the current Position, if possible
                 Position enPassant = field.stream()
                         .filter(button -> button.enabledEnPassant())
                         .filter(button -> button.getPosition().getColumn() == currentPosition.getColumn())
@@ -113,7 +112,7 @@ public class Pawn implements IChessPiece {
                                 button.getPosition().getRow() == currentPosition.getRow() + 1 ||
                                         button.getPosition().getRow() == currentPosition.getRow() - 1)
                         .map(ChessFieldButton::getPosition).findFirst().get();
-
+                // find the Actual button, that will be captured after executing the EnPassant
                 result = new Position(enPassant.getRow(),
                         currentPlayerColor == EPlayerColor.WHITE ?
                                 enPassant.getColumn() + 1 :
@@ -133,12 +132,15 @@ public class Pawn implements IChessPiece {
      * @param field       field the game is being played in
      */
     public void enableEnPassant(final ChessFieldButton currentPawn, final ChessFieldButton destination, final List<ChessFieldButton> field) {
+        // disable every enPassant that currently exists
         field.stream()
                 .filter(button -> button.enabledEnPassant())
                 .filter(button -> button.isMissedEnPassant())
                 .forEach(button -> button.setEnPassant(false));
 
+        // save amount of steps travelled by the currentPawn
         int tmp_steps = Math.abs(currentPawn.getPosition().getColumn() - destination.getPosition().getColumn());
+        // find all the Pawns that could execute the EnPassant after currentPawn moved to destination
         Set<ChessFieldButton> potentialPawns = field.stream()
                 .filter(button -> button.getPlayerColor() != currentPawn.getPlayerColor() && button.getPlayerColor() != EPlayerColor.NONE)
                 .filter(button ->
@@ -147,10 +149,10 @@ public class Pawn implements IChessPiece {
                 .filter(button -> button.getType() == EChessPieces.PAWN_WHITE || button.getType() == EChessPieces.PAWN_BLACK)
                 .filter(button -> button.getPosition().getColumn() == destination.getPosition().getColumn())
                 .collect(Collectors.toSet());
-
+        // if there are any Pawns that can executed the En Passant within the next move, and the currentPawn has moved two steps forward, enable En Passant
         if (tmp_steps > 1 && potentialPawns.size() > 0) {
             destination.setEnPassant(true);
-            destination.setMissedEnPassant(true);
+            destination.setMissedEnPassant(true); // this will turn off the EnPassant as soon as the next Move has been executed
         }
     }
 

@@ -138,7 +138,6 @@ public class ChessField {
             public void actionPerformed(ActionEvent e) {
                 ChessFieldButton currentButton = (ChessFieldButton) e.getSource();
                 if (currentButton.getPlayerColor() == currentPlayerColor) {
-
                     if (currentButton.isEndangered()) {
                         // there must be a marked button if an endangered button has been pressed, therefore no checks are needed
                         ChessFieldButton markedButton = field.stream().filter(ChessFieldButton::isMarked).findAny().get();

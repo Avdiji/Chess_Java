@@ -222,17 +222,18 @@ public class GameWindow extends JFrame implements IChessFrame {
      * @param captured captured button
      */
     private void removeRedundantPiece(final ChessFieldButton captured){
-        Position toRemove = new Position(captured.getPosition().getRow(),
-                captured.getPlayerColor() == EPlayerColor.WHITE ?
-                        captured.getPosition().getColumn() - 1 :
-                        captured.getPosition().getColumn() + 1);
+        if(captured.getType() == EChessPieces.PAWN_WHITE || captured.getType() == EChessPieces.PAWN_BLACK) {
+            Position toRemove = new Position(captured.getPosition().getRow(),
+                    captured.getPlayerColor() == EPlayerColor.WHITE ?
+                            captured.getPosition().getColumn() - 1 :
+                            captured.getPosition().getColumn() + 1);
 
-        ChessFieldButton actuallyCaptured = chessField.getField().stream()
-                .filter(button -> button.getPosition().equals(toRemove))
-                .findAny().get();
-        actuallyCaptured.setType(EChessPieces.EMPTY);
-        actuallyCaptured.setPlayerColor(EPlayerColor.NONE);
-
+            ChessFieldButton actuallyCaptured = chessField.getField().stream()
+                    .filter(button -> button.getPosition().equals(toRemove))
+                    .findAny().get();
+            actuallyCaptured.setType(EChessPieces.EMPTY);
+            actuallyCaptured.setPlayerColor(EPlayerColor.NONE);
+        }
     }
 
     /**
