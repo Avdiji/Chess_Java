@@ -31,7 +31,7 @@ public class GameWindow extends JFrame implements IChessFrame {
     private static final Position idlePosition = new Position('A',1);
 
     /** Sizes used for the GUI in the Game Window **/
-    private static final int MARGIN_BORDER_GRAVE[] = {70, 50, 100, 150};
+    private static final int MARGIN_BORDER_GRAVE[] = {50, 50, 100, 150};
     private static final int MARGIN_BOARD[] = {50, 160, 100, 160};
     private static final int MARGIN_TITLE[] = {30, 30, 0, 30};
     private static final int SIZE_TITLE = 50;
