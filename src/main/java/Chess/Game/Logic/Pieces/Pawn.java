@@ -53,6 +53,25 @@ public class Pawn implements IChessPiece {
         return result;
     }
 
+
+    /**
+     * The Method gets all the diagonal Position the Pawn could capture (if there was an enemy piece)
+     *
+     * @param currentPosition    current Position of the Pawn
+     * @param currentPlayerColor current Color of the Player
+     * @param field              field the Pawn is currently located in
+     * @return a Set of the Diagonal Buttons the Pawn could capture
+     */
+    public Set<Position> getDiagonalPositions(Position currentPosition, EPlayerColor currentPlayerColor, List<ChessFieldButton> field) {
+        Set<Position> potential = getPotentialPositions(currentPosition, currentPlayerColor, field);
+        Set<Position> result = field.stream()
+                .filter(button -> button.getPosition().getRow() != currentPosition.getRow() && potential.contains(button.getPosition()))
+                .map(ChessFieldButton::getPosition)
+                .collect(Collectors.toSet());
+
+        return result;
+    }
+
     @Override
     public Set<Position> getActualPositions(Position currentPosition, EPlayerColor currentPlayerColor, List<ChessFieldButton> field) {
         Set<Position> result = new HashSet<>();
@@ -71,7 +90,6 @@ public class Pawn implements IChessPiece {
                 front.clear();
             }
         }
-
         // the Positions diagonal to the Pawn
         Set<ChessFieldButton> diagonal = field.stream()
                 .filter(button -> button.getPosition().getRow() != currentPosition.getRow() && potential.contains(button.getPosition()))

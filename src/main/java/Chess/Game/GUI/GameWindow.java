@@ -236,6 +236,36 @@ public class GameWindow extends JFrame implements IChessFrame {
         }
     }
 
+
+    /**
+     * The Method Moves the marked button to the captured Button (used to make the client work)
+     *
+     * @param capturedButton button that has been captured
+     * @param markedButton button that has been moved
+     */
+    public void MovePiece(final ChessFieldButton capturedButton, final ChessFieldButton markedButton){
+            // check how many empty pieces there are pre execution
+            int empty_fields_preMove = (int) chessField.getField().stream()
+                    .filter(button -> button.getType() == EChessPieces.EMPTY).count();
+
+            addToGrave(capturedButton.getType(), capturedButton.getPlayerColor());
+
+            capturedButton.setType(markedButton.getType());
+            capturedButton.setPlayerColor(markedButton.getPlayerColor());
+
+            markedButton.setType(EChessPieces.EMPTY);
+            markedButton.setPlayerColor(EPlayerColor.NONE);
+
+            // check how many empty pieces there are post execution
+            int empty_fields_postMove = (int) chessField.getField().stream()
+                    .filter(button -> button.getType() == EChessPieces.EMPTY).count();
+
+            if(empty_fields_preMove == empty_fields_postMove){
+                removeRedundantPiece(capturedButton);
+            }
+            changePlayerIndicator();
+    }
+
     /**
      * Method initializes the Listener to add the Piece to the Grave
      */
@@ -244,30 +274,9 @@ public class GameWindow extends JFrame implements IChessFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ChessFieldButton capturedButton = (ChessFieldButton) e.getSource();
-                if (capturedButton.isEndangered()) {
-
-                    // check how many empty pieces there are pre execution
-                    int empty_fields_preMove =(int) chessField.getField().stream()
-                            .filter(button -> button.getType() == EChessPieces.EMPTY).count();
-
-                    addToGrave(capturedButton.getType(), capturedButton.getPlayerColor());
+                if(capturedButton.isEndangered()) {
                     ChessFieldButton markedButton = chessField.getField().stream().filter(ChessFieldButton::isMarked).findAny().get();
-
-                    capturedButton.setType(markedButton.getType());
-                    capturedButton.setPlayerColor(markedButton.getPlayerColor());
-
-                    markedButton.setType(EChessPieces.EMPTY);
-                    markedButton.setPlayerColor(EPlayerColor.NONE);
-
-                    // check how many empty pieces there are post execution
-                    int empty_fields_postMove =(int) chessField.getField().stream()
-                            .filter(button -> button.getType() == EChessPieces.EMPTY).count();
-
-                    if(empty_fields_preMove == empty_fields_postMove){
-                        removeRedundantPiece(capturedButton);
-                    }
-
-                    changePlayerIndicator();
+                    MovePiece(capturedButton, markedButton);
                 }
             }
         };

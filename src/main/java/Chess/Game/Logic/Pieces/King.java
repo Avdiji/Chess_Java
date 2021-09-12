@@ -60,4 +60,6 @@ public class King implements IChessPiece {
         result.removeAll(toRemove);
         return result;
     }
+
+
 }

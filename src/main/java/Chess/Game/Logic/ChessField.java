@@ -130,6 +130,21 @@ public class ChessField {
     }
 
     /**
+     * Method updates the currentPlayer Color and enables the enPassant after every move
+     * (used to make the Client work)
+     *
+     * @param currentButton button, that has been captured
+     * @param markedButton button, that has captured the currentButton
+     */
+    public void updateAfterExecution(final ChessFieldButton currentButton, final ChessFieldButton markedButton){
+        movement.updateEnPassant(markedButton, currentButton, field);
+        setCurrentPlayerColor(currentPlayerColor == player1.getPlayerColor() ?
+                player2.getPlayerColor() :
+                player1.getPlayerColor());
+        removeMarkings();
+    }
+
+    /**
      * Method initializes {@link #pieceListener}
      */
     private void initPieceListener() {
@@ -141,10 +156,7 @@ public class ChessField {
                     if (currentButton.isEndangered()) {
                         // there must be a marked button if an endangered button has been pressed, therefore no checks are needed
                         ChessFieldButton markedButton = field.stream().filter(ChessFieldButton::isMarked).findAny().get();
-                        movement.updateEnPassant(markedButton, currentButton, field);
-                        setCurrentPlayerColor(currentPlayerColor == player1.getPlayerColor() ?
-                                player2.getPlayerColor() :
-                                player1.getPlayerColor());
+                        updateAfterExecution(currentButton, markedButton);
                         removeMarkings();
                     } else {
                         markButtons(currentButton);
