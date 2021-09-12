@@ -22,17 +22,27 @@ import java.util.List;
  */
 public class ChessField {
 
-    /** field of the Chess Game **/
+    /**
+     * field of the Chess Game
+     **/
     private List<ChessFieldButton> field;
-    /** Movements of the Pieces **/
+    /**
+     * Movements of the Pieces
+     **/
     private ChessPieceMovement movement;
-    /** Listener for all the Pieces **/
+    /**
+     * Listener for all the Pieces
+     **/
     private ActionListener pieceListener;
 
-    /** Players **/
+    /**
+     * Players
+     **/
     private final Player player1;
     private final Player player2;
-    /** Color to determine which players turn it is **/
+    /**
+     * Color to determine which players turn it is
+     **/
     private EPlayerColor currentPlayerColor;
 
     /**
@@ -134,9 +144,9 @@ public class ChessField {
      * (used to make the Client work)
      *
      * @param currentButton button, that has been captured
-     * @param markedButton button, that has captured the currentButton
+     * @param markedButton  button, that has captured the currentButton
      */
-    public void updateAfterExecution(final ChessFieldButton currentButton, final ChessFieldButton markedButton){
+    public void updateAfterExecution(final ChessFieldButton currentButton, final ChessFieldButton markedButton) {
         movement.updateEnPassant(markedButton, currentButton, field);
         setCurrentPlayerColor(currentPlayerColor == player1.getPlayerColor() ?
                 player2.getPlayerColor() :

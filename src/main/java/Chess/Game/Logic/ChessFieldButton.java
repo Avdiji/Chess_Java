@@ -35,6 +35,10 @@ public class ChessFieldButton extends JButton {
     private boolean enPassant;
     private boolean missedEnPassant; // to check whether the enPassant has been used or not
 
+    /** True if this button is a King/Rook and has moved **/
+    private boolean kingMoved;
+    private boolean rookMoved;
+
     /**
      * Constructor initializes following variables:<br>
      * <p>
@@ -57,6 +61,9 @@ public class ChessFieldButton extends JButton {
 
         enPassant = false;
         missedEnPassant = false;
+
+        kingMoved = false;
+        rookMoved = false;
 
         playerColor = type.toString().contains("WHITE") ?
                 EPlayerColor.WHITE : (type.toString().contains("BLACK") ?
@@ -119,6 +126,22 @@ public class ChessFieldButton extends JButton {
      */
     public boolean isMissedEnPassant(){
         return missedEnPassant;
+    }
+
+    /**
+     * Getter for{@link #kingMoved}
+     * @return kingMoved
+     */
+    public boolean hasKingMoved(){
+        return kingMoved;
+    }
+
+    /**
+     * Getter for {@link #rookMoved}
+     * @return rookMoved
+     */
+    public boolean hasRookMoved(){
+        return rookMoved;
     }
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
@@ -183,6 +206,22 @@ public class ChessFieldButton extends JButton {
      */
     public void setMissedEnPassant(final boolean value){
         missedEnPassant = value;
+    }
+
+    /**
+     * Setter for {@link #kingMoved}
+     * @param value new value for kingMoved
+     */
+    public void setKingMoved(final boolean value){
+        this.kingMoved = value;
+    }
+
+    /**
+     * Setter for {@link #rookMoved}
+     * @param value new value for rookMoved
+     */
+    public void setRookMoved(final boolean value){
+        this.rookMoved = value;
     }
     //SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER //
     //SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER //

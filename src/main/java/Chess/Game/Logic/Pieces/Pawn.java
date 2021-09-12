@@ -68,7 +68,6 @@ public class Pawn implements IChessPiece {
                 .filter(button -> button.getPosition().getRow() != currentPosition.getRow() && potential.contains(button.getPosition()))
                 .map(ChessFieldButton::getPosition)
                 .collect(Collectors.toSet());
-
         return result;
     }
 

@@ -27,57 +27,90 @@ import java.util.Arrays;
  */
 public class GameWindow extends JFrame implements IChessFrame {
 
-    /** idle position to initialize the graves **/
-    private static final Position idlePosition = new Position('A',1);
+    /**
+     * idle position to initialize the graves
+     **/
+    private static final Position idlePosition = new Position('A', 1);
 
-    /** Sizes used for the GUI in the Game Window **/
+    /**
+     * Sizes used for the GUI in the Game Window
+     **/
     private static final int MARGIN_BORDER_GRAVE[] = {50, 50, 100, 150};
     private static final int MARGIN_BOARD[] = {50, 160, 100, 160};
     private static final int MARGIN_TITLE[] = {30, 30, 0, 30};
     private static final int SIZE_TITLE = 50;
     private static final int SIZE_GRAVE_LABEL = 15;
 
-    /** Strings used for the GUI in the Game Window **/
+    /**
+     * Strings used for the GUI in the Game Window
+     **/
     private static final String TITLE = "Chess";
     private static final String FORFEIT_WHITE = "Forfeit White";
     private static final String FORFEIT_BLACK = "Forfeit Black";
 
-    /** Label with the Title of the Game Window **/
+    /**
+     * Label with the Title of the Game Window
+     **/
     private JLabel title;
 
-    /** Board with all the Pieces and the Positions (only way to make it work with javaswing) **/
+    /**
+     * Board with all the Pieces and the Positions (only way to make it work with javaswing)
+     **/
     private JPanel board_wrapper;
-    /** Panels to indicate, which players turn it is **/
+    /**
+     * Panels to indicate, which players turn it is
+     **/
     private JPanel indicator_black;
     private JPanel indicator_white;
 
-    /** Board with all the Pieces **/
+    /**
+     * Board with all the Pieces
+     **/
     private JPanel panel_chessBoard;
-    /** The Chess Board with the pieces only **/
+    /**
+     * The Chess Board with the pieces only
+     **/
     private JPanel panel_chessPieces;
 
 
-    /** RHS of the Game Window **/
+    /**
+     * RHS of the Game Window
+     **/
     private JPanel panel_LHS;
-    /** The Grave containing the white pieces **/
+    /**
+     * The Grave containing the white pieces
+     **/
     private JPanel grave_white;
-    /** Surrender button white player **/
+    /**
+     * Surrender button white player
+     **/
     private JButton ff_white;
 
-    /** LHS of the Game Window **/
+    /**
+     * LHS of the Game Window
+     **/
     private JPanel panel_RHS;
-    /** The Grave containing the black pieces **/
+    /**
+     * The Grave containing the black pieces
+     **/
     private JPanel grave_black;
-    /** Surrender button black player **/
+    /**
+     * Surrender button black player
+     **/
     private JButton ff_black;
 
-    /** ChessField the Game is being played on **/
+    /**
+     * ChessField the Game is being played on
+     **/
     private ChessField chessField;
-    /** ActionListener to add Piece to the Grave **/
+    /**
+     * ActionListener to add Piece to the Grave
+     **/
     private ActionListener captureListener;
 
     /**
      * Constructor
+     *
      * @param chessField chessField with all the Logic
      */
     public GameWindow(final ChessField chessField) {
@@ -90,7 +123,9 @@ public class GameWindow extends JFrame implements IChessFrame {
         addComponents();
     }
 
-    /** Method initializes {@link #title} **/
+    /**
+     * Method initializes {@link #title}
+     **/
     private void initTitle() {
         title = new JLabel(TITLE);
         title.setHorizontalAlignment(JLabel.CENTER);
@@ -179,7 +214,6 @@ public class GameWindow extends JFrame implements IChessFrame {
         board_wrapper.add(panel_chessBoard, BorderLayout.CENTER);
         board_wrapper.add(indicator_white, BorderLayout.SOUTH);
         board_wrapper.add(indicator_black, BorderLayout.NORTH);
-
     }
 
     /**
@@ -219,10 +253,11 @@ public class GameWindow extends JFrame implements IChessFrame {
 
     /**
      * The Method removes the redundant Pawn in case of an enPassant
+     *
      * @param captured captured button
      */
-    private void removeRedundantPiece(final ChessFieldButton captured){
-        if(captured.getType() == EChessPieces.PAWN_WHITE || captured.getType() == EChessPieces.PAWN_BLACK) {
+    private void removeRedundantPiece(final ChessFieldButton captured) {
+        if (captured.getType() == EChessPieces.PAWN_WHITE || captured.getType() == EChessPieces.PAWN_BLACK) {
             Position toRemove = new Position(captured.getPosition().getRow(),
                     captured.getPlayerColor() == EPlayerColor.WHITE ?
                             captured.getPosition().getColumn() - 1 :
@@ -236,14 +271,71 @@ public class GameWindow extends JFrame implements IChessFrame {
         }
     }
 
+    /**
+     * Method checks, whether a rochade has been selected, and executes it if true
+     *
+     * @param capturedButton button that has been captured
+     * @param markedButton   button that has executed the move
+     * @return true if a rochade can be executed
+     */
+    private boolean executeRochade(final ChessFieldButton capturedButton, final ChessFieldButton markedButton) {
+        boolean result = false;
+        boolean rightRochade;
+        int steps;
+
+        steps = Math.abs(markedButton.getPosition().getRow() - capturedButton.getPosition().getRow());
+        if ((markedButton.getType() == EChessPieces.KING_WHITE || markedButton.getType() == EChessPieces.KING_BLACK) && steps > 1) {
+            result = true;
+
+            capturedButton.setType(markedButton.getType());
+            capturedButton.setPlayerColor(markedButton.getPlayerColor());
+            markedButton.setType(EChessPieces.EMPTY);
+            markedButton.setPlayerColor(EPlayerColor.NONE);
+
+            rightRochade = markedButton.getPosition().getRow() < capturedButton.getPosition().getRow();
+            ChessFieldButton rook;
+            ChessFieldButton newRook;
+            Position newRookPosition;
+
+            if (rightRochade) {
+                rook = chessField.getField().stream()
+                        .filter(button -> button.getPlayerColor() == capturedButton.getPlayerColor())
+                        .filter(button -> button.getPosition().getRow() > markedButton.getPosition().getRow())
+                        .filter(button -> button.getType() == EChessPieces.ROOK_WHITE || button.getType() == EChessPieces.ROOK_BLACK)
+                        .findAny().get();
+                newRookPosition = new Position((char) (capturedButton.getPosition().getRow() - 1), capturedButton.getPosition().getColumn());
+                newRook = chessField.getField().stream().filter(button -> button.getPosition().equals(newRookPosition)).findAny().get();
+            } else {
+                rook = chessField.getField().stream()
+                        .filter(button -> button.getPlayerColor() == capturedButton.getPlayerColor())
+                        .filter(button -> button.getPosition().getRow() < markedButton.getPosition().getRow())
+                        .filter(button -> button.getType() == EChessPieces.ROOK_WHITE || button.getType() == EChessPieces.ROOK_BLACK)
+                        .findAny().get();
+                newRookPosition = new Position((char) (capturedButton.getPosition().getRow() + 1), capturedButton.getPosition().getColumn());
+                newRook = chessField.getField().stream().filter(button -> button.getPosition().equals(newRookPosition)).findAny().get();
+            }
+            newRook.setType(rook.getType());
+            newRook.setPlayerColor(rook.getPlayerColor());
+            rook.setType(EChessPieces.EMPTY);
+            rook.setPlayerColor(EPlayerColor.NONE);
+        }
+        return result;
+    }
 
     /**
      * The Method Moves the marked button to the captured Button (used to make the client work)
      *
      * @param capturedButton button that has been captured
-     * @param markedButton button that has been moved
+     * @param markedButton   button that has been moved
      */
-    public void MovePiece(final ChessFieldButton capturedButton, final ChessFieldButton markedButton){
+    public void MovePiece(final ChessFieldButton capturedButton, final ChessFieldButton markedButton) {
+        if (markedButton.getType() == EChessPieces.ROOK_WHITE || markedButton.getType() == EChessPieces.ROOK_BLACK) {
+            markedButton.setRookMoved(true);
+        } else if (markedButton.getType() == EChessPieces.KING_WHITE || markedButton.getType() == EChessPieces.KING_BLACK) {
+            markedButton.setKingMoved(true);
+        }
+
+        if (!executeRochade(capturedButton, markedButton)) {
             // check how many empty pieces there are pre execution
             int empty_fields_preMove = (int) chessField.getField().stream()
                     .filter(button -> button.getType() == EChessPieces.EMPTY).count();
@@ -260,10 +352,11 @@ public class GameWindow extends JFrame implements IChessFrame {
             int empty_fields_postMove = (int) chessField.getField().stream()
                     .filter(button -> button.getType() == EChessPieces.EMPTY).count();
 
-            if(empty_fields_preMove == empty_fields_postMove){
+            if (empty_fields_preMove == empty_fields_postMove) {
                 removeRedundantPiece(capturedButton);
             }
-            changePlayerIndicator();
+        }
+        changePlayerIndicator();
     }
 
     /**
@@ -274,7 +367,7 @@ public class GameWindow extends JFrame implements IChessFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ChessFieldButton capturedButton = (ChessFieldButton) e.getSource();
-                if(capturedButton.isEndangered()) {
+                if (capturedButton.isEndangered()) {
                     ChessFieldButton markedButton = chessField.getField().stream().filter(ChessFieldButton::isMarked).findAny().get();
                     MovePiece(capturedButton, markedButton);
                 }

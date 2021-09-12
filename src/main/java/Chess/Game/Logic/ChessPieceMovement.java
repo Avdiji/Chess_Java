@@ -14,6 +14,7 @@ import Chess.Game.Logic.Player.EPlayerColor;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Fitor Avdiji
@@ -55,8 +56,6 @@ public class ChessPieceMovement {
     }
 
     /**
-     * // TODO King can capture piece, which puts him in an endangered state
-     * <p>
      * Method returns a Set of potential moves thePiece could make
      *
      * @param currentPosition    currentPosition of the Piece
@@ -89,6 +88,30 @@ public class ChessPieceMovement {
     }
 
     /**
+     * The Method checks, whether the Player is in a check or not
+     *
+     * @param currentPosition current position of the King
+     * @param currentPlayerColor current Color of the King
+     * @param field field the King is located in
+     * @return
+     */
+    public boolean isCheck(final Position currentPosition, final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field){
+            AtomicBoolean result = new AtomicBoolean(false);
+
+            field.stream()
+                    .filter(button -> button.getPlayerColor() != currentPlayerColor)
+                    .filter(button -> button.getPlayerColor() != EPlayerColor.NONE)
+                    .filter(button -> button.getType() != EChessPieces.KING_WHITE && button.getType() != EChessPieces.KING_BLACK)
+                    .forEach(button -> {
+                        Set<Position> moves = getActualMoves(button.getPosition(), button.getPlayerColor(), field, button.getType());
+                        if(moves.contains(currentPosition))
+                            result.set(true);
+                    });
+            return result.get();
+    }
+
+
+    /**
      * The Method returns a Set of Positions the King can move to, without endangering himself
      *
      * @param currentPosition    currentPosition of the King
@@ -98,47 +121,57 @@ public class ChessPieceMovement {
      */
     private Set<Position> getKingsSaveMoves(final Position currentPosition, final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field) {
         Set<Position> result = king.getActualPositions(currentPosition, currentPlayerColor, field);
+
+        if(!isCheck(currentPosition, currentPlayerColor, field))
+            result.addAll(((King)king).getPositionsRochade(currentPosition, currentPlayerColor, field));
+
         Set<Position> enemyPositions = new HashSet<>();
 
         ChessFieldButton currentButton = field.stream().filter(button -> button.getPosition().equals(currentPosition)).findAny().get();
         // for each ChessFieldButton the king could reach
-        field.stream().filter(button -> king.getActualPositions(currentPosition, currentPlayerColor, field).contains(button.getPosition())).forEach(button -> {
-            // save values
-            EChessPieces tmp_type = button.getType();
-            EPlayerColor tmp_color = button.getPlayerColor();
-            EChessPieces king_type = currentButton.getType();
-            EPlayerColor king_color = currentButton.getPlayerColor();
-            // execute the move
-            button.setType(king_type);
-            button.setPlayerColor(king_color);
-            currentButton.setType(EChessPieces.EMPTY);
-            currentButton.setPlayerColor(EPlayerColor.NONE);
-            // check, whether the king ends up in an endangered Position
-            field.stream()
-                    .filter(piece -> piece.getType() != EChessPieces.KING_WHITE && piece.getType() != EChessPieces.KING_BLACK)
-                    .filter(piece -> piece.getType() != EChessPieces.PAWN_WHITE && piece.getType() != EChessPieces.PAWN_BLACK)
-                    .filter(piece -> piece.getPlayerColor() != currentPlayerColor && piece.getPlayerColor() != EPlayerColor.NONE)
-                    .forEach(piece -> enemyPositions.addAll(getActualMoves(piece.getPosition(), piece.getPlayerColor(), field, piece.getType())));
-            // extra check for pawn
-            field.stream()
-                    .filter(piece -> piece.getPlayerColor() != currentPlayerColor && piece.getPlayerColor() != EPlayerColor.NONE)
-                    .filter(piece -> piece.getType() == EChessPieces.PAWN_WHITE || piece.getType() == EChessPieces.PAWN_BLACK)
-                    .forEach(piece -> enemyPositions.addAll(((Pawn) pawn).getDiagonalPositions(piece.getPosition(), piece.getPlayerColor(), field)));
-            // extra check for enemy King
-            ChessFieldButton enemyKing = field.stream()
-                    .filter(piece -> piece.getPlayerColor() != currentPlayerColor)
-                    .filter(piece -> piece.getType() == EChessPieces.KING_WHITE || piece.getType() == EChessPieces.KING_BLACK)
-                    .findFirst().get();
-            // remove the kings illegal moves
-            result.removeAll(king.getActualPositions(enemyKing.getPosition(), enemyKing.getPlayerColor(), field));
-            // reset type and color of buttons
-            button.setType(tmp_type);
-            button.setPlayerColor(tmp_color);
-            currentButton.setType(king_type);
-            currentButton.setPlayerColor(king_color);
-        });
+        field.stream()
+                .filter(button -> king.getActualPositions(currentPosition, currentPlayerColor, field).contains(button.getPosition()))
+                .forEach(button -> {
+                    // save values
+                    EChessPieces tmp_type = button.getType();
+                    EPlayerColor tmp_color = button.getPlayerColor();
+                    EChessPieces king_type = currentButton.getType();
+                    EPlayerColor king_color = currentButton.getPlayerColor();
+                    // execute the move
+                    button.setType(king_type);
+                    button.setPlayerColor(king_color);
+                    currentButton.setType(EChessPieces.EMPTY);
+                    currentButton.setPlayerColor(EPlayerColor.NONE);
+                    // check, whether the king ends up in an endangered Position
+                    field.stream()
+                            .filter(piece -> piece.getType() != EChessPieces.KING_WHITE && piece.getType() != EChessPieces.KING_BLACK)
+                            .filter(piece -> piece.getType() != EChessPieces.PAWN_WHITE && piece.getType() != EChessPieces.PAWN_BLACK)
+                            .filter(piece -> piece.getPlayerColor() != currentPlayerColor && piece.getPlayerColor() != EPlayerColor.NONE)
+                            .forEach(piece -> enemyPositions.addAll(getActualMoves(piece.getPosition(), piece.getPlayerColor(), field, piece.getType())));
+                    // extra check for pawn
+                    field.stream()
+                            .filter(piece -> piece.getPlayerColor() != currentPlayerColor && piece.getPlayerColor() != EPlayerColor.NONE)
+                            .filter(piece -> piece.getType() == EChessPieces.PAWN_WHITE || piece.getType() == EChessPieces.PAWN_BLACK)
+                            .forEach(piece -> enemyPositions.addAll(((Pawn) pawn).getDiagonalPositions(piece.getPosition(), piece.getPlayerColor(), field)));
+                    // extra check for enemy King
+                    ChessFieldButton enemyKing = field.stream()
+                            .filter(piece -> piece.getPlayerColor() != currentPlayerColor)
+                            .filter(piece -> piece.getType() == EChessPieces.KING_WHITE || piece.getType() == EChessPieces.KING_BLACK)
+                            .findFirst().get();
+                    // remove the kings illegal moves
+                    result.removeAll(king.getActualPositions(enemyKing.getPosition(), enemyKing.getPlayerColor(), field));
+                    // reset type and color of buttons
+                    button.setType(tmp_type);
+                    button.setPlayerColor(tmp_color);
+                    currentButton.setType(king_type);
+                    currentButton.setPlayerColor(king_color);
+                });
         // remove all other illegal moves
         result.removeAll(enemyPositions);
         return result;
     }
+
+    // TODO all the moves must be adjusted, if the king is in an endangered Position, get the intersection of the pressed piece -position and the endangering piece - position, then check for evey move what might work
+
+
 }
