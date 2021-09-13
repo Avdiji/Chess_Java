@@ -43,7 +43,7 @@ public class Player {
     }
 
     /**
-     * Method sets the last move e.g: "A1;B3"
+     * Method sets the last move e.g: "A-1;B-3"
      *
      * @param marked   button that has been moved
      * @param captured button that has been captured

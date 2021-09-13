@@ -106,7 +106,7 @@ public class GameWindow extends JFrame implements IChessFrame {
     /**
      * ActionListener to add Piece to the Grave
      **/
-    private ActionListener captureListener;
+    private ActionListener buttonListener;
 
     /**
      * Constructor
@@ -252,77 +252,6 @@ public class GameWindow extends JFrame implements IChessFrame {
     }
 
     /**
-     * The Method removes the redundant Pawn in case of an enPassant
-     *
-     * @param captured captured button
-     */
-    private void removeRedundantPiece(final ChessFieldButton captured) {
-        if (captured.getType() == EChessPieces.PAWN_WHITE || captured.getType() == EChessPieces.PAWN_BLACK) {
-            Position toRemove = new Position(captured.getPosition().getRow(),
-                    captured.getPlayerColor() == EPlayerColor.WHITE ?
-                            captured.getPosition().getColumn() - 1 :
-                            captured.getPosition().getColumn() + 1);
-
-            ChessFieldButton actuallyCaptured = chessField.getField().stream()
-                    .filter(button -> button.getPosition().equals(toRemove))
-                    .findAny().get();
-            actuallyCaptured.setType(EChessPieces.EMPTY);
-            actuallyCaptured.setPlayerColor(EPlayerColor.NONE);
-        }
-    }
-
-    /**
-     * Method checks, whether a rochade has been selected, and executes it if true
-     *
-     * @param capturedButton button that has been captured
-     * @param markedButton   button that has executed the move
-     * @return true if a rochade can be executed
-     */
-    private boolean executeRochade(final ChessFieldButton capturedButton, final ChessFieldButton markedButton) {
-        boolean result = false;
-        boolean rightRochade;
-        int steps;
-
-        steps = Math.abs(markedButton.getPosition().getRow() - capturedButton.getPosition().getRow());
-        if ((markedButton.getType() == EChessPieces.KING_WHITE || markedButton.getType() == EChessPieces.KING_BLACK) && steps > 1) {
-            result = true;
-
-            capturedButton.setType(markedButton.getType());
-            capturedButton.setPlayerColor(markedButton.getPlayerColor());
-            markedButton.setType(EChessPieces.EMPTY);
-            markedButton.setPlayerColor(EPlayerColor.NONE);
-
-            rightRochade = markedButton.getPosition().getRow() < capturedButton.getPosition().getRow();
-            ChessFieldButton rook;
-            ChessFieldButton newRook;
-            Position newRookPosition;
-
-            if (rightRochade) {
-                rook = chessField.getField().stream()
-                        .filter(button -> button.getPlayerColor() == capturedButton.getPlayerColor())
-                        .filter(button -> button.getPosition().getRow() > markedButton.getPosition().getRow())
-                        .filter(button -> button.getType() == EChessPieces.ROOK_WHITE || button.getType() == EChessPieces.ROOK_BLACK)
-                        .findAny().get();
-                newRookPosition = new Position((char) (capturedButton.getPosition().getRow() - 1), capturedButton.getPosition().getColumn());
-                newRook = chessField.getField().stream().filter(button -> button.getPosition().equals(newRookPosition)).findAny().get();
-            } else {
-                rook = chessField.getField().stream()
-                        .filter(button -> button.getPlayerColor() == capturedButton.getPlayerColor())
-                        .filter(button -> button.getPosition().getRow() < markedButton.getPosition().getRow())
-                        .filter(button -> button.getType() == EChessPieces.ROOK_WHITE || button.getType() == EChessPieces.ROOK_BLACK)
-                        .findAny().get();
-                newRookPosition = new Position((char) (capturedButton.getPosition().getRow() + 1), capturedButton.getPosition().getColumn());
-                newRook = chessField.getField().stream().filter(button -> button.getPosition().equals(newRookPosition)).findAny().get();
-            }
-            newRook.setType(rook.getType());
-            newRook.setPlayerColor(rook.getPlayerColor());
-            rook.setType(EChessPieces.EMPTY);
-            rook.setPlayerColor(EPlayerColor.NONE);
-        }
-        return result;
-    }
-
-    /**
      * The Method Moves the marked button to the captured Button (used to make the client work)
      *
      * @param capturedButton button that has been captured
@@ -330,12 +259,12 @@ public class GameWindow extends JFrame implements IChessFrame {
      */
     public void MovePiece(final ChessFieldButton capturedButton, final ChessFieldButton markedButton) {
         if (markedButton.getType() == EChessPieces.ROOK_WHITE || markedButton.getType() == EChessPieces.ROOK_BLACK) {
-            markedButton.setRookMoved(true);
+            capturedButton.setRookMoved(true);
         } else if (markedButton.getType() == EChessPieces.KING_WHITE || markedButton.getType() == EChessPieces.KING_BLACK) {
-            markedButton.setKingMoved(true);
+            capturedButton.setKingMoved(true);
         }
-
-        if (!executeRochade(capturedButton, markedButton)) {
+        // if the move wasn't a castle (rochade)
+        if (!chessField.getMovement().executeRochade(capturedButton, markedButton, chessField.getField())) {
             // check how many empty pieces there are pre execution
             int empty_fields_preMove = (int) chessField.getField().stream()
                     .filter(button -> button.getType() == EChessPieces.EMPTY).count();
@@ -353,23 +282,36 @@ public class GameWindow extends JFrame implements IChessFrame {
                     .filter(button -> button.getType() == EChessPieces.EMPTY).count();
 
             if (empty_fields_preMove == empty_fields_postMove) {
-                removeRedundantPiece(capturedButton);
+                chessField.getMovement().removeRedundantPiece(capturedButton, chessField.getField());
             }
         }
         changePlayerIndicator();
+        chessField.getMovement().updateEnPassant(markedButton, capturedButton, chessField.getField());
+        chessField.setCurrentPlayerColor(chessField.getCurrentPlayerColor() == chessField.getPlayer1().getPlayerColor() ?
+                chessField.getPlayer2().getPlayerColor() :
+                chessField.getPlayer1().getPlayerColor());
+        chessField.removeMarkings();
+
+        System.out.println(String.format("Check %s: %b", chessField.getCurrentPlayerColor(), chessField.getMovement().isCheck(chessField.getCurrentPlayerColor(), chessField.getField())));
+        System.out.println(String.format("Checkmate %s: %b", chessField.getCurrentPlayerColor(), chessField.getMovement().isCheckMate(chessField.getCurrentPlayerColor(), chessField.getField())));
+        System.out.println(String.format("Stalemate %s: %b", chessField.getCurrentPlayerColor(), chessField.getMovement().isStalemate(chessField.getCurrentPlayerColor(), chessField.getField())));
+        System.out.println();
     }
 
     /**
      * Method initializes the Listener to add the Piece to the Grave
      */
-    private void initCaptureListener() {
-        captureListener = new ActionListener() {
+    private void initButtonListener() {
+        buttonListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ChessFieldButton capturedButton = (ChessFieldButton) e.getSource();
-                if (capturedButton.isEndangered()) {
+                ChessFieldButton selectedButton = (ChessFieldButton) e.getSource();
+                if (selectedButton.isEndangered()) {
                     ChessFieldButton markedButton = chessField.getField().stream().filter(ChessFieldButton::isMarked).findAny().get();
-                    MovePiece(capturedButton, markedButton);
+                    MovePiece(selectedButton, markedButton);
+                } else {
+                    if (selectedButton.getPlayerColor() == chessField.getCurrentPlayerColor())
+                        chessField.markButtons(selectedButton);
                 }
             }
         };
@@ -377,7 +319,7 @@ public class GameWindow extends JFrame implements IChessFrame {
 
     @Override
     public void initComponents() {
-        initCaptureListener();
+        initButtonListener();
         initTitle();
         initPanel_RHS();
         initPanel_LHS();
@@ -390,7 +332,7 @@ public class GameWindow extends JFrame implements IChessFrame {
         this.add(panel_RHS, BorderLayout.EAST);
         this.add(panel_LHS, BorderLayout.WEST);
         this.add(board_wrapper, BorderLayout.CENTER);
-        chessField.getField().forEach(button -> button.addActionListener(captureListener));
+        chessField.getField().forEach(button -> button.addActionListener(buttonListener));
     }
 
     @Override

@@ -6,7 +6,6 @@ import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Player.Player;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -99,6 +98,15 @@ public class ChessField {
     public Player getPlayer2() {
         return player2;
     }
+
+    /**
+     * Setter for {@link #movement}
+     *
+     * @return movement
+     */
+    public ChessPieceMovement getMovement() {
+        return movement;
+    }
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
 
@@ -111,11 +119,10 @@ public class ChessField {
         this.currentPlayerColor = currentPlayerColor;
     }
 
-
     /**
      * Method removes all disables every marking on the field
      */
-    private void removeMarkings() {
+    public void removeMarkings() {
         field.stream().filter(ChessFieldButton::isMarked).forEach(piece -> piece.setMarked(false));
         field.stream().filter(ChessFieldButton::isEndangered).forEach(piece -> piece.setEndangered(false));
         field.stream().forEach(ChessFieldButton::renderPiece);
@@ -126,54 +133,16 @@ public class ChessField {
      *
      * @param currentButton Button that has been clicked
      */
-    private void markButtons(ChessFieldButton currentButton) {
+    public void markButtons(ChessFieldButton currentButton) {
         removeMarkings();
         currentButton.setMarked(true);
         field.stream().filter(button -> movement
-                .getActualMoves(
+                .getSafePositions(
                         currentButton.getPosition(),
                         currentButton.getPlayerColor(),
-                        field,
-                        currentButton.getType())
+                        field)
                 .contains(button.getPosition()))
                 .forEach(match -> match.setEndangered(true));
-    }
-
-    /**
-     * Method updates the currentPlayer Color and enables the enPassant after every move
-     * (used to make the Client work)
-     *
-     * @param currentButton button, that has been captured
-     * @param markedButton  button, that has captured the currentButton
-     */
-    public void updateAfterExecution(final ChessFieldButton currentButton, final ChessFieldButton markedButton) {
-        movement.updateEnPassant(markedButton, currentButton, field);
-        setCurrentPlayerColor(currentPlayerColor == player1.getPlayerColor() ?
-                player2.getPlayerColor() :
-                player1.getPlayerColor());
-        removeMarkings();
-    }
-
-    /**
-     * Method initializes {@link #pieceListener}
-     */
-    private void initPieceListener() {
-        pieceListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ChessFieldButton currentButton = (ChessFieldButton) e.getSource();
-                if (currentButton.getPlayerColor() == currentPlayerColor) {
-                    if (currentButton.isEndangered()) {
-                        // there must be a marked button if an endangered button has been pressed, therefore no checks are needed
-                        ChessFieldButton markedButton = field.stream().filter(ChessFieldButton::isMarked).findAny().get();
-                        updateAfterExecution(currentButton, markedButton);
-                        removeMarkings();
-                    } else {
-                        markButtons(currentButton);
-                    }
-                }
-            }
-        };
     }
 
     /**
@@ -182,7 +151,6 @@ public class ChessField {
      * @param initPath Path of the csv file with the infos for initialization
      */
     public void initField(final String initPath) {
-        initPieceListener();
         field = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(initPath))) {
@@ -210,5 +178,4 @@ public class ChessField {
             e.printStackTrace();
         }
     }
-
 }
