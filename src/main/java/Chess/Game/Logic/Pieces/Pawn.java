@@ -150,28 +150,28 @@ public class Pawn implements IChessPiece {
      * @param field       field the game is being played in
      */
     public void enableEnPassant(final ChessFieldButton currentPawn, final ChessFieldButton destination, final List<ChessFieldButton> field) {
-        // disable every enPassant that currently exists
-        field.stream()
-                .filter(button -> button.enabledEnPassant())
-                .filter(button -> button.isMissedEnPassant())
-                .forEach(button -> button.setEnPassant(false));
+        //check whether currentPawn really is a pawn
+        if (currentPawn.getType() == EChessPieces.PAWN_WHITE || currentPawn.getType() == EChessPieces.PAWN_BLACK) {
+            // disable every enPassant that currently exists
+            field.stream()
+                    .filter(button -> button.enabledEnPassant())
+                    .forEach(button -> button.setEnPassant(false));
 
-        // save amount of steps travelled by the currentPawn
-        int tmp_steps = Math.abs(currentPawn.getPosition().getColumn() - destination.getPosition().getColumn());
-        // find all the Pawns that could execute the EnPassant after currentPawn moved to destination
-        Set<ChessFieldButton> potentialPawns = field.stream()
-                .filter(button -> button.getPlayerColor() != currentPawn.getPlayerColor() && button.getPlayerColor() != EPlayerColor.NONE)
-                .filter(button ->
-                        button.getPosition().getRow() == destination.getPosition().getRow() + 1 ||
-                                button.getPosition().getRow() == destination.getPosition().getRow() - 1)
-                .filter(button -> button.getType() == EChessPieces.PAWN_WHITE || button.getType() == EChessPieces.PAWN_BLACK)
-                .filter(button -> button.getPosition().getColumn() == destination.getPosition().getColumn())
-                .collect(Collectors.toSet());
-        // if there are any Pawns that can executed the En Passant within the next move, and the currentPawn has moved two steps forward, enable En Passant
-        if (tmp_steps > 1 && potentialPawns.size() > 0) {
-            destination.setEnPassant(true);
-            destination.setMissedEnPassant(true); // this will turn off the EnPassant as soon as the next Move has been executed
+            // save amount of steps travelled by the currentPawn
+            int tmp_steps = Math.abs(currentPawn.getPosition().getColumn() - destination.getPosition().getColumn());
+            // find all the Pawns that could execute the EnPassant after currentPawn moved to destination
+            Set<ChessFieldButton> potentialPawns = field.stream()
+                    .filter(button -> button.getPlayerColor() != currentPawn.getPlayerColor() && button.getPlayerColor() != EPlayerColor.NONE)
+                    .filter(button ->
+                            button.getPosition().getRow() == destination.getPosition().getRow() + 1 ||
+                                    button.getPosition().getRow() == destination.getPosition().getRow() - 1)
+                    .filter(button -> button.getType() == EChessPieces.PAWN_WHITE || button.getType() == EChessPieces.PAWN_BLACK)
+                    .filter(button -> button.getPosition().getColumn() == destination.getPosition().getColumn())
+                    .collect(Collectors.toSet());
+            // if there are any Pawns that can executed the En Passant within the next move, and the currentPawn has moved two steps forward, enable En Passant
+            if (tmp_steps > 1 && potentialPawns.size() > 0) {
+                destination.setEnPassant(true);
+            }
         }
     }
-
 }

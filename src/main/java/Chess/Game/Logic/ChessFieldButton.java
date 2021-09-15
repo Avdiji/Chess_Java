@@ -33,7 +33,6 @@ public class ChessFieldButton extends JButton {
     /** True if a Pawn has moved next to another Pawn,
      * in a way that enables the other Pawn to execute the EnPassant **/
     private boolean enPassant;
-    private boolean missedEnPassant; // to check whether the enPassant has been used or not
 
     /** True if this button is a King/Rook and has moved **/
     private boolean kingMoved;
@@ -60,7 +59,6 @@ public class ChessFieldButton extends JButton {
         endangered = false;
 
         enPassant = false;
-        missedEnPassant = false;
 
         kingMoved = false;
         rookMoved = false;
@@ -118,14 +116,6 @@ public class ChessFieldButton extends JButton {
      */
     public boolean enabledEnPassant(){
         return enPassant;
-    }
-
-    /**
-     * Getter for {@link #missedEnPassant}
-     * @return missedEnPassant
-     */
-    public boolean isMissedEnPassant(){
-        return missedEnPassant;
     }
 
     /**
@@ -198,14 +188,6 @@ public class ChessFieldButton extends JButton {
      */
     public void setEnPassant(final boolean value){
         enPassant = value;
-    }
-
-    /**
-     * Setter for {@link #missedEnPassant}
-     * @param value
-     */
-    public void setMissedEnPassant(final boolean value){
-        missedEnPassant = value;
     }
 
     /**
