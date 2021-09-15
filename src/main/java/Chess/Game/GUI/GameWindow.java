@@ -25,7 +25,9 @@ import java.util.Arrays;
  * <p>
  * Class includes all the GUI for the Game Window
  */
-public class GameWindow extends JFrame implements IChessFrame {
+public class GameWindow implements IChessFrame {
+
+    private JFrame gameFrame;
 
     /**
      * idle position to initialize the graves
@@ -72,7 +74,6 @@ public class GameWindow extends JFrame implements IChessFrame {
      **/
     private JPanel panel_chessPieces;
 
-
     /**
      * RHS of the Game Window
      **/
@@ -107,6 +108,9 @@ public class GameWindow extends JFrame implements IChessFrame {
      * ActionListener to add Piece to the Grave
      **/
     private ActionListener buttonListener;
+
+    private UpgradePawn panel_upgradePawn;
+    private ActionListener upgradeListener;
 
     /**
      * Constructor
@@ -328,13 +332,47 @@ public class GameWindow extends JFrame implements IChessFrame {
         buttonListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ChessFieldButton selectedButton = (ChessFieldButton) e.getSource();
-                if (selectedButton.isEndangered()) {
-                    ChessFieldButton markedButton = chessField.getField().stream().filter(ChessFieldButton::isMarked).findAny().get();
-                    MovePiece(selectedButton, markedButton);
-                } else {
-                    if (selectedButton.getPlayerColor() == chessField.getCurrentPlayerColor())
-                        chessField.markButtons(selectedButton);
+                Thread executeThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ChessFieldButton selectedButton = (ChessFieldButton) e.getSource();
+                        if (selectedButton.isEndangered()) {
+                            ChessFieldButton markedButton = chessField.getField().stream().filter(ChessFieldButton::isMarked).findAny().get();
+                            if (pawnUpgrade(selectedButton, markedButton)) {
+                                panel_upgradePawn.setPlayerColor(chessField.getCurrentPlayerColor());
+                                panel_upgradePawn.render_buttonPieces();
+                                title.setVisible(false);
+                                panel_upgradePawn.setVisible(true);
+                                synchronized (gameFrame) {
+                                    try {
+                                        gameFrame.wait();
+                                    } catch (InterruptedException interruptedException) {
+                                        interruptedException.printStackTrace();
+                                    }
+                                }
+                                markedButton.setType(panel_upgradePawn.getSelectedType());
+                            }
+                            MovePiece(selectedButton, markedButton);
+                        } else {
+                            if (selectedButton.getPlayerColor() == chessField.getCurrentPlayerColor())
+                                chessField.markButtons(selectedButton);
+                        }
+                    }
+                });
+                executeThread.start();
+            }
+        };
+    }
+
+    private void initUpgradeListener() {
+        upgradeListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel_upgradePawn.setSelectedType(((ChessFieldButton) e.getSource()).getType());
+                panel_upgradePawn.setVisible(false);
+                title.setVisible(true);
+                synchronized (gameFrame) {
+                    gameFrame.notify();
                 }
             }
         };
@@ -343,29 +381,34 @@ public class GameWindow extends JFrame implements IChessFrame {
     @Override
     public void initComponents() {
         initButtonListener();
+        initUpgradeListener();
         initTitle();
         initPanel_RHS();
         initPanel_LHS();
         initChessBoard();
+        panel_upgradePawn = new UpgradePawn(upgradeListener);
+        panel_upgradePawn.setVisible(false);
     }
 
     @Override
     public void addComponents() {
-        this.add(title, BorderLayout.NORTH);
-        this.add(panel_RHS, BorderLayout.EAST);
-        this.add(panel_LHS, BorderLayout.WEST);
-        this.add(board_wrapper, BorderLayout.CENTER);
+        gameFrame.add(title, BorderLayout.NORTH);
+        gameFrame.add(panel_RHS, BorderLayout.EAST);
+        gameFrame.add(panel_LHS, BorderLayout.WEST);
+        gameFrame.add(board_wrapper, BorderLayout.CENTER);
+        gameFrame.add(panel_upgradePawn, BorderLayout.SOUTH);
         chessField.getField().forEach(button -> button.addActionListener(buttonListener));
     }
 
     @Override
     public void initMainFrame() {
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        this.getContentPane().setBackground(COLOR_BACKGROUND);
-        this.setLocationRelativeTo(null);
-        this.setLayout(new BorderLayout());
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setUndecorated(true);
-        this.setVisible(true);
+        gameFrame = new JFrame();
+        gameFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        gameFrame.getContentPane().setBackground(COLOR_BACKGROUND);
+        gameFrame.setLocationRelativeTo(null);
+        gameFrame.setLayout(new BorderLayout());
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameFrame.setUndecorated(true);
+        gameFrame.setVisible(true);
     }
 }
