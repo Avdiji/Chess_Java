@@ -332,6 +332,7 @@ public class GameWindow implements IChessFrame {
         buttonListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // thread to prevent the gui from freezing
                 Thread executeThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -343,7 +344,7 @@ public class GameWindow implements IChessFrame {
                                 panel_upgradePawn.render_buttonPieces();
                                 title.setVisible(false);
                                 panel_upgradePawn.setVisible(true);
-                                synchronized (gameFrame) {
+                                synchronized (gameFrame) { // acquire the monitor lock (to prevent IllegalMonitorStateException)
                                     try {
                                         gameFrame.wait();
                                     } catch (InterruptedException interruptedException) {
@@ -372,7 +373,7 @@ public class GameWindow implements IChessFrame {
                 panel_upgradePawn.setVisible(false);
                 title.setVisible(true);
                 synchronized (gameFrame) {
-                    gameFrame.notify();
+                    gameFrame.notify(); // notify the gameFrame
                 }
             }
         };
