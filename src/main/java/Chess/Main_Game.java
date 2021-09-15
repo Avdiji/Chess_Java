@@ -1,6 +1,6 @@
 package Chess;
 
-import Chess.Game.GUI.GameWindow;
+import Chess.Game.GUI.ChessboardGUI.GameWindow;
 import Chess.Game.Logic.ChessField;
 import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Player.Player;
@@ -13,12 +13,12 @@ public class Main_Game {
         Player player2 = new Player(EPlayerColor.BLACK);
 
         ChessField chessField = new ChessField(player1, player2);
-        chessField.initField("src/main/resources/initilization/initilization_default.csv");
+//        chessField.initField("src/main/resources/initilization/initilization_default.csv");
 //        chessField.initField("src/main/resources/initilization/testInit.csv");
 //        chessField.initField("src/main/resources/initilization/checkmate.csv");
 //        chessField.initField("src/main/resources/initilization/stalemate.csv");
 //        chessField.initField("src/main/resources/initilization/rochade.csv");
-//        chessField.initField("src/main/resources/initilization/pawnUpgrade.csv");
+        chessField.initField("src/main/resources/initilization/pawnUpgrade.csv");
 
         GameWindow a = new GameWindow(chessField);
     }

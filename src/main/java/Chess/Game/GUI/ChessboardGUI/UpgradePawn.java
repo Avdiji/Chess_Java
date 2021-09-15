@@ -1,5 +1,6 @@
-package Chess.Game.GUI;
+package Chess.Game.GUI.ChessboardGUI;
 
+import Chess.Game.GUI.IChessFrame;
 import Chess.Game.Logic.ChessFieldButton;
 import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Pieces.IChessPiece;
@@ -44,22 +45,45 @@ public class UpgradePawn extends JPanel implements IChessFrame {
         }
     }
 
+    /**
+     * Getter for {@link #selectedType}
+     *
+     * @return selectedType
+     */
     public EChessPieces getSelectedType() {
         return selectedType;
     }
 
+    /**
+     * Getter for {@link #playerColor}
+     *
+     * @return playerColor
+     */
     public EPlayerColor getPlayerColor() {
         return playerColor;
     }
 
+    /**
+     * Setter for {@link #selectedType}
+     *
+     * @param selectedType
+     */
     public void setSelectedType(final EChessPieces selectedType) {
         this.selectedType = selectedType;
     }
 
+    /**
+     * Setter for {@link #playerColor}
+     *
+     * @param playerColor
+     */
     public void setPlayerColor(final EPlayerColor playerColor) {
         this.playerColor = playerColor;
     }
 
+    /**
+     * Method renders the buttons pieces (draws new icons depending on the value of {@link #selectedType}
+     */
     public void render_buttonPieces() {
         button_pieces[0].setType(playerColor == EPlayerColor.WHITE ?
                 EChessPieces.ROOK_WHITE :
@@ -87,26 +111,25 @@ public class UpgradePawn extends JPanel implements IChessFrame {
     @Override
     public void initComponents() {
         button_pieces = new ChessFieldButton[4];
-        Position tmp_position = new Position('A', 1);
-        button_pieces[0] = new ChessFieldButton(tmp_position,
+        button_pieces[0] = new ChessFieldButton(GameWindow.idlePosition,
                 playerColor == EPlayerColor.WHITE ?
                         EChessPieces.ROOK_WHITE :
                         EChessPieces.ROOK_BLACK,
                 IChessPiece.COLOR_FIELD_MARKED);
 
-        button_pieces[1] = new ChessFieldButton(tmp_position,
+        button_pieces[1] = new ChessFieldButton(GameWindow.idlePosition,
                 playerColor == EPlayerColor.WHITE ?
                         EChessPieces.BISHOP_WHITE :
                         EChessPieces.BISHOP_BLACK,
                 IChessPiece.COLOR_FIELD_MARKED);
 
-        button_pieces[2] = new ChessFieldButton(tmp_position,
+        button_pieces[2] = new ChessFieldButton(GameWindow.idlePosition,
                 playerColor == EPlayerColor.WHITE ?
                         EChessPieces.KNIGHT_WHITE :
                         EChessPieces.KNIGHT_BLACK,
                 IChessPiece.COLOR_FIELD_MARKED);
 
-        button_pieces[3] = new ChessFieldButton(tmp_position,
+        button_pieces[3] = new ChessFieldButton(GameWindow.idlePosition,
                 playerColor == EPlayerColor.WHITE ?
                         EChessPieces.QUEEN_WHITE :
                         EChessPieces.QUEEN_BLACK,

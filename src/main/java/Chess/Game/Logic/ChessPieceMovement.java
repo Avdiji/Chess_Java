@@ -55,7 +55,6 @@ public class ChessPieceMovement {
         empty = new Empty();
     }
 
-
     /**
      * Method returns a Set of potential moves thePiece could make
      *
@@ -315,6 +314,7 @@ public class ChessPieceMovement {
      * @param captured captured button
      */
     public void removeRedundantPiece(final ChessFieldButton captured, final List<ChessFieldButton> field) {
+        // check whether the captured piece was a pawn or not (if it was a pawn a enPassant has been executed
         if (captured.getType() == EChessPieces.PAWN_WHITE || captured.getType() == EChessPieces.PAWN_BLACK) {
             Position toRemove = new Position(captured.getPosition().getRow(),
                     captured.getPlayerColor() == EPlayerColor.WHITE ?
