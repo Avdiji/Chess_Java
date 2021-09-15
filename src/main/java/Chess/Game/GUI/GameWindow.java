@@ -252,6 +252,39 @@ public class GameWindow extends JFrame implements IChessFrame {
     }
 
     /**
+     * Method returns true if the Pawn can be upgrade to another Piece
+     *
+     * @param capturedButton button that has been captured
+     * @param markedButton   button that has been moved
+     **/
+    private boolean pawnUpgrade(final ChessFieldButton capturedButton, final ChessFieldButton markedButton) {
+        boolean result = false;
+        if (markedButton.getType() == EChessPieces.PAWN_WHITE) {
+            result = capturedButton.getPosition().getColumn() == 8;
+        } else if (markedButton.getType() == EChessPieces.PAWN_BLACK) {
+            result = capturedButton.getPosition().getColumn() == 1;
+        }
+        return result;
+    }
+
+    /**
+     * Method adjusts the Game's variables after a move has been executed
+     */
+    private void adjustAfterMove(final ChessFieldButton capturedButton, final ChessFieldButton markedButton) {
+        changePlayerIndicator();
+        chessField.getMovement().updateEnPassant(markedButton, capturedButton, chessField.getField());
+        chessField.setCurrentPlayerColor(chessField.getCurrentPlayerColor() == chessField.getPlayer1().getPlayerColor() ?
+                chessField.getPlayer2().getPlayerColor() :
+                chessField.getPlayer1().getPlayerColor());
+        chessField.removeMarkings();
+
+        System.out.println(String.format("Check %s: %b", chessField.getCurrentPlayerColor(), chessField.getMovement().isCheck(chessField.getCurrentPlayerColor(), chessField.getField())));
+        System.out.println(String.format("Checkmate %s: %b", chessField.getCurrentPlayerColor(), chessField.getMovement().isCheckMate(chessField.getCurrentPlayerColor(), chessField.getField())));
+        System.out.println(String.format("Stalemate %s: %b", chessField.getCurrentPlayerColor(), chessField.getMovement().isStalemate(chessField.getCurrentPlayerColor(), chessField.getField())));
+        System.out.println();
+    }
+
+    /**
      * The Method Moves the marked button to the captured Button (used to make the client work)
      *
      * @param capturedButton button that has been captured
@@ -285,17 +318,7 @@ public class GameWindow extends JFrame implements IChessFrame {
                 chessField.getMovement().removeRedundantPiece(capturedButton, chessField.getField());
             }
         }
-        changePlayerIndicator();
-        chessField.getMovement().updateEnPassant(markedButton, capturedButton, chessField.getField());
-        chessField.setCurrentPlayerColor(chessField.getCurrentPlayerColor() == chessField.getPlayer1().getPlayerColor() ?
-                chessField.getPlayer2().getPlayerColor() :
-                chessField.getPlayer1().getPlayerColor());
-        chessField.removeMarkings();
-
-        System.out.println(String.format("Check %s: %b", chessField.getCurrentPlayerColor(), chessField.getMovement().isCheck(chessField.getCurrentPlayerColor(), chessField.getField())));
-        System.out.println(String.format("Checkmate %s: %b", chessField.getCurrentPlayerColor(), chessField.getMovement().isCheckMate(chessField.getCurrentPlayerColor(), chessField.getField())));
-        System.out.println(String.format("Stalemate %s: %b", chessField.getCurrentPlayerColor(), chessField.getMovement().isStalemate(chessField.getCurrentPlayerColor(), chessField.getField())));
-        System.out.println();
+        adjustAfterMove(capturedButton, markedButton);
     }
 
     /**
