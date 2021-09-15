@@ -13,7 +13,7 @@ public class Main_Game {
         Player player2 = new Player(EPlayerColor.BLACK);
 
         ChessField chessField = new ChessField(player1, player2);
-//        chessField.initField("src/main/resources/initilization/initilization_default.csv");
+        chessField.initField("src/main/resources/initilization/initilization_default.csv");
 //        chessField.initField("src/main/resources/initilization/testInit.csv");
 //        chessField.initField("src/main/resources/initilization/checkmate.csv");
 //        chessField.initField("src/main/resources/initilization/stalemate.csv");
