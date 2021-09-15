@@ -210,6 +210,56 @@ public class GameWindow implements IChessFrame {
         adjustAfterMove(capturedButton, markedButton);
     }
 
+
+    /**
+     * The Method creates and returns a new Thread, that executes a move
+     * (used an individual thread to enable the pawn upgrade)
+     *
+     * @param capturedButton the captured button
+     * @return A new Thread, that executes a Move
+     * @throws IllegalStateException if the captured button is not in an endangered state
+     */
+    private Thread executeMoveThread(final ChessFieldButton capturedButton) {
+        if (!capturedButton.isEndangered()) {
+            throw new IllegalStateException("The capturedButton must be in an endangered state!");
+        }
+
+        Thread result = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // there must have been a marked button, if the selected one was endangered
+                ChessFieldButton markedButton = chessField.getField().stream().filter(ChessFieldButton::isMarked).findAny().get();
+
+                // check whether a pawn has been upgraded
+                if (hasPawnUpgraded(capturedButton, markedButton)) {
+
+                    // set the color of the current Player and render panel_upgradePawn
+                    panel_upgradePawn.setPlayerColor(chessField.getCurrentPlayerColor());
+                    panel_upgradePawn.render_buttonPieces();
+
+                    // disable title visibility/ enable panel_upgradePawn visibility
+                    title.setVisible(false);
+                    panel_upgradePawn.setVisible(true);
+
+                    // acquire the monitor lock (to prevent IllegalMonitorStateException)
+                    synchronized (gameFrame) {
+                        try {
+                            // stop gameFrame until it gets notified
+                            gameFrame.wait();
+                        } catch (InterruptedException interruptedException) {
+                            interruptedException.printStackTrace();
+                        }
+                    }
+                    // set the type of the marked button after the gameFrame has been notified
+                    markedButton.setType(panel_upgradePawn.getSelectedType());
+                }
+                // finally move the pawn
+                MovePiece(capturedButton, markedButton);
+            }
+        });
+        return result;
+    }
+
     /**
      * Method initializes the Listener to add the Piece to the Grave
      */
@@ -217,46 +267,17 @@ public class GameWindow implements IChessFrame {
         buttonListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // thread to prevent the gui from freezing (also marks the paths much faster -> win win)
-                Thread executeThread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // selected button
-                        ChessFieldButton selectedButton = (ChessFieldButton) e.getSource();
-
-                        // if the selected button was endangered
-                        if (selectedButton.isEndangered()) {
-                            // there must have been a marked button, if the selected one was endangered
-                            ChessFieldButton markedButton = chessField.getField().stream().filter(ChessFieldButton::isMarked).findAny().get();
-                            // check whether a pawn has been upgraded
-                            if (hasPawnUpgraded(selectedButton, markedButton)) {
-                                // set the color of the current Player and render panel_upgradePawn
-                                panel_upgradePawn.setPlayerColor(chessField.getCurrentPlayerColor());
-                                panel_upgradePawn.render_buttonPieces();
-                                // disable title visibility/ enable panel_upgradePawn visibility
-                                title.setVisible(false);
-                                panel_upgradePawn.setVisible(true);
-                                synchronized (gameFrame) { // acquire the monitor lock (to prevent IllegalMonitorStateException)
-                                    try {
-                                        // stop gameFrame until it gets notified
-                                        gameFrame.wait();
-                                    } catch (InterruptedException interruptedException) {
-                                        interruptedException.printStackTrace();
-                                    }
-                                }
-                                // set the type of the marked button after the gameFrame has been notified
-                                markedButton.setType(panel_upgradePawn.getSelectedType());
-                            }
-                            // finally move the pawn
-                            MovePiece(selectedButton, markedButton);
-                        } else {
-                            // if the selected button was not endangered mark all of it's pathing options
-                            if (selectedButton.getPlayerColor() == chessField.getCurrentPlayerColor())
-                                chessField.markButtons(selectedButton);
-                        }
+                if (!panel_upgradePawn.isVisible()) {
+                    ChessFieldButton selectedButton = (ChessFieldButton) e.getSource();
+                    // if the selected button was endangered
+                    if (selectedButton.isEndangered()) {
+                        executeMoveThread(selectedButton).start();
+                    } else {
+                        // if the selected button was not endangered mark all of it's pathing options
+                        if (selectedButton.getPlayerColor() == chessField.getCurrentPlayerColor())
+                            chessField.markButtons(selectedButton);
                     }
-                });
-                executeThread.start();
+                }
             }
         };
     }
