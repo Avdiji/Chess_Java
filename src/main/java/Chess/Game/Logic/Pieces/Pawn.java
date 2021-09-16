@@ -142,36 +142,38 @@ public class Pawn implements IChessPiece {
     }
 
     /**
-     * Method sets the value enPassant of currentPawn to true,
+     * Method sets the value enPassant of destination to true,
      * if currentPawn enables another pawn on the field to execute the enPassant
      *
      * @param currentPawn current Pawn
      * @param destination destination of the current Pawn
      * @param field       field the game is being played in
+     * @throws IllegalArgumentException currentPawn must have the Type PAWN_WHITE or PAWN_BLACK
      */
     public void enableEnPassant(final ChessFieldButton currentPawn, final ChessFieldButton destination, final List<ChessFieldButton> field) {
-        //check whether currentPawn really is a pawn
-        if (currentPawn.getType() == EChessPieces.PAWN_WHITE || currentPawn.getType() == EChessPieces.PAWN_BLACK) {
-            // disable every enPassant that currently exists
-            field.stream()
-                    .filter(button -> button.enabledEnPassant())
-                    .forEach(button -> button.setEnPassant(false));
-
-            // save amount of steps travelled by the currentPawn
-            int tmp_steps = Math.abs(currentPawn.getPosition().getColumn() - destination.getPosition().getColumn());
-            // find all the Pawns that could execute the EnPassant after currentPawn moved to destination
-            Set<ChessFieldButton> potentialPawns = field.stream()
-                    .filter(button -> button.getPlayerColor() != currentPawn.getPlayerColor() && button.getPlayerColor() != EPlayerColor.NONE)
-                    .filter(button ->
-                            button.getPosition().getRow() == destination.getPosition().getRow() + 1 ||
-                                    button.getPosition().getRow() == destination.getPosition().getRow() - 1)
-                    .filter(button -> button.getType() == EChessPieces.PAWN_WHITE || button.getType() == EChessPieces.PAWN_BLACK)
-                    .filter(button -> button.getPosition().getColumn() == destination.getPosition().getColumn())
-                    .collect(Collectors.toSet());
-            // if there are any Pawns that can executed the En Passant within the next move, and the currentPawn has moved two steps forward, enable En Passant
-            if (tmp_steps > 1 && potentialPawns.size() > 0) {
-                destination.setEnPassant(true);
-            }
+        if(currentPawn.getType() != EChessPieces.PAWN_WHITE && currentPawn.getType() != EChessPieces.PAWN_BLACK){
+            throw new IllegalArgumentException("currentPawn must be a Pawn!");
         }
+        // disable every enPassant that currently exists
+        field.stream()
+                .filter(ChessFieldButton::enabledEnPassant)
+                .forEach(button -> button.setEnPassant(false));
+
+                // save amount of steps travelled by the currentPawn
+                int tmp_steps = Math.abs(currentPawn.getPosition().getColumn() - destination.getPosition().getColumn());
+                // find all the Pawns that could execute the EnPassant after currentPawn moved to destination
+                Set<ChessFieldButton> potentialPawns = field.stream()
+                        .filter(button -> button.getPlayerColor() != currentPawn.getPlayerColor() && button.getPlayerColor() != EPlayerColor.NONE)
+                        .filter(button ->
+                                button.getPosition().getRow() == destination.getPosition().getRow() + 1 ||
+                                        button.getPosition().getRow() == destination.getPosition().getRow() - 1)
+                        .filter(button -> button.getType() == EChessPieces.PAWN_WHITE || button.getType() == EChessPieces.PAWN_BLACK)
+                        .filter(button -> button.getPosition().getColumn() == destination.getPosition().getColumn())
+                        .collect(Collectors.toSet());
+
+                // if there are any Pawns that can executed the En Passant within the next move, and the currentPawn has moved two steps forward, enable En Passant
+                if (tmp_steps > 1 && potentialPawns.size() > 0) {
+                    destination.setEnPassant(true);
+                }
     }
 }

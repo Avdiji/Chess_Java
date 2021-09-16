@@ -7,16 +7,7 @@ import java.util.Objects;
  * <p>
  * class Represents a position on the Game Field from a1 - h8
  */
-public class Position {
-
-    /**
-     * column of the current Position (i-value)
-     **/
-    private final char row;
-    /**
-     * row of the current Position (j - value)
-     **/
-    private final int column;
+public record Position(char row, int column) {
 
     /**
      * Constructor initializes {@link #row}
@@ -27,14 +18,12 @@ public class Position {
      * @throws IllegalArgumentException if column is not a alphanumerical,
      *                                  lowercase letter from a - h, or row is not a number from 1 - 8
      */
-    public Position(final char row, final int column) {
+    public Position {
         if (row < 'A' || row > 'H')
             throw new IllegalArgumentException("The column must be between A - H inclusive!");
         else if (column < 1 || column > 8)
             throw new IllegalArgumentException("The row must be between 1 - 8 inclusive!");
 
-        this.row = row;
-        this.column = column;
     }
 
     /**

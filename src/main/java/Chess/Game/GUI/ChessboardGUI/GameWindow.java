@@ -24,55 +24,38 @@ import java.util.Arrays;
  */
 public class GameWindow implements IChessFrame {
 
+    /** Frame the Game is being played in **/
     private JFrame gameFrame;
 
-    /**
-     * idle position to initialize the graves
-     **/
+    /**idle position to initialize the graves **/
     protected static final Position idlePosition = new Position('A', 1);
 
-    /**
-     * Sizes used for the GUI in the Game Window
-     **/
+    /** Sizes used for the GUI in the Game Window **/
     protected static final int MARGIN_BORDER_GRAVE[] = {50, 50, 100, 150};
     private static final int MARGIN_TITLE[] = {30, 30, 0, 30};
     private static final int SIZE_TITLE = 50;
     protected static final int SIZE_GRAVE_LABEL = 15;
 
-    /**
-     * Strings used for the GUI in the Game Window
-     **/
+    /** Strings used for the GUI in the Game Window **/
     private static final String TITLE = "Chess";
 
-    /**
-     * Label with the Title of the Game Window
-     **/
+    /** Label with the Title of the Game Window **/
     private JLabel title;
 
-    /**
-     * Graves of the Players
-     **/
+    /** Graves of the Players **/
     private Grave_White panel_LHS;
     private Grave_Black panel_RHS;
 
-    /**
-     * Panel with the board and the player indicator
-     **/
+    /** Panel with the board and the player indicator **/
     private BoardWrapper board_wrapper;
 
-    /**
-     * ChessField the Game is being played on
-     **/
+    /** ChessField the Game is being played on **/
     private ChessField chessField;
 
-    /**
-     * ActionListener to add Piece to the Grave
-     **/
+    /** ActionListener to add Piece to the Grave **/
     private ActionListener buttonListener;
 
-    /**
-     * ActionListener to upgrade a Pawn
-     **/
+    /** ActionListener to upgrade a Pawn **/
     private UpgradePawn panel_upgradePawn;
     private ActionListener upgradeListener;
 
@@ -91,9 +74,7 @@ public class GameWindow implements IChessFrame {
         addComponents();
     }
 
-    /**
-     * Method initializes {@link #title}
-     **/
+    /** Method initializes {@link #title} **/
     private void initTitle() {
         title = new JLabel(TITLE);
         title.setHorizontalAlignment(JLabel.CENTER);
@@ -124,9 +105,7 @@ public class GameWindow implements IChessFrame {
         }
     }
 
-    /**
-     * Method changes the Color of the player indicators accordingly to the currentPlayer
-     */
+    /** Method changes the Color of the player indicators accordingly to the currentPlayer */
     private void changePlayerIndicator() {
         if (chessField.getCurrentPlayerColor() == chessField.getPlayer1().getPlayerColor()) {
             board_wrapper.setIndicator_white(IChessFrame.COLOR_BACKGROUND);
@@ -156,9 +135,8 @@ public class GameWindow implements IChessFrame {
     /**
      * Method adjusts the Game's variables after a move has been executed
      */
-    private void adjustAfterMove(final ChessFieldButton capturedButton, final ChessFieldButton markedButton) {
+    private void adjustPostMove(final ChessFieldButton capturedButton, final ChessFieldButton markedButton) {
         changePlayerIndicator(); // change the Player Indicator
-        chessField.getMovement().updateEnPassant(markedButton, capturedButton, chessField.getField()); // update the enPassant
         chessField.setCurrentPlayerColor(chessField.getCurrentPlayerColor() == chessField.getPlayer1().getPlayerColor() ?
                 chessField.getPlayer2().getPlayerColor() :
                 chessField.getPlayer1().getPlayerColor()); // the the new Playercolor
@@ -171,18 +149,33 @@ public class GameWindow implements IChessFrame {
     }
 
     /**
-     * The Method Moves the marked button to the captured Button (used to make the client work)
+     * Method adjusts the variables of both buttons, so that it enables the Player to execute a Rochade/EnPassant
+     * before the move is executed
      *
      * @param capturedButton button that has been captured
-     * @param markedButton   button that has been moved
+     * @param markedButton   button that has executed the move
      */
-    public void MovePiece(final ChessFieldButton capturedButton, final ChessFieldButton markedButton) {
+    private void adjustPreMove(final ChessFieldButton capturedButton, final ChessFieldButton markedButton) {
+        try {
+            chessField.getMovement().updateEnPassant(markedButton, capturedButton, chessField.getField()); // update the enPassant
+        } catch (IllegalArgumentException e) {
+        }
         // mark rooks and kings (to prevent illegal rochade
         if (markedButton.getType() == EChessPieces.ROOK_WHITE || markedButton.getType() == EChessPieces.ROOK_BLACK) {
             capturedButton.setRookMoved(true);
         } else if (markedButton.getType() == EChessPieces.KING_WHITE || markedButton.getType() == EChessPieces.KING_BLACK) {
             capturedButton.setKingMoved(true);
         }
+    }
+
+    /**
+     * The Method Moves the marked button to the captured Button (used to make the client work)
+     *
+     * @param capturedButton button that has been captured
+     * @param markedButton   button that has been moved
+     */
+    public void MovePiece(final ChessFieldButton capturedButton, final ChessFieldButton markedButton) {
+        adjustPreMove(capturedButton, markedButton);
 
         // check whether the move is a castle and execute it if so
         if (!chessField.getMovement().executeRochade(capturedButton, markedButton, chessField.getField())) {
@@ -202,14 +195,13 @@ public class GameWindow implements IChessFrame {
             int empty_fields_postMove = (int) chessField.getField().stream()
                     .filter(button -> button.getType() == EChessPieces.EMPTY).count();
 
-            // remove a redundant pawn (method removeRedundantPiecee checks, whether another pawn has been captured or not
+            // remove a redundant pawn (method removeRedundantPiece checks, whether another pawn has been captured or not
             if (empty_fields_preMove == empty_fields_postMove) {
                 chessField.getMovement().removeRedundantPiece(capturedButton, chessField.getField());
             }
         }
-        adjustAfterMove(capturedButton, markedButton);
+        adjustPostMove(capturedButton, markedButton);
     }
-
 
     /**
      * The Method creates and returns a new Thread, that executes a move
@@ -223,37 +215,26 @@ public class GameWindow implements IChessFrame {
         if (!capturedButton.isEndangered()) {
             throw new IllegalStateException("The capturedButton must be in an endangered state!");
         }
-
         Thread result = new Thread(new Runnable() {
             @Override
             public void run() {
-                // there must have been a marked button, if the selected one was endangered
                 ChessFieldButton markedButton = chessField.getField().stream().filter(ChessFieldButton::isMarked).findAny().get();
-
-                // check whether a pawn has been upgraded
                 if (hasPawnUpgraded(capturedButton, markedButton)) {
 
-                    // set the color of the current Player and render panel_upgradePawn
                     panel_upgradePawn.setPlayerColor(chessField.getCurrentPlayerColor());
                     panel_upgradePawn.render_buttonPieces();
-
-                    // disable title visibility/ enable panel_upgradePawn visibility
                     title.setVisible(false);
                     panel_upgradePawn.setVisible(true);
 
-                    // acquire the monitor lock (to prevent IllegalMonitorStateException)
                     synchronized (gameFrame) {
                         try {
-                            // stop gameFrame until it gets notified
                             gameFrame.wait();
                         } catch (InterruptedException interruptedException) {
                             interruptedException.printStackTrace();
                         }
                     }
-                    // set the type of the marked button after the gameFrame has been notified
                     markedButton.setType(panel_upgradePawn.getSelectedType());
                 }
-                // finally move the pawn
                 MovePiece(capturedButton, markedButton);
             }
         });

@@ -21,34 +21,24 @@ import java.util.List;
  */
 public class ChessField {
 
-    /**
-     * field of the Chess Game
-     **/
+    /** field of the Chess Game **/
     private List<ChessFieldButton> field;
-    /**
-     * Movements of the Pieces
-     **/
-    private ChessPieceMovement movement;
-    /**
-     * Listener for all the Pieces
-     **/
-    private ActionListener pieceListener;
 
-    /**
-     * Players
-     **/
+    /** Movements of the Pieces **/
+    private ChessPieceMovement movement;
+
+    /** Players **/
     private final Player player1;
     private final Player player2;
-    /**
-     * Color to determine which players turn it is
-     **/
+
+    /** Color to determine which players turn it is **/
     private EPlayerColor currentPlayerColor;
 
     /**
      * Constructor initializes:<br>
-     * {@link #player1}
-     * {@link #player2}
-     * {@link #movement}
+     * {@link #player1} <br>
+     * {@link #player2} <br>
+     * {@link #movement} <br>
      *
      * @param player1 player1
      * @param player2 player2
@@ -62,7 +52,6 @@ public class ChessField {
 
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
-
     /**
      * Getter for {@link #field}
      *
@@ -169,7 +158,6 @@ public class ChessField {
 
                 ChessFieldButton tmp_button = new ChessFieldButton(new Position(tmp_row, tmp_column), EChessPieces.valueOf(values[2]), tmp_background);
                 tmp_button.initPiece();
-                tmp_button.addActionListener(pieceListener);
                 field.add(tmp_button);
             }
         } catch (FileNotFoundException e) {

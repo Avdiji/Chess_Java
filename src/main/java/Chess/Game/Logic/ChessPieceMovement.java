@@ -23,9 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class ChessPieceMovement {
 
-    /**
-     * All the possible pieces
-     **/
+    /** All the possible pieces **/
     private final IChessPiece pawn;
     private final IChessPiece rook;
     private final IChessPiece bishop;

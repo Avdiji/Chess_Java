@@ -1,6 +1,5 @@
 package Chess.Game.Logic.Pieces;
 
-import Chess.Game.Logic.ChessField;
 import Chess.Game.Logic.ChessFieldButton;
 import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Position;

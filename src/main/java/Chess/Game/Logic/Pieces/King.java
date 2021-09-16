@@ -70,6 +70,7 @@ public class King implements IChessPiece {
      * @return a Set of new Positions the King could move to (Rochade)
      */
     public Set<Position> getPositionsRochade(final Position currentPosition, final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field) {
+        // TODO cleanup
         Set<Position> result = new HashSet<>();
         ChessFieldButton currentKing = field.stream().filter(button -> button.getPosition().equals(currentPosition)).findAny().get();
 

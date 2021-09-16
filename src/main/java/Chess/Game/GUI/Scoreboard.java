@@ -1,4 +1,24 @@
 package Chess.Game.GUI;
 
-public class Scoreboard {
+import javax.swing.JFrame;
+
+public class Scoreboard extends JFrame implements IChessFrame {
+
+    
+
+
+    @Override
+    public void initMainFrame() {
+
+    }
+
+    @Override
+    public void initComponents() {
+
+    }
+
+    @Override
+    public void addComponents() {
+
+    }
 }

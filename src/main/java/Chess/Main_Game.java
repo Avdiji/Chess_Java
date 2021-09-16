@@ -8,7 +8,6 @@ import Chess.Game.Logic.Player.Player;
 public class Main_Game {
 
     public static void main(String... args) {
-
         Player player1 = new Player(EPlayerColor.WHITE);
         Player player2 = new Player(EPlayerColor.BLACK);
 
