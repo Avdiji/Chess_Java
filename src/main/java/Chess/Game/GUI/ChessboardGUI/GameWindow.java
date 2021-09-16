@@ -34,7 +34,6 @@ public class GameWindow implements IChessFrame {
     protected static final int MARGIN_BORDER_GRAVE[] = {50, 50, 100, 150};
     private static final int MARGIN_TITLE[] = {30, 30, 0, 30};
     private static final int SIZE_TITLE = 50;
-    protected static final int SIZE_GRAVE_LABEL = 15;
 
     /** Strings used for the GUI in the Game Window **/
     private static final String TITLE = "Chess";
@@ -79,7 +78,7 @@ public class GameWindow implements IChessFrame {
         title = new JLabel(TITLE);
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setForeground(COLOR_LABEL);
-        title.setFont(new Font("Arial Black", Font.BOLD, SIZE_TITLE));
+        title.setFont(new Font(FONT, FONT_TYPE, SIZE_TITLE));
         title.setBorder(new EmptyBorder(MARGIN_TITLE[0], MARGIN_TITLE[1], MARGIN_TITLE[2], MARGIN_TITLE[3]));
     }
 

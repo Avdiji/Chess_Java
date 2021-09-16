@@ -75,7 +75,7 @@ public class Grave_Black extends JPanel implements IChessFrame {
 
         ff_black = new JButton(FORFEIT_BLACK);
         ff_black.setPreferredSize(new Dimension(2 * IChessPiece.SIZE_FIELD, IChessPiece.SIZE_FIELD / 2));
-        ff_black.setFont(new Font("Arial Black", Font.BOLD, GameWindow.SIZE_GRAVE_LABEL));
+        ff_black.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
         ff_black.setBackground(COLOR_BUTTON_BACKGROUND);
         ff_black.setForeground(COLOR_LABEL);
     }

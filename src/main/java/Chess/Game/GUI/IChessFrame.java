@@ -1,6 +1,7 @@
 package Chess.Game.GUI;
 
 import java.awt.Color;
+import java.awt.Font;
 
 /**
  * @author Fitor Avdiji
@@ -21,6 +22,11 @@ public interface IChessFrame {
      * Color of all the Buttons in the Windows of the GUI
      **/
     public static final Color COLOR_BUTTON_BACKGROUND = new Color(0x828282);
+
+    /** Options for the Font **/
+    public static final String FONT = "Arial Black";
+    public static final int FONT_TYPE = Font.BOLD;
+    public static final int SIZE_BUTTON_LABEL = 15;
 
     /**
      * Method initializes the Main frame of this Window
