@@ -1,7 +1,6 @@
 package Chess;
 
-import Chess.Game.GUI.ChessboardGUI.GameWindow;
-import Chess.Game.GUI.Scoreboard;
+import Chess.Game.GUI.MainMenu;
 import Chess.Game.Logic.ChessField;
 import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Player.Player;
@@ -22,6 +21,7 @@ public class Main_Game {
 
 //        GameWindow a = new GameWindow(chessField);
 
-        Scoreboard sb = new Scoreboard("White Gave up");
+//        Scoreboard sb = new Scoreboard("White Gave up");
+        MainMenu mm = new MainMenu();
     }
 }

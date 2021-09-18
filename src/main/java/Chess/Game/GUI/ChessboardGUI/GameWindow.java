@@ -33,7 +33,6 @@ public class GameWindow implements IChessFrame {
     /** Sizes used for the GUI in the Game Window **/
     protected static final int MARGIN_BORDER_GRAVE[] = {50, 50, 100, 150};
     private static final int MARGIN_TITLE[] = {30, 30, 0, 30};
-    private static final int SIZE_TITLE = 50;
 
     /** Strings used for the GUI in the Game Window **/
     private static final String TITLE = "Chess";

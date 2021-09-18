@@ -27,6 +27,7 @@ public interface IChessFrame {
     public static final String FONT = "Arial Black";
     public static final int FONT_TYPE = Font.BOLD;
     public static final int SIZE_BUTTON_LABEL = 15;
+    public static final int SIZE_TITLE = 50;
 
     /**
      * Method initializes the Main frame of this Window

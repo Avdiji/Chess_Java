@@ -3,8 +3,6 @@ package Chess.Game.GUI;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.border.EmptyBorder;
-import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -114,6 +112,5 @@ public class Scoreboard extends JFrame implements IChessFrame {
         this.setLayout(new GridBagLayout());
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.getContentPane().setBackground(COLOR_BACKGROUND);
-
     }
 }
