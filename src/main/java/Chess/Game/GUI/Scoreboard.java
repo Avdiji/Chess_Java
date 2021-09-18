@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
 
 /**
  * @author Fitor Avdiji
@@ -42,11 +43,6 @@ public class Scoreboard extends JFrame implements IChessFrame {
     private GridBagConstraints gbc;
 
     /**
-     * Message, that will be displayed on the scoreboard
-     **/
-    private final String message;
-
-    /**
      * JLabel containing the message of the scoreboard
      **/
     private JLabel label_message;
@@ -57,8 +53,7 @@ public class Scoreboard extends JFrame implements IChessFrame {
     private JButton button_menu;
     private JButton button_exit;
 
-    public Scoreboard(final String message) {
-        this.message = message;
+    public Scoreboard() {
 
         initComponents();
         initMainFrame();
@@ -68,11 +63,35 @@ public class Scoreboard extends JFrame implements IChessFrame {
         this.setVisible(true);
     }
 
+    /**
+     * Setter for {@link #message}
+     * @param message newMessage of the scoreboard
+     */
+    public void setMessage(final String message){
+        label_message.setText(message);
+    }
+
+    /**
+     * Method sets the Actionslistener for {@link #button_menu}
+     * @param al ActionListener for button_menu
+     */
+    protected void addAL_button_menu(final ActionListener al){
+        button_menu.addActionListener(al);
+    }
+
+    /**
+     * Meethod sets the Actionslistener for {@link #button_exit}
+     * @param al Actionlistener for button_exit
+     */
+    protected void addAL_button_exit(final ActionListener al){
+        button_exit.addActionListener(al);
+    }
+
     @Override
     public void initComponents() {
         gbc = new GridBagConstraints();
 
-        label_message = new JLabel(message);
+        label_message = new JLabel();
         label_message.setFont(new Font(FONT, FONT_TYPE, SIZE_FONT));
         label_message.setForeground(COLOR_LABEL);
         label_message.setHorizontalAlignment(JLabel.CENTER);

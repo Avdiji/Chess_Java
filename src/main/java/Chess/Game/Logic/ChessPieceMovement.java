@@ -264,42 +264,32 @@ public class ChessPieceMovement {
      */
     public boolean executeRochade(final ChessFieldButton capturedButton, final ChessFieldButton markedButton, final List<ChessFieldButton> field) {
         boolean result = false;
-        boolean rightRochade;
         int steps;
 
         steps = Math.abs(markedButton.getPosition().getRow() - capturedButton.getPosition().getRow());
         if ((markedButton.getType() == EChessPieces.KING_WHITE || markedButton.getType() == EChessPieces.KING_BLACK) && steps > 1) {
             result = true;
 
+            int direction = Integer.compare(capturedButton.getPosition().getRow(), markedButton.getPosition().getRow());
+            int column = markedButton.getPlayerColor() == EPlayerColor.WHITE ? 1 : 8;
+
+            ChessFieldButton rook = direction == -1 ?
+                    field.stream().filter(button -> button.getPosition().equals(new Position('A', column))).findAny().get() :
+                    field.stream().filter(button -> button.getPosition().equals(new Position('H', column))).findAny().get();
+
+            ChessFieldButton newRook = direction == -1 ?
+                    field.stream().filter(button -> button.getPosition().equals(new Position(((char) (capturedButton.getPosition().getRow() + 1)), column))).findAny().get() :
+                    field.stream().filter(button -> button.getPosition().equals(new Position(((char) (capturedButton.getPosition().getRow() - 1)), column))).findAny().get();
+
             capturedButton.setType(markedButton.getType());
             capturedButton.setPlayerColor(markedButton.getPlayerColor());
+
+            newRook.setType(rook.getType());
+            newRook.setPlayerColor(rook.getPlayerColor());
+
             markedButton.setType(EChessPieces.EMPTY);
             markedButton.setPlayerColor(EPlayerColor.NONE);
 
-            rightRochade = markedButton.getPosition().getRow() < capturedButton.getPosition().getRow();
-            ChessFieldButton rook;
-            ChessFieldButton newRook;
-            Position newRookPosition;
-
-            if (rightRochade) {
-                rook = field.stream()
-                        .filter(button -> button.getPlayerColor() == capturedButton.getPlayerColor())
-                        .filter(button -> button.getPosition().getRow() > markedButton.getPosition().getRow())
-                        .filter(button -> button.getType() == EChessPieces.ROOK_WHITE || button.getType() == EChessPieces.ROOK_BLACK)
-                        .findAny().get();
-                newRookPosition = new Position((char) (capturedButton.getPosition().getRow() - 1), capturedButton.getPosition().getColumn());
-                newRook = field.stream().filter(button -> button.getPosition().equals(newRookPosition)).findAny().get();
-            } else {
-                rook = field.stream()
-                        .filter(button -> button.getPlayerColor() == capturedButton.getPlayerColor())
-                        .filter(button -> button.getPosition().getRow() < markedButton.getPosition().getRow())
-                        .filter(button -> button.getType() == EChessPieces.ROOK_WHITE || button.getType() == EChessPieces.ROOK_BLACK)
-                        .findAny().get();
-                newRookPosition = new Position((char) (capturedButton.getPosition().getRow() + 1), capturedButton.getPosition().getColumn());
-                newRook = field.stream().filter(button -> button.getPosition().equals(newRookPosition)).findAny().get();
-            }
-            newRook.setType(rook.getType());
-            newRook.setPlayerColor(rook.getPlayerColor());
             rook.setType(EChessPieces.EMPTY);
             rook.setPlayerColor(EPlayerColor.NONE);
         }

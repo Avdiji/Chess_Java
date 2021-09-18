@@ -1,6 +1,7 @@
 package Chess.Game.GUI.ChessboardGUI;
 
 import Chess.Game.GUI.IChessFrame;
+import Chess.Game.GUI.Scoreboard;
 import Chess.Game.Logic.ChessField;
 import Chess.Game.Logic.ChessFieldButton;
 import Chess.Game.Logic.Pieces.EChessPieces;
@@ -24,45 +25,73 @@ import java.util.Arrays;
  */
 public class GameWindow implements IChessFrame {
 
-    /** Frame the Game is being played in **/
+    /**
+     * Frame the Game is being played in
+     **/
     private JFrame gameFrame;
 
-    /**idle position to initialize the graves **/
+    /**
+     * idle position to initialize the graves
+     **/
     protected static final Position idlePosition = new Position('A', 1);
 
-    /** Sizes used for the GUI in the Game Window **/
+    /**
+     * Sizes used for the GUI in the Game Window
+     **/
     protected static final int MARGIN_BORDER_GRAVE[] = {50, 50, 100, 150};
     private static final int MARGIN_TITLE[] = {30, 30, 0, 30};
 
-    /** Strings used for the GUI in the Game Window **/
+    /**
+     * Strings used for the GUI in the Game Window
+     **/
     private static final String TITLE = "Chess";
+    private static final String STALEMATE = "STALEMATE";
 
-    /** Label with the Title of the Game Window **/
+
+    /**
+     * Label with the Title of the Game Window
+     **/
     private JLabel title;
 
-    /** Graves of the Players **/
+    /**
+     * Graves of the Players
+     **/
     private Grave_White panel_LHS;
     private Grave_Black panel_RHS;
 
-    /** Panel with the board and the player indicator **/
+    /**
+     * Panel with the board and the player indicator
+     **/
     private BoardWrapper board_wrapper;
 
-    /** ChessField the Game is being played on **/
+    /**
+     * ChessField the Game is being played on
+     **/
     private ChessField chessField;
 
-    /** ActionListener to add Piece to the Grave **/
+    /**
+     * ActionListener to add Piece to the Grave
+     **/
     private ActionListener buttonListener;
 
-    /** ActionListener to upgrade a Pawn **/
+    /**
+     * ActionListener to upgrade a Pawn
+     **/
     private UpgradePawn panel_upgradePawn;
     private ActionListener upgradeListener;
+
+    /**
+     * Scoreboard of this Game
+     **/
+    private final Scoreboard scoreboard;
 
     /**
      * Constructor
      *
      * @param chessField chessField with all the Logic
      */
-    public GameWindow(final ChessField chessField) {
+    public GameWindow(final ChessField chessField, final Scoreboard scoreboard) {
+        this.scoreboard = scoreboard;
         this.chessField = chessField;
         panel_LHS = new Grave_White();
         panel_RHS = new Grave_Black();
@@ -72,7 +101,9 @@ public class GameWindow implements IChessFrame {
         addComponents();
     }
 
-    /** Method initializes {@link #title} **/
+    /**
+     * Method initializes {@link #title}
+     **/
     private void initTitle() {
         title = new JLabel(TITLE);
         title.setHorizontalAlignment(JLabel.CENTER);
@@ -103,7 +134,9 @@ public class GameWindow implements IChessFrame {
         }
     }
 
-    /** Method changes the Color of the player indicators accordingly to the currentPlayer */
+    /**
+     * Method changes the Color of the player indicators accordingly to the currentPlayer
+     */
     private void changePlayerIndicator() {
         if (chessField.getCurrentPlayerColor() == chessField.getPlayer1().getPlayerColor()) {
             board_wrapper.setIndicator_white(IChessFrame.COLOR_BACKGROUND);
@@ -140,10 +173,18 @@ public class GameWindow implements IChessFrame {
                 chessField.getPlayer1().getPlayerColor()); // the the new Playercolor
         chessField.removeMarkings(); // remove all the markings
 
-        System.out.println(String.format("Check %s: %b", chessField.getCurrentPlayerColor(), chessField.getMovement().isCheck(chessField.getCurrentPlayerColor(), chessField.getField())));
-        System.out.println(String.format("Checkmate %s: %b", chessField.getCurrentPlayerColor(), chessField.getMovement().isCheckMate(chessField.getCurrentPlayerColor(), chessField.getField())));
-        System.out.println(String.format("Stalemate %s: %b", chessField.getCurrentPlayerColor(), chessField.getMovement().isStalemate(chessField.getCurrentPlayerColor(), chessField.getField())));
-        System.out.println();
+        if (chessField.getMovement().isCheckMate(chessField.getCurrentPlayerColor(), chessField.getField())) {
+            gameFrame.setVisible(false);
+            gameFrame.dispose();
+            scoreboard.setMessage(String.format("%s Won", Arrays.stream(EPlayerColor.values())
+                    .filter(value -> value != chessField.getCurrentPlayerColor() && value != EPlayerColor.NONE).findAny().get()));
+            scoreboard.setVisible(true);
+        } else if (chessField.getMovement().isStalemate(chessField.getCurrentPlayerColor(), chessField.getField())) {
+            gameFrame.setVisible(false);
+            gameFrame.dispose();
+            scoreboard.setMessage(STALEMATE);
+            scoreboard.setVisible(true);
+        }
     }
 
     /**

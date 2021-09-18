@@ -1,53 +1,49 @@
 package Chess.Game.GUI;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
+import Chess.Game.GUI.ChessboardGUI.GameWindow;
+import Chess.Game.Logic.ChessField;
+import Chess.Game.Logic.Player.EPlayerColor;
+import Chess.Game.Logic.Player.Player;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+/**
+ * @author Fitor Avdiji
+ * <p>
+ * Main Menu of the Game
+ */
 public class MainMenu extends JFrame implements IChessFrame {
+
+    /**
+     * String used in all the different Gamemodes
+     **/
+    protected static final String[] STRING_GAMEMODES = {"Classic", "Rook/Bishop Only", "Pawn/Knight Only"};
+    private static final String STRING_GAMEMODE_PATH[] = {
+            "src/main/resources/initilization/init_default.csv",
+            "src/main/resources/initilization/init_rook_bishop.csv",
+            "src/main/resources/initilization/init_pawn_knight.csv"};
 
     /**
      * Sizes, used in the MainMenu
      **/
     private static final int SIZE_WIDTH = 1000;
     private static final int SIZE_LENGTH = 700;
-    private static final int SIZE_BUTTON_MAINMENU = 30;
+    public static final int SIZE_BUTTON_MAINMENU = 30;
 
     /**
-     * Margins of the Components in the Main Menu
+     * Margin of the Title
      **/
     private static final int MARGIN_TITLE_MAINMENU[] = {50, 0, 0, 0};
-    private static final int MARGIN_BUTTONS_MAINMENU[] = {20, 70, 10, 10};
-    private static final int MARGIN_PANEL_COLORMODES[] = {0, 0, 135, 50};
-    private static final int MARGIN_LABEL_IMAGE[] = {95, 10, 10, 60};
-
-    private static final String IMAGE_PATH = "src/main/resources/Images/MainMenuImage_Green.png";
-
     /**
-     * Strings, needed for the GUI
+     * Text of the Title
      **/
     private static final String STRING_TITLE = "Avdiji's Chess";
-    private static final String STRING_BUTTON_LOCAL = "Multiplayer Local";
-    private static final String STRING_BUTTON_ONLINE = "Multiplayer Online";
-    private static final String STRING_BUTTON_AI = "Player vs AI";
-    private static final String STRING_BUTTON_EXIT = "Exit";
-    private static final String STRING_BUTTON_LIGHTMODE = "Lightmode";
-    private static final String STRING_BUTTON_DARKMODE = "Darkmode";
-    private static final String STRING_BUTTON_RED = "Red";
-    private static final String STRING_BUTTON_GREEN = "Green";
-
-    /**
-     * GridBagConstraints for the Layout
-     **/
-    private GridBagConstraints gbc;
 
     /**
      * JLabel, containing the title
@@ -55,45 +51,82 @@ public class MainMenu extends JFrame implements IChessFrame {
     private JLabel label_title;
 
     /**
-     * Panel containing following components: <br>
-     * * {@link #button_local}<br>
-     * * {@link #button_online}<br>
-     * * {@link #button_ai}<br>
-     * * {@link #button_exit}
+     * Panels of the Main Menu
      **/
-    private JPanel panel_LHS;
-    private JButton button_local;
-    private JButton button_online;
-    private JButton button_ai;
-    private JButton button_exit;
+    private MainMenu_Panel_LHS panel_LHS;
+    private MainMenu_panel_RHS panel_RHS;
 
     /**
-     * Panel containing following components:<br>
-     * * {@link #label_image}<br>
-     * * {@link #panel_colorModes}<br>
-     * * {@link #button_lightmode}<br>
-     * * {@link #button_darkmode}<br>
-     * * {@link #button_red}<br>
-     * * {@link #button_green}<br>
-     * * {@link #panel_RHS}
+     * Objects to start the Game
      **/
-    private JPanel panel_RHS;
-    private JLabel label_image;
-    private JPanel panel_colorModes;
-    private JButton button_lightmode;
-    private JButton button_darkmode;
-    private JButton button_red;
-    private JButton button_green;
+    private Player player1;
+    private Player player2;
+    private ChessField chessField;
 
+    /** Scoreboard **/
+    private Scoreboard scoreboard;
+
+    /** ActionsListeners for the Components of {@link #panel_LHS} **/
+    private ActionListener AL_local;
+    private ActionListener AL_online;
+    private ActionListener AL_ai;
+    private ActionListener AL_exit;
+
+    /** ActionsListeners for the scoreboard **/
+    private ActionListener AL_scoreboard_mainmenu;
+    private ActionListener AL_scoreboard_exit;
+
+    /**
+     * Constructor
+     */
     public MainMenu() {
-        gbc = new GridBagConstraints();
-
         initComponents();
         initMainFrame();
         addComponents();
 
         this.setUndecorated(true);
         this.setVisible(true);
+    }
+    // TODO outsource actionlisteners to new classes
+    /** Method initializes {@link #AL_local} **/
+    private void initAL_local(){
+        AL_local = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                player1 = new Player(EPlayerColor.WHITE);
+                player2 = new Player(EPlayerColor.BLACK);
+
+                chessField = new ChessField(player1, player2);
+                chessField.initField(STRING_GAMEMODE_PATH[panel_LHS.getCombobox_gamemodes().getSelectedIndex()]);
+
+                setVisible(false);
+                new GameWindow(chessField, scoreboard);
+            }
+        };
+    }
+
+    /** Method initializes {@link #AL_scoreboard_mainmenu} **/
+    private void initAL_scoreboard_mainmenu(){
+        AL_scoreboard_mainmenu = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(true);
+                scoreboard.setVisible(false);
+            }
+        };
+    }
+
+    /** Method initializes {@link #AL_scoreboard_exit} **/
+    private void initAL_scoreboard_exit(){
+        AL_scoreboard_exit = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                scoreboard.setVisible(false);
+                scoreboard.dispose();
+                setVisible(false);
+                dispose();
+            }
+        };
     }
 
     /**
@@ -108,128 +141,6 @@ public class MainMenu extends JFrame implements IChessFrame {
         label_title.setBorder(new EmptyBorder(MARGIN_TITLE_MAINMENU[0], MARGIN_TITLE_MAINMENU[1], MARGIN_TITLE_MAINMENU[2], MARGIN_TITLE_MAINMENU[3]));
     }
 
-    /**
-     * Method initializes all the components of {@link #panel_LHS}
-     */
-    private void initButtons_LHS() {
-        button_local = new JButton(STRING_BUTTON_LOCAL);
-        button_online = new JButton(STRING_BUTTON_ONLINE);
-        button_ai = new JButton(STRING_BUTTON_AI);
-        button_exit = new JButton(STRING_BUTTON_EXIT);
-
-        button_local.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_MAINMENU));
-        button_online.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_MAINMENU));
-        button_ai.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_MAINMENU));
-        button_exit.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_MAINMENU));
-
-        button_local.setForeground(COLOR_LABEL);
-        button_online.setForeground(COLOR_LABEL);
-        button_ai.setForeground(COLOR_LABEL);
-        button_exit.setForeground(COLOR_LABEL);
-
-        button_local.setBackground(COLOR_BUTTON_BACKGROUND);
-        button_online.setBackground(COLOR_BUTTON_BACKGROUND);
-        button_ai.setBackground(COLOR_BUTTON_BACKGROUND);
-        button_exit.setBackground(COLOR_BUTTON_BACKGROUND);
-    }
-
-    /**
-     * Method initializes following variables:<br>
-     * {@link #panel_LHS}<br>
-     * {@link #button_local}<br>
-     * {@link #button_online}<br>
-     * {@link #button_ai}<br>
-     * {@link #button_exit}
-     */
-    private void initPanel_LHS() {
-        panel_LHS = new JPanel();
-        panel_LHS.setLayout(new GridBagLayout());
-        panel_LHS.setBackground(COLOR_BACKGROUND);
-        initButtons_LHS();
-
-        gbc.insets = new Insets(MARGIN_BUTTONS_MAINMENU[0], MARGIN_BUTTONS_MAINMENU[1], MARGIN_BUTTONS_MAINMENU[2], MARGIN_BUTTONS_MAINMENU[3]);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panel_LHS.add(button_local, gbc);
-
-        gbc.gridy = 1;
-        panel_LHS.add(button_online, gbc);
-
-        gbc.gridy = 2;
-        panel_LHS.add(button_ai, gbc);
-
-        gbc.insets = new Insets(MARGIN_BUTTONS_MAINMENU[0] * 3, MARGIN_BUTTONS_MAINMENU[1], MARGIN_BUTTONS_MAINMENU[2], MARGIN_BUTTONS_MAINMENU[3]);
-        gbc.gridy = 3;
-        panel_LHS.add(button_exit, gbc);
-
-        gbc.insets = new Insets(0, 0, 0, 0);
-        gbc.fill = 0;
-    }
-
-    /**
-     * Method initializes all the Components of {@link #panel_colorModes}
-     */
-    private void initButtons_RHS() {
-        button_lightmode = new JButton(STRING_BUTTON_LIGHTMODE);
-        button_darkmode = new JButton(STRING_BUTTON_DARKMODE);
-        button_red = new JButton(STRING_BUTTON_RED);
-        button_green = new JButton(STRING_BUTTON_GREEN);
-
-        button_lightmode.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
-        button_darkmode.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
-        button_red.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
-        button_green.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
-
-        button_lightmode.setForeground(COLOR_LABEL);
-        button_darkmode.setForeground(COLOR_LABEL);
-        button_red.setForeground(COLOR_LABEL);
-        button_green.setForeground(COLOR_LABEL);
-
-        button_lightmode.setBackground(COLOR_BUTTON_BACKGROUND);
-        button_darkmode.setBackground(COLOR_BUTTON_BACKGROUND);
-        button_red.setBackground(COLOR_BUTTON_BACKGROUND);
-        button_green.setBackground(COLOR_BUTTON_BACKGROUND);
-    }
-
-    /**
-     * Method initializes following variables:<br>
-     * {@link #panel_RHS}<br>
-     * {@link #label_image}<br>
-     * {@link #panel_colorModes}<br>
-     * {@link #button_lightmode}<br>
-     * {@link #button_darkmode}<br>
-     * {@link #button_red}<br>
-     * {@link #button_green}<br>
-     * {@link #panel_RHS}<br>
-     */
-    private void initPanel_RHS() {
-        panel_RHS = new JPanel();
-        panel_RHS.setLayout(new BorderLayout());
-        panel_RHS.setBackground(COLOR_BACKGROUND);
-        label_image = new JLabel(new ImageIcon(IMAGE_PATH));
-        label_image.setBorder(new EmptyBorder(MARGIN_LABEL_IMAGE[0], MARGIN_LABEL_IMAGE[1], MARGIN_LABEL_IMAGE[2], MARGIN_LABEL_IMAGE[3]));
-
-        panel_colorModes = new JPanel();
-        panel_colorModes.setLayout(new GridBagLayout());
-        panel_colorModes.setBackground(COLOR_BACKGROUND);
-        panel_colorModes.setBorder(new EmptyBorder(MARGIN_PANEL_COLORMODES[0], MARGIN_PANEL_COLORMODES[1], MARGIN_PANEL_COLORMODES[2], MARGIN_PANEL_COLORMODES[3]));
-
-        initButtons_RHS();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panel_colorModes.add(button_lightmode, gbc);
-        gbc.gridx = 1;
-        panel_colorModes.add(button_darkmode, gbc);
-        gbc.gridx = 2;
-        panel_colorModes.add(button_red, gbc);
-        gbc.gridx = 3;
-        panel_colorModes.add(button_green, gbc);
-
-        panel_RHS.add(label_image, BorderLayout.CENTER);
-        panel_RHS.add(panel_colorModes, BorderLayout.SOUTH);
-    }
-
     @Override
     public void initMainFrame() {
         this.setSize(SIZE_WIDTH, SIZE_LENGTH);
@@ -242,8 +153,20 @@ public class MainMenu extends JFrame implements IChessFrame {
     @Override
     public void initComponents() {
         initTitle();
-        initPanel_LHS();
-        initPanel_RHS();
+        initAL_local();
+
+        initAL_scoreboard_mainmenu();
+        initAL_scoreboard_exit();
+
+        panel_LHS = new MainMenu_Panel_LHS();
+        panel_RHS = new MainMenu_panel_RHS();
+
+        scoreboard = new Scoreboard();
+        scoreboard.setVisible(false);
+        scoreboard.addAL_button_menu(AL_scoreboard_mainmenu);
+        scoreboard.addAL_button_exit(AL_scoreboard_exit);
+
+        panel_LHS.addAL_button_local(AL_local);
     }
 
     @Override

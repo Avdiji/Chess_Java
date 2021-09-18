@@ -1,6 +1,7 @@
 package Chess.Game.GUI.ChessboardGUI;
 
 import Chess.Game.GUI.IChessFrame;
+import Chess.Game.GUI.MainMenu;
 import Chess.Game.Logic.ChessField;
 import Chess.Game.Logic.Pieces.IChessPiece;
 
