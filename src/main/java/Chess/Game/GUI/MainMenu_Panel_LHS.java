@@ -2,7 +2,9 @@ package Chess.Game.GUI;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -27,7 +29,7 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
      * Strings, needed for the GUI
      **/
     private static final String STRING_BUTTON_LOCAL = "Multiplayer Local";
-    private static final String STRING_BUTTON_ONLINE = "Multiplayer Online";
+    private static final String STRING_BUTTON_ONLINE = "Online (Only Classic)";
     private static final String STRING_BUTTON_AI = "Player vs AI";
     private static final String STRING_BUTTON_EXIT = "Exit";
 
@@ -73,10 +75,19 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
         button_local.addActionListener(al);
     }
 
+    /**
+     * Method adds an ActionListener to {@link #button_exit}
+     *
+     * @param al ActionListener to end the application
+     */
+    public void addAL_button_exit(final ActionListener al) {
+        button_exit.addActionListener(al);
+    }
+
     @Override
     public void initMainFrame() {
         this.setLayout(new GridBagLayout());
-        this.setBackground(COLOR_BACKGROUND);
+        this.setBackground(MainMenu.COLOR_BACKGROUND);
     }
 
     @Override
@@ -84,8 +95,9 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
         combobox_gamemodes = new JComboBox<>();
         Arrays.stream(MainMenu.STRING_GAMEMODES).forEach(value -> combobox_gamemodes.addItem(value));
         combobox_gamemodes.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
-        combobox_gamemodes.setBackground(COLOR_BUTTON_BACKGROUND);
-        combobox_gamemodes.setForeground(COLOR_LABEL);
+        combobox_gamemodes.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+        combobox_gamemodes.setForeground(MainMenu.COLOR_LABEL);
+        ((JLabel)combobox_gamemodes.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 
         button_local = new JButton(STRING_BUTTON_LOCAL);
         button_online = new JButton(STRING_BUTTON_ONLINE);
@@ -97,15 +109,15 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
         button_ai.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
         button_exit.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
 
-        button_local.setForeground(COLOR_LABEL);
-        button_online.setForeground(COLOR_LABEL);
-        button_ai.setForeground(COLOR_LABEL);
-        button_exit.setForeground(COLOR_LABEL);
+        button_local.setForeground(MainMenu.COLOR_LABEL);
+        button_online.setForeground(MainMenu.COLOR_LABEL);
+        button_ai.setForeground(MainMenu.COLOR_LABEL);
+        button_exit.setForeground(MainMenu.COLOR_LABEL);
 
-        button_local.setBackground(COLOR_BUTTON_BACKGROUND);
-        button_online.setBackground(COLOR_BUTTON_BACKGROUND);
-        button_ai.setBackground(COLOR_BUTTON_BACKGROUND);
-        button_exit.setBackground(COLOR_BUTTON_BACKGROUND);
+        button_local.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+        button_online.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+        button_ai.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+        button_exit.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
     }
 
     @Override
@@ -130,5 +142,20 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
         gbc.insets = new Insets(MARGIN_BUTTONS_MAINMENU[0] * 3, MARGIN_BUTTONS_MAINMENU[1], MARGIN_BUTTONS_MAINMENU[2], MARGIN_BUTTONS_MAINMENU[3]);
         gbc.gridy = 4;
         this.add(button_exit, gbc);
+    }
+
+    @Override
+    public void reColor(){
+        this.setBackground(MainMenu.COLOR_BACKGROUND);
+        combobox_gamemodes.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+        combobox_gamemodes.setForeground(MainMenu.COLOR_LABEL);
+        button_local.setForeground(MainMenu.COLOR_LABEL);
+        button_online.setForeground(MainMenu.COLOR_LABEL);
+        button_ai.setForeground(MainMenu.COLOR_LABEL);
+        button_exit.setForeground(MainMenu.COLOR_LABEL);
+        button_local.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+        button_online.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+        button_ai.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+        button_exit.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
     }
 }

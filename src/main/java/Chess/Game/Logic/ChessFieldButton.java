@@ -1,5 +1,6 @@
 package Chess.Game.Logic;
 
+import Chess.Game.GUI.MainMenu;
 import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Pieces.IChessPiece;
 import Chess.Game.Logic.Player.EPlayerColor;
@@ -160,7 +161,7 @@ public class ChessFieldButton extends JButton {
      */
     public void setMarked(final boolean marked) {
         this.marked = marked;
-        this.setBackground(marked ? IChessPiece.COLOR_FIELD_MARKED : backgroundColor);
+        this.setBackground(marked ? MainMenu.COLOR_FIELD_MARKED : backgroundColor);
     }
 
     /**
@@ -177,7 +178,7 @@ public class ChessFieldButton extends JButton {
                 this.setIcon(new ImageIcon());
             }
         } else {
-            this.setBackground(endangered ? IChessPiece.COLOR_FIELD_ENDANGERED : backgroundColor);
+            this.setBackground(endangered ? MainMenu.COLOR_FIELD_ENDANGERED : backgroundColor);
         }
     }
 

@@ -1,11 +1,11 @@
 package Chess.Game.GUI.ChessboardGUI;
 
 import Chess.Game.GUI.IChessFrame;
+import Chess.Game.GUI.MainMenu;
 import Chess.Game.GUI.Scoreboard;
 import Chess.Game.Logic.ChessField;
 import Chess.Game.Logic.ChessFieldButton;
 import Chess.Game.Logic.Pieces.EChessPieces;
-import Chess.Game.Logic.Pieces.IChessPiece;
 import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Position;
 
@@ -59,6 +59,10 @@ public class GameWindow implements IChessFrame {
     private Grave_White panel_LHS;
     private Grave_Black panel_RHS;
 
+    /** ActionListeners for the Graves **/
+    private ActionListener AL_graveWhite;
+    private ActionListener AL_graveBlack;
+
     /**
      * Panel with the board and the player indicator
      **/
@@ -107,7 +111,7 @@ public class GameWindow implements IChessFrame {
     private void initTitle() {
         title = new JLabel(TITLE);
         title.setHorizontalAlignment(JLabel.CENTER);
-        title.setForeground(COLOR_LABEL);
+        title.setForeground(MainMenu.COLOR_LABEL);
         title.setFont(new Font(FONT, FONT_TYPE, SIZE_TITLE));
         title.setBorder(new EmptyBorder(MARGIN_TITLE[0], MARGIN_TITLE[1], MARGIN_TITLE[2], MARGIN_TITLE[3]));
     }
@@ -139,11 +143,11 @@ public class GameWindow implements IChessFrame {
      */
     private void changePlayerIndicator() {
         if (chessField.getCurrentPlayerColor() == chessField.getPlayer1().getPlayerColor()) {
-            board_wrapper.setIndicator_white(IChessFrame.COLOR_BACKGROUND);
-            board_wrapper.setIndicator_black(IChessPiece.COLOR_FIELD_MARKED);
+            board_wrapper.setIndicator_white(MainMenu.COLOR_BACKGROUND);
+            board_wrapper.setIndicator_black(MainMenu.COLOR_FIELD_MARKED);
         } else {
-            board_wrapper.setIndicator_black(IChessFrame.COLOR_BACKGROUND);
-            board_wrapper.setIndicator_white(IChessPiece.COLOR_FIELD_MARKED);
+            board_wrapper.setIndicator_black(MainMenu.COLOR_BACKGROUND);
+            board_wrapper.setIndicator_white(MainMenu.COLOR_FIELD_MARKED);
         }
     }
 
@@ -321,13 +325,46 @@ public class GameWindow implements IChessFrame {
         };
     }
 
+    /** Method initializes {@link #AL_graveWhite} **/
+    private void initAL_graveWhite(){
+        AL_graveWhite = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameFrame.setVisible(false);
+                gameFrame.dispose();
+                scoreboard.setMessage("WHITE gave up!");
+                scoreboard.setVisible(true);
+            }
+        };
+    }
+
+    /** Method initializes {@link #AL_graveBlack} **/
+    private void initAL_graveBlack(){
+        AL_graveBlack = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameFrame.setVisible(false);
+                gameFrame.dispose();
+                scoreboard.setMessage("BLACK gave up!");
+                scoreboard.setVisible(true);
+            }
+        };
+    }
+
     @Override
     public void initComponents() {
         initButtonListener();
         initUpgradeListener();
         initTitle();
+
+        initAL_graveWhite();
+        initAL_graveBlack();
+
         panel_upgradePawn = new UpgradePawn(upgradeListener);
         panel_upgradePawn.setVisible(false);
+
+        panel_LHS.addGraveListener(AL_graveWhite);
+        panel_RHS.addGraveListener(AL_graveBlack);
     }
 
     @Override
@@ -344,11 +381,16 @@ public class GameWindow implements IChessFrame {
     public void initMainFrame() {
         gameFrame = new JFrame();
         gameFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        gameFrame.getContentPane().setBackground(COLOR_BACKGROUND);
+        gameFrame.getContentPane().setBackground(MainMenu.COLOR_BACKGROUND);
         gameFrame.setLocationRelativeTo(null);
         gameFrame.setLayout(new BorderLayout());
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setUndecorated(true);
         gameFrame.setVisible(true);
+    }
+
+    @Override
+    public void reColor() {
+
     }
 }

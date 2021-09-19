@@ -1,6 +1,7 @@
 package Chess.Game.GUI.ChessboardGUI;
 
 import Chess.Game.GUI.IChessFrame;
+import Chess.Game.GUI.MainMenu;
 import Chess.Game.Logic.ChessFieldButton;
 import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Pieces.IChessPiece;
@@ -12,6 +13,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 
 /**
  * @author Fitor Avdiji
@@ -51,9 +53,14 @@ public class Grave_Black extends JPanel implements IChessFrame {
         return grave_black;
     }
 
+    /** Method adds an ActionsListener to {@link #ff_black} **/
+    public void addGraveListener(final ActionListener al){
+        ff_black.addActionListener(al);
+    }
+
     @Override
     public void initMainFrame() {
-        this.setBackground(COLOR_BACKGROUND);
+        this.setBackground(MainMenu.COLOR_BACKGROUND);
         this.setBorder(new EmptyBorder(
                 GameWindow.MARGIN_BORDER_GRAVE[0],
                 GameWindow.MARGIN_BORDER_GRAVE[1],
@@ -66,9 +73,9 @@ public class Grave_Black extends JPanel implements IChessFrame {
     public void initComponents() {
         grave_black = new JPanel();
         grave_black.setLayout(new GridLayout(8, 2));
-        grave_black.setBackground(IChessFrame.COLOR_BACKGROUND);
+        grave_black.setBackground(MainMenu.COLOR_BACKGROUND);
         for (int i = 0; i < 8 * 2; ++i) {
-            ChessFieldButton tmp_button = new ChessFieldButton(GameWindow.idlePosition, EChessPieces.EMPTY, IChessPiece.COLOR_FIELD_WHITE);
+            ChessFieldButton tmp_button = new ChessFieldButton(GameWindow.idlePosition, EChessPieces.EMPTY, MainMenu.COLOR_FIELD_WHITE);
             tmp_button.initPiece();
             grave_black.add(tmp_button);
         }
@@ -76,13 +83,18 @@ public class Grave_Black extends JPanel implements IChessFrame {
         ff_black = new JButton(FORFEIT_BLACK);
         ff_black.setPreferredSize(new Dimension(2 * IChessPiece.SIZE_FIELD, IChessPiece.SIZE_FIELD / 2));
         ff_black.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
-        ff_black.setBackground(COLOR_BUTTON_BACKGROUND);
-        ff_black.setForeground(COLOR_LABEL);
+        ff_black.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+        ff_black.setForeground(MainMenu.COLOR_LABEL);
     }
 
     @Override
     public void addComponents() {
         this.add(grave_black, BorderLayout.CENTER);
         this.add(ff_black, BorderLayout.SOUTH);
+    }
+
+    @Override
+    public void reColor() {
+
     }
 }

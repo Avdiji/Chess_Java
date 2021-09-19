@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,6 +21,23 @@ import java.awt.event.ActionListener;
  */
 public class MainMenu extends JFrame implements IChessFrame {
 
+    /** Path to the Image of the Main Menu **/
+    private static final String IMAGE_PATH_DARKMODE = "src/main/resources/Images/MainMenuImage_Darkmode.png";
+    private static final String IMAGE_PATH_LIGHTMODE = "src/main/resources/Images/MainMenuImage_Lightmode.png";
+    private static final String IMAGE_PATH_BLUE = "src/main/resources/Images/MainMenuImage_Blue.png";
+    private static final String IMAGE_PATH_GREEN = "src/main/resources/Images/MainMenuImage_Green.png";
+
+    /**
+     * Currently Selected Colors
+     **/
+    public static Color COLOR_BACKGROUND = COLOR_BACKGROUND_DARKMODE;
+    public static Color COLOR_LABEL = COLOR_LABEL_DARKMODE;
+    public static Color COLOR_BUTTON_BACKGROUND = COLOR_BUTTON_BACKGROUND_DARKMODE;
+    public static Color COLOR_FIELD_WHITE = COLOR_FIELD_WHITE_DARKMODE;
+    public static Color COLOR_FIELD_BLACK = COLOR_FIELD_BLACK_DARKMODE;
+    public static Color COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_DARKMODE;
+    public final static Color COLOR_FIELD_ENDANGERED = new Color(0xec7c26);
+
     /**
      * String used in all the different Gamemodes
      **/
@@ -27,7 +45,8 @@ public class MainMenu extends JFrame implements IChessFrame {
     private static final String STRING_GAMEMODE_PATH[] = {
             "src/main/resources/initilization/init_default.csv",
             "src/main/resources/initilization/init_rook_bishop.csv",
-            "src/main/resources/initilization/init_pawn_knight.csv"};
+            "src/main/resources/initilization/stalemate.csv"};
+//            "src/main/resources/initilization/init_pawn_knight.csv"};
 
     /**
      * Sizes, used in the MainMenu
@@ -63,16 +82,30 @@ public class MainMenu extends JFrame implements IChessFrame {
     private Player player2;
     private ChessField chessField;
 
-    /** Scoreboard **/
+    /**
+     * Scoreboard
+     **/
     private Scoreboard scoreboard;
 
-    /** ActionsListeners for the Components of {@link #panel_LHS} **/
+    /**
+     * ActionsListeners for the Components of {@link #panel_LHS}
+     **/
     private ActionListener AL_local;
     private ActionListener AL_online;
     private ActionListener AL_ai;
     private ActionListener AL_exit;
 
-    /** ActionsListeners for the scoreboard **/
+    /**
+     * ActionListeners for the Components of {@link #panel_RHS}
+     **/
+    private ActionListener AL_lightmode;
+    private ActionListener AL_darkmode;
+    private ActionListener AL_blue;
+    private ActionListener AL_green;
+
+    /**
+     * ActionsListeners for the scoreboard
+     **/
     private ActionListener AL_scoreboard_mainmenu;
     private ActionListener AL_scoreboard_exit;
 
@@ -87,9 +120,15 @@ public class MainMenu extends JFrame implements IChessFrame {
         this.setUndecorated(true);
         this.setVisible(true);
     }
-    // TODO outsource actionlisteners to new classes
-    /** Method initializes {@link #AL_local} **/
-    private void initAL_local(){
+
+    //////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////// AL LHS  //////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Method initializes {@link #AL_local}
+     **/
+    private void initAL_local() {
         AL_local = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -105,8 +144,117 @@ public class MainMenu extends JFrame implements IChessFrame {
         };
     }
 
-    /** Method initializes {@link #AL_scoreboard_mainmenu} **/
-    private void initAL_scoreboard_mainmenu(){
+    /**
+     * Method initializes {@link #AL_exit}
+     **/
+    private void initAL_exit() {
+        AL_exit = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                scoreboard.dispose();
+                setVisible(false);
+                dispose();
+            }
+        };
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////// AL LHS  //////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////// AL RHS  //////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Method initializes {@link #AL_lightmode}
+     **/
+    private void initAL_lightmode() {
+        AL_lightmode = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                COLOR_BACKGROUND = COLOR_BACKGROUND_LIGHTMODE;
+                COLOR_LABEL = COLOR_LABEL_LIGHTMODE;
+                COLOR_BUTTON_BACKGROUND = COLOR_BUTTON_BACKGROUND_LIGHTMODE;
+                COLOR_FIELD_WHITE = COLOR_FIELD_WHITE_LIGHTMODE;
+                COLOR_FIELD_BLACK = COLOR_FIELD_BLACK_LIGHTMODE;
+                COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_LIGHTMODE;
+                panel_RHS.setPanelImage(IMAGE_PATH_LIGHTMODE);
+                reColor();
+            }
+        };
+    }
+
+    /**
+     * Method initializes {@link #AL_darkmode}
+     **/
+    private void initAL_darkmode() {
+        AL_darkmode = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                COLOR_BACKGROUND = COLOR_BACKGROUND_DARKMODE;
+                COLOR_LABEL = COLOR_LABEL_DARKMODE;
+                COLOR_BUTTON_BACKGROUND = COLOR_BUTTON_BACKGROUND_DARKMODE;
+                COLOR_FIELD_WHITE = COLOR_FIELD_WHITE_DARKMODE;
+                COLOR_FIELD_BLACK = COLOR_FIELD_BLACK_DARKMODE;
+                COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_DARKMODE;
+                panel_RHS.setPanelImage(IMAGE_PATH_DARKMODE);
+                reColor();
+            }
+        };
+    }
+
+    /**
+     * Method initializes {@link #AL_blue}
+     **/
+    private void initAL_blue() {
+        AL_blue = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                COLOR_BACKGROUND = COLOR_BACKGROUND_BLUE;
+                COLOR_LABEL = COLOR_LABEL_BLUE;
+                COLOR_BUTTON_BACKGROUND = COLOR_BUTTON_BACKGROUND_BLUE;
+                COLOR_FIELD_WHITE = COLOR_FIELD_WHITE_BLUE;
+                COLOR_FIELD_BLACK = COLOR_FIELD_BLACK_BLUE;
+                COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_BLUE;
+                panel_RHS.setPanelImage(IMAGE_PATH_BLUE);
+                reColor();
+            }
+        };
+    }
+
+    /**
+     * Method initializes {@link #AL_green}
+     **/
+    private void initAL_green() {
+        AL_green = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                COLOR_BACKGROUND = COLOR_BACKGROUND_GREEN;
+                COLOR_LABEL = COLOR_LABEL_GREEN;
+                COLOR_BUTTON_BACKGROUND = COLOR_BUTTON_BACKGROUND_GREEN;
+                COLOR_FIELD_WHITE = COLOR_FIELD_WHITE_GREEN;
+                COLOR_FIELD_BLACK = COLOR_FIELD_BLACK_GREEN;
+                COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_GREEN;
+                panel_RHS.setPanelImage(IMAGE_PATH_GREEN);
+                reColor();
+            }
+        };
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////// AL RHS  //////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////// AL Scoreboard  //////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Method initializes {@link #AL_scoreboard_mainmenu}
+     **/
+    private void initAL_scoreboard_mainmenu() {
         AL_scoreboard_mainmenu = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -116,8 +264,10 @@ public class MainMenu extends JFrame implements IChessFrame {
         };
     }
 
-    /** Method initializes {@link #AL_scoreboard_exit} **/
-    private void initAL_scoreboard_exit(){
+    /**
+     * Method initializes {@link #AL_scoreboard_exit}
+     **/
+    private void initAL_scoreboard_exit() {
         AL_scoreboard_exit = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -128,14 +278,17 @@ public class MainMenu extends JFrame implements IChessFrame {
             }
         };
     }
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////// AL Scoreboard  //////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Method initializes {@link #label_title}
      */
     private void initTitle() {
         label_title = new JLabel(STRING_TITLE);
-        label_title.setBackground(COLOR_BACKGROUND);
-        label_title.setForeground(COLOR_LABEL);
+        label_title.setBackground(MainMenu.COLOR_BACKGROUND);
+        label_title.setForeground(MainMenu.COLOR_LABEL);
         label_title.setHorizontalAlignment(JLabel.CENTER);
         label_title.setFont(new Font(FONT, FONT_TYPE, SIZE_TITLE));
         label_title.setBorder(new EmptyBorder(MARGIN_TITLE_MAINMENU[0], MARGIN_TITLE_MAINMENU[1], MARGIN_TITLE_MAINMENU[2], MARGIN_TITLE_MAINMENU[3]));
@@ -154,9 +307,15 @@ public class MainMenu extends JFrame implements IChessFrame {
     public void initComponents() {
         initTitle();
         initAL_local();
+        initAL_exit();
 
         initAL_scoreboard_mainmenu();
         initAL_scoreboard_exit();
+
+        initAL_lightmode();
+        initAL_darkmode();
+        initAL_blue();
+        initAL_green();
 
         panel_LHS = new MainMenu_Panel_LHS();
         panel_RHS = new MainMenu_panel_RHS();
@@ -167,6 +326,13 @@ public class MainMenu extends JFrame implements IChessFrame {
         scoreboard.addAL_button_exit(AL_scoreboard_exit);
 
         panel_LHS.addAL_button_local(AL_local);
+        panel_LHS.addAL_button_exit(AL_exit);
+
+        panel_RHS.addAL_button_lightmode(AL_lightmode);
+        panel_RHS.addAL_button_darkmode(AL_darkmode);
+        panel_RHS.addAL_button_blue(AL_blue);
+        panel_RHS.addAL_button_green(AL_green);
+        panel_RHS.setPanelImage(IMAGE_PATH_DARKMODE);
     }
 
     @Override
@@ -174,5 +340,17 @@ public class MainMenu extends JFrame implements IChessFrame {
         this.add(label_title, BorderLayout.NORTH);
         this.add(panel_LHS, BorderLayout.WEST);
         this.add(panel_RHS, BorderLayout.EAST);
+    }
+
+    @Override
+    public void reColor() {
+        this.getContentPane().setBackground(COLOR_BACKGROUND);
+
+        label_title.setBackground(MainMenu.COLOR_BACKGROUND);
+        label_title.setForeground(MainMenu.COLOR_LABEL);
+
+        panel_LHS.reColor();
+        panel_RHS.reColor();
+        scoreboard.reColor();
     }
 }

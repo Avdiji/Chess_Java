@@ -18,14 +18,14 @@ public interface IChessPiece {
     /** Size of a Field in the Chess Board in px **/
     public static final int SIZE_FIELD = 100;
 
-    /** Color for the white field **/
-    public static final Color COLOR_FIELD_WHITE = new Color(0x8fbc8f);
-    /** Color for the black field **/
-    public static final Color COLOR_FIELD_BLACK = new Color(0x1E7B56);
-    /** Color of a marked field **/
-    public static final Color COLOR_FIELD_MARKED = new Color(0x039be5);
-    /** Color of an endangered field **/
-    public static final Color COLOR_FIELD_ENDANGERED = new Color(0xec7c26);
+//    /** Color for the white field **/
+//    public static final Color COLOR_FIELD_WHITE = new Color(0x8fbc8f);
+//    /** Color for the black field **/
+//    public static final Color COLOR_FIELD_BLACK = new Color(0x1E7B56);
+//    /** Color of a marked field **/
+//    public static final Color COLOR_FIELD_MARKED = new Color(0x039be5);
+//    /** Color of an endangered field **/
+//    public static final Color COLOR_FIELD_ENDANGERED = new Color(0xec7c26);
 
     /**
      * Method returns a Set of Positions the Piece on the current Position can actually capture

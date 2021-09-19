@@ -69,7 +69,7 @@ public class BoardWrapper extends JPanel implements IChessFrame {
     @Override
     public void initMainFrame() {
         this.setLayout(new BorderLayout());
-        this.setBackground(IChessFrame.COLOR_BACKGROUND);
+        this.setBackground(MainMenu.COLOR_BACKGROUND);
         this.setBorder(new EmptyBorder(MARGIN_BOARD[0], MARGIN_BOARD[1], MARGIN_BOARD[2], MARGIN_BOARD[3]));
     }
 
@@ -77,11 +77,11 @@ public class BoardWrapper extends JPanel implements IChessFrame {
     public void initComponents() {
         indicator_white = new JPanel();
         indicator_black = new JPanel();
-        indicator_white.setBackground(IChessPiece.COLOR_FIELD_MARKED);
-        indicator_black.setBackground(IChessFrame.COLOR_BACKGROUND);
+        indicator_white.setBackground(MainMenu.COLOR_FIELD_MARKED);
+        indicator_black.setBackground(MainMenu.COLOR_BACKGROUND);
 
         panel_chessBoard = new JPanel();
-        panel_chessBoard.setBackground(COLOR_BACKGROUND);
+        panel_chessBoard.setBackground(MainMenu.COLOR_BACKGROUND);
         panel_chessPieces = new JPanel();
         panel_chessPieces.setLayout(new GridLayout(8, 8));
         chessField.getField().forEach(piece -> panel_chessPieces.add(piece));
@@ -93,5 +93,10 @@ public class BoardWrapper extends JPanel implements IChessFrame {
         this.add(panel_chessBoard, BorderLayout.CENTER);
         this.add(indicator_white, BorderLayout.SOUTH);
         this.add(indicator_black, BorderLayout.NORTH);
+    }
+
+    @Override
+    public void reColor() {
+
     }
 }

@@ -1,5 +1,6 @@
 package Chess.Game.Logic;
 
+import Chess.Game.GUI.MainMenu;
 import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Pieces.IChessPiece;
 import Chess.Game.Logic.Player.EPlayerColor;
@@ -151,8 +152,8 @@ public class ChessField {
                 char tmp_row = values[0].length() > 1 ? values[0].charAt(1) : values[0].charAt(0);
                 int tmp_column = Integer.parseInt(values[1]);
                 Color tmp_background = switch (values[3]) {
-                    case "WHITE" -> IChessPiece.COLOR_FIELD_WHITE;
-                    case "BLACK" -> IChessPiece.COLOR_FIELD_BLACK;
+                    case "WHITE" -> MainMenu.COLOR_FIELD_WHITE;
+                    case "BLACK" -> MainMenu.COLOR_FIELD_BLACK;
                     default -> throw new IllegalStateException("Unexpected value: " + values[3]);
                 };
 

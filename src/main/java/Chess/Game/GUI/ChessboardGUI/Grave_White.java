@@ -1,6 +1,7 @@
 package Chess.Game.GUI.ChessboardGUI;
 
 import Chess.Game.GUI.IChessFrame;
+import Chess.Game.GUI.MainMenu;
 import Chess.Game.Logic.ChessFieldButton;
 import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Pieces.IChessPiece;
@@ -12,6 +13,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 
 /**
  * @author Fitor Avdiji
@@ -43,6 +45,11 @@ public class Grave_White extends JPanel implements IChessFrame {
         addComponents();
     }
 
+    /** Method adds an ActionsListener to {@link #ff_white} **/
+    public void addGraveListener(final ActionListener al){
+        ff_white.addActionListener(al);
+    }
+
     /**
      * Getter for {@link #grave_white}
      * @return grave_white
@@ -53,7 +60,7 @@ public class Grave_White extends JPanel implements IChessFrame {
 
     @Override
     public void initMainFrame() {
-        this.setBackground(COLOR_BACKGROUND);
+        this.setBackground(MainMenu.COLOR_BACKGROUND);
         this.setBorder(new EmptyBorder(
                 GameWindow.MARGIN_BORDER_GRAVE[0],
                 GameWindow.MARGIN_BORDER_GRAVE[3],
@@ -66,9 +73,9 @@ public class Grave_White extends JPanel implements IChessFrame {
     public void initComponents() {
         grave_white = new JPanel();
         grave_white.setLayout(new GridLayout(8, 2));
-        grave_white.setBackground(IChessFrame.COLOR_BACKGROUND);
+        grave_white.setBackground(MainMenu.COLOR_BACKGROUND);
         for (int i = 0; i < 8 * 2; ++i) {
-            ChessFieldButton tmp_button = new ChessFieldButton(GameWindow.idlePosition, EChessPieces.EMPTY, IChessPiece.COLOR_FIELD_BLACK);
+            ChessFieldButton tmp_button = new ChessFieldButton(GameWindow.idlePosition, EChessPieces.EMPTY, MainMenu.COLOR_FIELD_BLACK);
             tmp_button.initPiece();
             grave_white.add(tmp_button);
         }
@@ -76,13 +83,18 @@ public class Grave_White extends JPanel implements IChessFrame {
         ff_white = new JButton(FORFEIT_WHITE);
         ff_white.setPreferredSize(new Dimension(2 * IChessPiece.SIZE_FIELD, IChessPiece.SIZE_FIELD / 2));
         ff_white.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
-        ff_white.setBackground(COLOR_BUTTON_BACKGROUND);
-        ff_white.setForeground(COLOR_LABEL);
+        ff_white.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+        ff_white.setForeground(MainMenu.COLOR_LABEL);
     }
 
     @Override
     public void addComponents() {
         this.add(grave_white, BorderLayout.CENTER);
         this.add(ff_white, BorderLayout.SOUTH);
+    }
+
+    @Override
+    public void reColor() {
+
     }
 }

@@ -93,17 +93,17 @@ public class Scoreboard extends JFrame implements IChessFrame {
 
         label_message = new JLabel();
         label_message.setFont(new Font(FONT, FONT_TYPE, SIZE_FONT));
-        label_message.setForeground(COLOR_LABEL);
+        label_message.setForeground(MainMenu.COLOR_LABEL);
         label_message.setHorizontalAlignment(JLabel.CENTER);
 
         button_menu = new JButton(TEXT_MENU);
         button_exit = new JButton(TEXT_EXIT);
-        button_menu.setBackground(COLOR_BUTTON_BACKGROUND);
-        button_exit.setBackground(COLOR_BUTTON_BACKGROUND);
+        button_menu.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+        button_exit.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
         button_menu.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
         button_exit.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
-        button_menu.setForeground(COLOR_LABEL);
-        button_exit.setForeground(COLOR_LABEL);
+        button_menu.setForeground(MainMenu.COLOR_LABEL);
+        button_exit.setForeground(MainMenu.COLOR_LABEL);
     }
 
     @Override
@@ -130,6 +130,18 @@ public class Scoreboard extends JFrame implements IChessFrame {
         this.setLocationRelativeTo(null);
         this.setLayout(new GridBagLayout());
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.getContentPane().setBackground(COLOR_BACKGROUND);
+        this.getContentPane().setBackground(MainMenu.COLOR_BACKGROUND);
+    }
+
+    @Override
+    public void reColor() {
+        this.getContentPane().setBackground(MainMenu.COLOR_BACKGROUND);
+        label_message.setForeground(MainMenu.COLOR_LABEL);
+
+        button_menu.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+        button_exit.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+
+        button_menu.setForeground(MainMenu.COLOR_LABEL);
+        button_exit.setForeground(MainMenu.COLOR_LABEL);
     }
 }
