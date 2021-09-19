@@ -301,7 +301,8 @@ public class ChessPieceMovement {
      *
      * @param captured captured button
      */
-    public void removeRedundantPiece(final ChessFieldButton captured, final List<ChessFieldButton> field) {
+    public ChessFieldButton findRedundantPiece(final ChessFieldButton captured, final List<ChessFieldButton> field) {
+        ChessFieldButton result = null;
         // check whether the captured piece was a pawn or not (if it was a pawn a enPassant has been executed
         if (captured.getType() == EChessPieces.PAWN_WHITE || captured.getType() == EChessPieces.PAWN_BLACK) {
             Position toRemove = new Position(captured.getPosition().getRow(),
@@ -312,8 +313,8 @@ public class ChessPieceMovement {
             ChessFieldButton actuallyCaptured = field.stream()
                     .filter(button -> button.getPosition().equals(toRemove))
                     .findAny().get();
-            actuallyCaptured.setType(EChessPieces.EMPTY);
-            actuallyCaptured.setPlayerColor(EPlayerColor.NONE);
+            result = actuallyCaptured;
         }
+        return result;
     }
 }

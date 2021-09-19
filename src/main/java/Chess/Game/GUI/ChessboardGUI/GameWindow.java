@@ -59,7 +59,9 @@ public class GameWindow implements IChessFrame {
     private Grave_White panel_LHS;
     private Grave_Black panel_RHS;
 
-    /** ActionListeners for the Graves **/
+    /**
+     * ActionListeners for the Graves
+     **/
     private ActionListener AL_graveWhite;
     private ActionListener AL_graveBlack;
 
@@ -240,11 +242,12 @@ public class GameWindow implements IChessFrame {
 
             // remove a redundant pawn (method removeRedundantPiece checks, whether another pawn has been captured or not)
             if (empty_fields_preMove == empty_fields_postMove) {
-                chessField.getMovement().removeRedundantPiece(capturedButton, chessField.getField());
-                EPlayerColor tmp_color = Arrays.stream(EPlayerColor.values())
-                        .filter(color -> color != capturedButton.getPlayerColor() && color != EPlayerColor.NONE).findAny().get();
-                EChessPieces tmp_piece = tmp_color == EPlayerColor.WHITE ? EChessPieces.PAWN_WHITE : EChessPieces.PAWN_BLACK;
-                addToGrave(tmp_piece, tmp_color);
+                ChessFieldButton toBury = chessField.getMovement().findRedundantPiece(capturedButton, chessField.getField());
+                if (toBury != null) {
+                    addToGrave(toBury.getType(), toBury.getPlayerColor());
+                    toBury.setType(EChessPieces.EMPTY);
+                    toBury.setPlayerColor(EPlayerColor.NONE);
+                }
             }
         }
         adjustPostMove(capturedButton, markedButton);
@@ -329,8 +332,10 @@ public class GameWindow implements IChessFrame {
         };
     }
 
-    /** Method initializes {@link #AL_graveWhite} **/
-    private void initAL_graveWhite(){
+    /**
+     * Method initializes {@link #AL_graveWhite}
+     **/
+    private void initAL_graveWhite() {
         AL_graveWhite = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -342,8 +347,10 @@ public class GameWindow implements IChessFrame {
         };
     }
 
-    /** Method initializes {@link #AL_graveBlack} **/
-    private void initAL_graveBlack(){
+    /**
+     * Method initializes {@link #AL_graveBlack}
+     **/
+    private void initAL_graveBlack() {
         AL_graveBlack = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
