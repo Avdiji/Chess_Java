@@ -20,8 +20,8 @@ public interface IChessFrame {
     public static final Color COLOR_BACKGROUND_DARKMODE = new Color(0x444444);
     public static final Color COLOR_LABEL_DARKMODE = new Color(0xFFFFFF);
     public static final Color COLOR_BUTTON_BACKGROUND_DARKMODE = new Color(0x828282);
-    public static final Color COLOR_FIELD_WHITE_DARKMODE = new Color(0xD2D2D2);
-    public static final Color COLOR_FIELD_BLACK_DARKMODE = new Color(0x757575);
+    public static final Color COLOR_FIELD_WHITE_DARKMODE = new Color(0xA4A4A4);
+    public static final Color COLOR_FIELD_BLACK_DARKMODE = new Color(0x4C572E);
     public static final Color COLOR_FIELD_MARKED_DARKMODE = new Color(0x000000);
 
     /** Lightmode Colors **/
@@ -30,7 +30,7 @@ public interface IChessFrame {
     public static final Color COLOR_BUTTON_BACKGROUND_LIGHTMODE = new Color(0xBDBDBD);
     public static final Color COLOR_FIELD_WHITE_LIGHTMODE = new Color(0xE4FFE4);
     public static final Color COLOR_FIELD_BLACK_LIGHTMODE = new Color(0x58E3AC);
-    public static final Color COLOR_FIELD_MARKED_LIGHTMODE = new Color(0x8CEF39);
+    public static final Color COLOR_FIELD_MARKED_LIGHTMODE = new Color(0x93A4FF);
 
     /** Blue Colors **/
     public static final Color COLOR_BACKGROUND_BLUE = new Color(0x36648b);

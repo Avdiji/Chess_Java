@@ -1,5 +1,10 @@
 package Chess.Game.GUI;
 
+import Chess.Game.GUI.ChessboardGUI.GameWindow;
+import Chess.Game.Logic.ChessField;
+import Chess.Game.Logic.Player.EPlayerColor;
+import Chess.Game.Logic.Player.Player;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -9,6 +14,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
@@ -18,7 +24,6 @@ import java.util.Arrays;
  * Panel in the Main Menu, that contains all the Buttons (left side of the main menu)
  */
 public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
-
 
     /**
      * Margin of the Buttons of this Panel
@@ -34,12 +39,33 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
     private static final String STRING_BUTTON_EXIT = "Exit";
 
     /**
+     * String used in all the different Gamemodes
+     **/
+    private static final String[] STRING_GAMEMODES = {"Classic", "Rook/Bishop Only", "Pawn/Knight Only"};
+    private static final String STRING_GAMEMODE_PATH[] = {
+            "src/main/resources/initilization/init_default.csv",
+            "src/main/resources/initilization/init_rook_bishop.csv",
+            "src/main/resources/initilization/init_pawn_knight.csv"};
+
+    /**
      * Components of this Panel
      **/
     private JButton button_local;
     private JButton button_online;
     private JButton button_ai;
     private JButton button_exit;
+
+    /** ActionListener for the Buttons of this Panel **/
+    private ActionListener AL_local;
+    private ActionListener AL_online;
+    private ActionListener AL_ai;
+    private ActionListener AL_exit;
+
+    /** MainMenu of this Panel **/
+    private MainMenu mainMenu;
+
+    /** Scoreboard of the corresponding panel **/
+    private Scoreboard scoreboard;
 
     /**
      * Combobox with all the different Gamemodes
@@ -51,37 +77,74 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
      **/
     private GridBagConstraints gbc;
 
-    public MainMenu_Panel_LHS() {
+    /**
+     * Constructor
+     * @param mm mainMenu
+     */
+    public MainMenu_Panel_LHS(final MainMenu mm, final Scoreboard scoreboard) {
+        this.mainMenu = mm;
+        this.scoreboard = scoreboard;
+
         initMainFrame();
         initComponents();
         addComponents();
     }
 
     /**
-     * Getter for {@link #combobox_gamemodes}
-     *
-     * @return combobox_gamemodes
+     * Method initializes {@link #button_local}
      */
-    protected JComboBox<String> getCombobox_gamemodes() {
-        return combobox_gamemodes;
+    private void initButton_local(){
+        button_local = new JButton(STRING_BUTTON_LOCAL);
+        button_local.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
+        button_local.setForeground(MainMenu.COLOR_LABEL);
+        button_local.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+
+        AL_local = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ChessField chessField = new ChessField(new Player(EPlayerColor.WHITE), new Player(EPlayerColor.BLACK));
+                chessField.initField(STRING_GAMEMODE_PATH[combobox_gamemodes.getSelectedIndex()]);
+                new GameWindow(chessField, scoreboard);
+                mainMenu.setVisible(false);
+            }
+        };
+    }
+
+    /** Method initializes {@link #button_online **/
+    private void initButton_online(){
+        button_online = new JButton(STRING_BUTTON_ONLINE);
+        button_online.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
+        button_online.setForeground(MainMenu.COLOR_LABEL);
+        button_online.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
     }
 
     /**
-     * Method adds an ActionListener to {@link #button_local}
-     *
-     * @param al ActionListener for the Button to start the local game
+     * Method initializes {@link #button_ai}
      */
-    public void addAL_button_local(final ActionListener al) {
-        button_local.addActionListener(al);
+    private void initButton_ai(){
+        button_ai = new JButton(STRING_BUTTON_AI);
+        button_ai.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
+        button_ai.setForeground(MainMenu.COLOR_LABEL);
+        button_ai.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
     }
 
     /**
-     * Method adds an ActionListener to {@link #button_exit}
-     *
-     * @param al ActionListener to end the application
+     * Method initializes {@link #button_exit}
      */
-    public void addAL_button_exit(final ActionListener al) {
-        button_exit.addActionListener(al);
+    private void initButton_exit(){
+        button_exit = new JButton(STRING_BUTTON_EXIT);
+        button_exit.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
+        button_exit.setForeground(MainMenu.COLOR_LABEL);
+        button_exit.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+
+        AL_exit = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                scoreboard.dispose();
+                mainMenu.setVisible(false);
+                mainMenu.dispose();
+            }
+        };
     }
 
     @Override
@@ -93,59 +156,44 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
     @Override
     public void initComponents() {
         combobox_gamemodes = new JComboBox<>();
-        Arrays.stream(MainMenu.STRING_GAMEMODES).forEach(value -> combobox_gamemodes.addItem(value));
+        Arrays.stream(STRING_GAMEMODES).forEach(value -> combobox_gamemodes.addItem(value));
         combobox_gamemodes.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
         combobox_gamemodes.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
         combobox_gamemodes.setForeground(MainMenu.COLOR_LABEL);
-        ((JLabel)combobox_gamemodes.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+        ((JLabel) combobox_gamemodes.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 
-        button_local = new JButton(STRING_BUTTON_LOCAL);
-        button_online = new JButton(STRING_BUTTON_ONLINE);
-        button_ai = new JButton(STRING_BUTTON_AI);
-        button_exit = new JButton(STRING_BUTTON_EXIT);
-
-        button_local.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
-        button_online.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
-        button_ai.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
-        button_exit.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
-
-        button_local.setForeground(MainMenu.COLOR_LABEL);
-        button_online.setForeground(MainMenu.COLOR_LABEL);
-        button_ai.setForeground(MainMenu.COLOR_LABEL);
-        button_exit.setForeground(MainMenu.COLOR_LABEL);
-
-        button_local.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
-        button_online.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
-        button_ai.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
-        button_exit.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+        initButton_local();
+        initButton_online();
+        initButton_ai();
+        initButton_exit();
     }
 
     @Override
     public void addComponents() {
         gbc = new GridBagConstraints();
-
         gbc.insets = new Insets(MARGIN_BUTTONS_MAINMENU[0], MARGIN_BUTTONS_MAINMENU[1], MARGIN_BUTTONS_MAINMENU[2], MARGIN_BUTTONS_MAINMENU[3]);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 0;
         this.add(button_local, gbc);
-
         gbc.gridy = 1;
         this.add(button_online, gbc);
-
         gbc.gridy = 2;
         this.add(button_ai, gbc);
-
         gbc.gridy = 3;
         this.add(combobox_gamemodes, gbc);
-
         gbc.insets = new Insets(MARGIN_BUTTONS_MAINMENU[0] * 3, MARGIN_BUTTONS_MAINMENU[1], MARGIN_BUTTONS_MAINMENU[2], MARGIN_BUTTONS_MAINMENU[3]);
         gbc.gridy = 4;
         this.add(button_exit, gbc);
+
+        button_local.addActionListener(AL_local);
+        button_online.addActionListener(AL_online);
+        button_ai.addActionListener(AL_ai);
+        button_exit.addActionListener(AL_exit);
     }
 
     @Override
-    public void reColor(){
+    public void reColor() {
         this.setBackground(MainMenu.COLOR_BACKGROUND);
         combobox_gamemodes.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
         combobox_gamemodes.setForeground(MainMenu.COLOR_LABEL);

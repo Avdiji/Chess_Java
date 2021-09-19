@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
@@ -39,7 +40,9 @@ public class Scoreboard extends JFrame implements IChessFrame {
     private static final String TEXT_MENU = "Back to Menu";
     private static final String TEXT_EXIT = "Exit Game";
 
-    /** GridBagConstraints for the Design **/
+    /**
+     * GridBagConstraints for the Design
+     **/
     private GridBagConstraints gbc;
 
     /**
@@ -53,38 +56,74 @@ public class Scoreboard extends JFrame implements IChessFrame {
     private JButton button_menu;
     private JButton button_exit;
 
-    public Scoreboard() {
+    /**
+     * ActionListeners for the buttons of this frame
+     **/
+    private ActionListener AL_menu;
+    private ActionListener AL_exit;
+
+    /**
+     * MainMenu of this Scoreboard
+     **/
+    private final MainMenu mainMenu;
+
+    /**
+     * Constructor
+     **/
+    public Scoreboard(final MainMenu mm) {
+        mainMenu = mm;
 
         initComponents();
         initMainFrame();
         addComponents();
-
         this.setUndecorated(true);
-        this.setVisible(true);
     }
 
     /**
      * Setter for {@link #message}
+     *
      * @param message newMessage of the scoreboard
      */
-    public void setMessage(final String message){
+    public void setMessage(final String message) {
         label_message.setText(message);
     }
 
     /**
-     * Method sets the Actionslistener for {@link #button_menu}
-     * @param al ActionListener for button_menu
-     */
-    protected void addAL_button_menu(final ActionListener al){
-        button_menu.addActionListener(al);
+     * Method initializes {@link #button_menu}
+     **/
+    private void initButton_menu() {
+        button_menu = new JButton(TEXT_MENU);
+        button_menu.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+        button_menu.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
+        button_menu.setForeground(MainMenu.COLOR_LABEL);
+
+        AL_menu = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                mainMenu.setVisible(true);
+            }
+        };
     }
 
     /**
-     * Meethod sets the Actionslistener for {@link #button_exit}
-     * @param al Actionlistener for button_exit
+     * Method initializes {@link #button_exit}
      */
-    protected void addAL_button_exit(final ActionListener al){
-        button_exit.addActionListener(al);
+    private void initButton_exit() {
+        button_exit = new JButton(TEXT_EXIT);
+        button_exit.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+        button_exit.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
+        button_exit.setForeground(MainMenu.COLOR_LABEL);
+
+        AL_exit = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                dispose();
+                mainMenu.setVisible(false);
+                mainMenu.dispose();
+            }
+        };
     }
 
     @Override
@@ -96,32 +135,29 @@ public class Scoreboard extends JFrame implements IChessFrame {
         label_message.setForeground(MainMenu.COLOR_LABEL);
         label_message.setHorizontalAlignment(JLabel.CENTER);
 
-        button_menu = new JButton(TEXT_MENU);
-        button_exit = new JButton(TEXT_EXIT);
-        button_menu.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
-        button_exit.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
-        button_menu.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
-        button_exit.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
-        button_menu.setForeground(MainMenu.COLOR_LABEL);
-        button_exit.setForeground(MainMenu.COLOR_LABEL);
+        initButton_menu();
+        initButton_exit();
     }
 
     @Override
     public void addComponents() {
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(MARGIN_MESSAGE[0],MARGIN_MESSAGE[1],MARGIN_MESSAGE[2],MARGIN_MESSAGE[3]);
+        gbc.insets = new Insets(MARGIN_MESSAGE[0], MARGIN_MESSAGE[1], MARGIN_MESSAGE[2], MARGIN_MESSAGE[3]);
         this.add(label_message, gbc);
 
         gbc.gridy = 1;
-        gbc.insets = new Insets(MARGIN_BUTTONS[0],MARGIN_BUTTONS[1],MARGIN_BUTTONS[2],MARGIN_BUTTONS[3]);
+        gbc.insets = new Insets(MARGIN_BUTTONS[0], MARGIN_BUTTONS[1], MARGIN_BUTTONS[2], MARGIN_BUTTONS[3]);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         this.add(button_menu, gbc);
 
         gbc.gridy = 2;
-        gbc.insets = new Insets(MARGIN_BUTTONS[0],MARGIN_BUTTONS[1],MARGIN_BUTTONS[2],MARGIN_BUTTONS[3]);
+        gbc.insets = new Insets(MARGIN_BUTTONS[0], MARGIN_BUTTONS[1], MARGIN_BUTTONS[2], MARGIN_BUTTONS[3]);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         this.add(button_exit, gbc);
+
+        button_menu.addActionListener(AL_menu);
+        button_exit.addActionListener(AL_exit);
     }
 
     @Override

@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
@@ -18,18 +19,32 @@ import java.awt.event.ActionListener;
  */
 public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
 
-    /** Margins of the components of this panel **/
+    /**
+     * Path to the Image of the Main Menu
+     **/
+    private static final String IMAGE_PATH_DARKMODE = "src/main/resources/Images/MainMenuImage_Darkmode.png";
+    private static final String IMAGE_PATH_LIGHTMODE = "src/main/resources/Images/MainMenuImage_Lightmode.png";
+    private static final String IMAGE_PATH_BLUE = "src/main/resources/Images/MainMenuImage_Blue.png";
+    private static final String IMAGE_PATH_GREEN = "src/main/resources/Images/MainMenuImage_Green.png";
+
+    /**
+     * Margins of the components of this panel
+     **/
     private static final int MARGIN_PANEL_COLORMODES[] = {0, 0, 135, 50};
     private static final int MARGIN_LABEL_IMAGE[] = {135, 10, 10, 60};
 
 
-    /** Text of the corresponding buttons **/
+    /**
+     * Text of the corresponding buttons
+     **/
     private static final String STRING_BUTTON_LIGHTMODE = "Lightmode";
     private static final String STRING_BUTTON_DARKMODE = "Darkmode";
     private static final String STRING_BUTTON_blue = "Blue";
     private static final String STRING_BUTTON_GREEN = "Green";
 
-    /** Components of this class **/
+    /**
+     * Components of this class
+     **/
     private JLabel label_image;
     private JPanel panel_colorModes;
     private JButton button_lightmode;
@@ -37,51 +52,128 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
     private JButton button_blue;
     private JButton button_green;
 
-    /** GridBagConstraints for the Layout of this Panel **/
+    /**
+     * ActionListeners for all the Buttons
+     **/
+    private ActionListener AL_lightmode;
+    private ActionListener AL_darkmode;
+    private ActionListener AL_blue;
+    private ActionListener AL_green;
+
+    /**
+     * MainMenu of this panel
+     **/
+    private final MainMenu mainMenu;
+
+    /**
+     * GridBagConstraints for the Layout of this Panel
+     **/
     private GridBagConstraints gbc;
 
-    /** Constructor **/
-    public MainMenu_panel_RHS(){
+    /**
+     * Constructor
+     **/
+    public MainMenu_panel_RHS(final MainMenu mm) {
         initMainFrame();
         initComponents();
         addComponents();
+
+        this.mainMenu = mm;
     }
 
     /**
-     * Method adds ActionListener to {@link #button_lightmode}
-     * @param al ActionListener to enable the Lightmode
+     * Method initializes {@link #button_lightmode}
      */
-    public void addAL_button_lightmode(final ActionListener al){
-        button_lightmode.addActionListener(al);
+    private void initButton_lightmode() {
+        button_lightmode = new JButton(STRING_BUTTON_LIGHTMODE);
+        button_lightmode.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
+        button_lightmode.setForeground(COLOR_LABEL_LIGHTMODE);
+        button_lightmode.setBackground(COLOR_BUTTON_BACKGROUND_LIGHTMODE);
+
+        AL_lightmode = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainMenu.COLOR_BACKGROUND = COLOR_BACKGROUND_LIGHTMODE;
+                MainMenu.COLOR_LABEL = COLOR_LABEL_LIGHTMODE;
+                MainMenu.COLOR_BUTTON_BACKGROUND = COLOR_BUTTON_BACKGROUND_LIGHTMODE;
+                MainMenu.COLOR_FIELD_WHITE = COLOR_FIELD_WHITE_LIGHTMODE;
+                MainMenu.COLOR_FIELD_BLACK = COLOR_FIELD_BLACK_LIGHTMODE;
+                MainMenu.COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_LIGHTMODE;
+                label_image.setIcon(new ImageIcon(IMAGE_PATH_LIGHTMODE));
+                mainMenu.reColor();
+            }
+        };
     }
 
     /**
-     * Method adds ActionListener to {@link #button_darkmode}
-     * @param al ActionListener to enable the Darkmode
+     * Method initializes {@link #button_darkmode}
      */
-    public void addAL_button_darkmode(final ActionListener al){
-        button_darkmode.addActionListener(al);
+    private void initButton_darkmode() {
+        button_darkmode = new JButton(STRING_BUTTON_DARKMODE);
+        button_darkmode.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
+        button_darkmode.setForeground(COLOR_LABEL_DARKMODE);
+        button_darkmode.setBackground(COLOR_BUTTON_BACKGROUND_DARKMODE);
+
+        AL_darkmode = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainMenu.COLOR_BACKGROUND = COLOR_BACKGROUND_DARKMODE;
+                MainMenu.COLOR_LABEL = COLOR_LABEL_DARKMODE;
+                MainMenu.COLOR_BUTTON_BACKGROUND = COLOR_BUTTON_BACKGROUND_DARKMODE;
+                MainMenu.COLOR_FIELD_WHITE = COLOR_FIELD_WHITE_DARKMODE;
+                MainMenu.COLOR_FIELD_BLACK = COLOR_FIELD_BLACK_DARKMODE;
+                MainMenu.COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_DARKMODE;
+                label_image.setIcon(new ImageIcon(IMAGE_PATH_DARKMODE));
+                mainMenu.reColor();
+            }
+        };
     }
 
     /**
-     * Method adds ActionListener to {@link #button_blue}
-     * @param al ActionListener to enable the blue Colormode
+     * Method initializes {@link #button_blue}
      */
-    public void addAL_button_blue(final ActionListener al){
-        button_blue.addActionListener(al);
+    private void initButton_blue() {
+        button_blue = new JButton(STRING_BUTTON_blue);
+        button_blue.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
+        button_blue.setBackground(COLOR_BUTTON_BACKGROUND_BLUE);
+
+        AL_blue = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainMenu.COLOR_BACKGROUND = COLOR_BACKGROUND_BLUE;
+                MainMenu.COLOR_LABEL = COLOR_LABEL_BLUE;
+                MainMenu.COLOR_BUTTON_BACKGROUND = COLOR_BUTTON_BACKGROUND_BLUE;
+                MainMenu.COLOR_FIELD_WHITE = COLOR_FIELD_WHITE_BLUE;
+                MainMenu.COLOR_FIELD_BLACK = COLOR_FIELD_BLACK_BLUE;
+                MainMenu.COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_BLUE;
+                label_image.setIcon(new ImageIcon(IMAGE_PATH_BLUE));
+                mainMenu.reColor();
+            }
+        };
     }
 
     /**
-     * Method adds ActionListener to {@link #button_green}
-     * @param al ActionListener to enable the green Colormode
+     * Method initializes {@link #button_green}
      */
-    public void addAL_button_green(final ActionListener al){
-        button_green.addActionListener(al);
-    }
+    private void initButton_green() {
+        button_green = new JButton(STRING_BUTTON_GREEN);
+        button_green.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
+        button_green.setForeground(COLOR_LABEL_GREEN);
+        button_green.setBackground(COLOR_BUTTON_BACKGROUND_GREEN);
 
-    /** Method sets an Image for {@link #label_image} **/
-    public void setPanelImage(final String imagePath){
-        label_image.setIcon(new ImageIcon(imagePath));
+        AL_green = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainMenu.COLOR_BACKGROUND = COLOR_BACKGROUND_GREEN;
+                MainMenu.COLOR_LABEL = COLOR_LABEL_GREEN;
+                MainMenu.COLOR_BUTTON_BACKGROUND = COLOR_BUTTON_BACKGROUND_GREEN;
+                MainMenu.COLOR_FIELD_WHITE = COLOR_FIELD_WHITE_GREEN;
+                MainMenu.COLOR_FIELD_BLACK = COLOR_FIELD_BLACK_GREEN;
+                MainMenu.COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_GREEN;
+                label_image.setIcon(new ImageIcon(IMAGE_PATH_GREEN));
+                mainMenu.reColor();
+            }
+        };
     }
 
     @Override
@@ -94,31 +186,17 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
     public void initComponents() {
         label_image = new JLabel();
         label_image.setBorder(new EmptyBorder(MARGIN_LABEL_IMAGE[0], MARGIN_LABEL_IMAGE[1], MARGIN_LABEL_IMAGE[2], MARGIN_LABEL_IMAGE[3]));
-        //
+        label_image.setIcon(new ImageIcon(IMAGE_PATH_DARKMODE));
+
         panel_colorModes = new JPanel();
         panel_colorModes.setLayout(new GridBagLayout());
         panel_colorModes.setBackground(MainMenu.COLOR_BACKGROUND);
         panel_colorModes.setBorder(new EmptyBorder(MARGIN_PANEL_COLORMODES[0], MARGIN_PANEL_COLORMODES[1], MARGIN_PANEL_COLORMODES[2], MARGIN_PANEL_COLORMODES[3]));
-        //
-        button_lightmode = new JButton(STRING_BUTTON_LIGHTMODE);
-        button_darkmode = new JButton(STRING_BUTTON_DARKMODE);
-        button_blue = new JButton(STRING_BUTTON_blue);
-        button_green = new JButton(STRING_BUTTON_GREEN);
 
-        button_lightmode.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
-        button_darkmode.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
-        button_blue.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
-        button_green.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
-
-        button_lightmode.setForeground(COLOR_LABEL_LIGHTMODE);
-        button_darkmode.setForeground(COLOR_LABEL_DARKMODE);
-        button_blue.setForeground(COLOR_LABEL_BLUE);
-        button_green.setForeground(COLOR_LABEL_GREEN);
-
-        button_lightmode.setBackground(COLOR_BUTTON_BACKGROUND_LIGHTMODE);
-        button_darkmode.setBackground(COLOR_BUTTON_BACKGROUND_DARKMODE);
-        button_blue.setBackground(COLOR_BUTTON_BACKGROUND_BLUE);
-        button_green.setBackground(COLOR_BUTTON_BACKGROUND_GREEN);
+        initButton_lightmode();
+        initButton_darkmode();
+        initButton_blue();
+        initButton_green();
     }
 
     @Override
@@ -137,6 +215,11 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
 
         this.add(label_image);
         this.add(panel_colorModes);
+
+        button_lightmode.addActionListener(AL_lightmode);
+        button_darkmode.addActionListener(AL_darkmode);
+        button_blue.addActionListener(AL_blue);
+        button_green.addActionListener(AL_green);
     }
 
     @Override
