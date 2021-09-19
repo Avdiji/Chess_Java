@@ -238,9 +238,13 @@ public class GameWindow implements IChessFrame {
             int empty_fields_postMove = (int) chessField.getField().stream()
                     .filter(button -> button.getType() == EChessPieces.EMPTY).count();
 
-            // remove a redundant pawn (method removeRedundantPiece checks, whether another pawn has been captured or not
+            // remove a redundant pawn (method removeRedundantPiece checks, whether another pawn has been captured or not)
             if (empty_fields_preMove == empty_fields_postMove) {
                 chessField.getMovement().removeRedundantPiece(capturedButton, chessField.getField());
+                EPlayerColor tmp_color = Arrays.stream(EPlayerColor.values())
+                        .filter(color -> color != capturedButton.getPlayerColor() && color != EPlayerColor.NONE).findAny().get();
+                EChessPieces tmp_piece = tmp_color == EPlayerColor.WHITE ? EChessPieces.PAWN_WHITE : EChessPieces.PAWN_BLACK;
+                addToGrave(tmp_piece, tmp_color);
             }
         }
         adjustPostMove(capturedButton, markedButton);

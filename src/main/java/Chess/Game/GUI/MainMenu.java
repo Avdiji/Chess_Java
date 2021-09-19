@@ -21,7 +21,9 @@ import java.awt.event.ActionListener;
  */
 public class MainMenu extends JFrame implements IChessFrame {
 
-    /** Path to the Image of the Main Menu **/
+    /**
+     * Path to the Image of the Main Menu
+     **/
     private static final String IMAGE_PATH_DARKMODE = "src/main/resources/Images/MainMenuImage_Darkmode.png";
     private static final String IMAGE_PATH_LIGHTMODE = "src/main/resources/Images/MainMenuImage_Lightmode.png";
     private static final String IMAGE_PATH_BLUE = "src/main/resources/Images/MainMenuImage_Blue.png";
@@ -45,8 +47,7 @@ public class MainMenu extends JFrame implements IChessFrame {
     private static final String STRING_GAMEMODE_PATH[] = {
             "src/main/resources/initilization/init_default.csv",
             "src/main/resources/initilization/init_rook_bishop.csv",
-            "src/main/resources/initilization/stalemate.csv"};
-//            "src/main/resources/initilization/init_pawn_knight.csv"};
+            "src/main/resources/initilization/init_pawn_knight.csv"};
 
     /**
      * Sizes, used in the MainMenu
@@ -167,9 +168,13 @@ public class MainMenu extends JFrame implements IChessFrame {
     ////////////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Method initializes {@link #AL_lightmode}
+     * Method initializes: <br>
+     * {@link #AL_lightmode}<br>
+     * {@link #AL_darkmode}<br>
+     * {@link #AL_blue}<br>
+     * {@link #AL_green}<br>
      **/
-    private void initAL_lightmode() {
+    private void initAL_ColorModes() {
         AL_lightmode = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -183,12 +188,7 @@ public class MainMenu extends JFrame implements IChessFrame {
                 reColor();
             }
         };
-    }
 
-    /**
-     * Method initializes {@link #AL_darkmode}
-     **/
-    private void initAL_darkmode() {
         AL_darkmode = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -202,12 +202,7 @@ public class MainMenu extends JFrame implements IChessFrame {
                 reColor();
             }
         };
-    }
 
-    /**
-     * Method initializes {@link #AL_blue}
-     **/
-    private void initAL_blue() {
         AL_blue = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -221,12 +216,7 @@ public class MainMenu extends JFrame implements IChessFrame {
                 reColor();
             }
         };
-    }
 
-    /**
-     * Method initializes {@link #AL_green}
-     **/
-    private void initAL_green() {
         AL_green = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -241,7 +231,6 @@ public class MainMenu extends JFrame implements IChessFrame {
             }
         };
     }
-
     //////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////// AL RHS  //////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
@@ -306,16 +295,13 @@ public class MainMenu extends JFrame implements IChessFrame {
     @Override
     public void initComponents() {
         initTitle();
+        initAL_ColorModes();
+
         initAL_local();
         initAL_exit();
 
         initAL_scoreboard_mainmenu();
         initAL_scoreboard_exit();
-
-        initAL_lightmode();
-        initAL_darkmode();
-        initAL_blue();
-        initAL_green();
 
         panel_LHS = new MainMenu_Panel_LHS();
         panel_RHS = new MainMenu_panel_RHS();
