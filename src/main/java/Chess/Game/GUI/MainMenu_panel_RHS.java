@@ -53,14 +53,6 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
     private JButton button_green;
 
     /**
-     * ActionListeners for all the Buttons
-     **/
-    private ActionListener AL_lightmode;
-    private ActionListener AL_darkmode;
-    private ActionListener AL_blue;
-    private ActionListener AL_green;
-
-    /**
      * MainMenu of this panel
      **/
     private final MainMenu mainMenu;
@@ -90,7 +82,7 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
         button_lightmode.setForeground(COLOR_LABEL_LIGHTMODE);
         button_lightmode.setBackground(COLOR_BUTTON_BACKGROUND_LIGHTMODE);
 
-        AL_lightmode = new ActionListener() {
+        button_lightmode.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainMenu.COLOR_BACKGROUND = COLOR_BACKGROUND_LIGHTMODE;
@@ -102,7 +94,7 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
                 label_image.setIcon(new ImageIcon(IMAGE_PATH_LIGHTMODE));
                 mainMenu.reColor();
             }
-        };
+        });
     }
 
     /**
@@ -114,7 +106,7 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
         button_darkmode.setForeground(COLOR_LABEL_DARKMODE);
         button_darkmode.setBackground(COLOR_BUTTON_BACKGROUND_DARKMODE);
 
-        AL_darkmode = new ActionListener() {
+        button_darkmode.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainMenu.COLOR_BACKGROUND = COLOR_BACKGROUND_DARKMODE;
@@ -126,7 +118,7 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
                 label_image.setIcon(new ImageIcon(IMAGE_PATH_DARKMODE));
                 mainMenu.reColor();
             }
-        };
+        });
     }
 
     /**
@@ -137,7 +129,7 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
         button_blue.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
         button_blue.setBackground(COLOR_BUTTON_BACKGROUND_BLUE);
 
-        AL_blue = new ActionListener() {
+        button_blue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainMenu.COLOR_BACKGROUND = COLOR_BACKGROUND_BLUE;
@@ -149,7 +141,7 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
                 label_image.setIcon(new ImageIcon(IMAGE_PATH_BLUE));
                 mainMenu.reColor();
             }
-        };
+        });
     }
 
     /**
@@ -161,7 +153,7 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
         button_green.setForeground(COLOR_LABEL_GREEN);
         button_green.setBackground(COLOR_BUTTON_BACKGROUND_GREEN);
 
-        AL_green = new ActionListener() {
+        button_green.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainMenu.COLOR_BACKGROUND = COLOR_BACKGROUND_GREEN;
@@ -173,7 +165,7 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
                 label_image.setIcon(new ImageIcon(IMAGE_PATH_GREEN));
                 mainMenu.reColor();
             }
-        };
+        });
     }
 
     @Override
@@ -215,11 +207,6 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
 
         this.add(label_image);
         this.add(panel_colorModes);
-
-        button_lightmode.addActionListener(AL_lightmode);
-        button_darkmode.addActionListener(AL_darkmode);
-        button_blue.addActionListener(AL_blue);
-        button_green.addActionListener(AL_green);
     }
 
     @Override

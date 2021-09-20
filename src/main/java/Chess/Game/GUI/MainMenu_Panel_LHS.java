@@ -1,6 +1,7 @@
 package Chess.Game.GUI;
 
 import Chess.Game.GUI.ChessboardGUI.GameWindow;
+import Chess.Game.GUI.ClientGUI.ServerLogin;
 import Chess.Game.Logic.ChessField;
 import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Player.Player;
@@ -55,16 +56,14 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
     private JButton button_ai;
     private JButton button_exit;
 
-    /** ActionListener for the Buttons of this Panel **/
-    private ActionListener AL_local;
-    private ActionListener AL_online;
-    private ActionListener AL_ai;
-    private ActionListener AL_exit;
-
-    /** MainMenu of this Panel **/
+    /**
+     * MainMenu of this Panel
+     **/
     private MainMenu mainMenu;
 
-    /** Scoreboard of the corresponding panel **/
+    /**
+     * Scoreboard of the corresponding panel
+     **/
     private Scoreboard scoreboard;
 
     /**
@@ -79,6 +78,7 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
 
     /**
      * Constructor
+     *
      * @param mm mainMenu
      */
     public MainMenu_Panel_LHS(final MainMenu mm, final Scoreboard scoreboard) {
@@ -93,13 +93,13 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
     /**
      * Method initializes {@link #button_local}
      */
-    private void initButton_local(){
+    private void initButton_local() {
         button_local = new JButton(STRING_BUTTON_LOCAL);
         button_local.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
         button_local.setForeground(MainMenu.COLOR_LABEL);
         button_local.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
 
-        AL_local = new ActionListener() {
+        button_local.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ChessField chessField = new ChessField(new Player(EPlayerColor.WHITE), new Player(EPlayerColor.BLACK));
@@ -107,21 +107,32 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
                 new GameWindow(chessField, scoreboard);
                 mainMenu.setVisible(false);
             }
-        };
+        });
     }
 
-    /** Method initializes {@link #button_online **/
-    private void initButton_online(){
+    /**
+     * Method initializes {@link #button_online
+     **/
+    private void initButton_online() {
         button_online = new JButton(STRING_BUTTON_ONLINE);
         button_online.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
         button_online.setForeground(MainMenu.COLOR_LABEL);
         button_online.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
+
+        button_online.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainMenu.setVisible(false);
+                new ServerLogin(mainMenu);
+            }
+        });
+
     }
 
     /**
      * Method initializes {@link #button_ai}
      */
-    private void initButton_ai(){
+    private void initButton_ai() {
         button_ai = new JButton(STRING_BUTTON_AI);
         button_ai.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
         button_ai.setForeground(MainMenu.COLOR_LABEL);
@@ -131,20 +142,20 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
     /**
      * Method initializes {@link #button_exit}
      */
-    private void initButton_exit(){
+    private void initButton_exit() {
         button_exit = new JButton(STRING_BUTTON_EXIT);
         button_exit.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
         button_exit.setForeground(MainMenu.COLOR_LABEL);
         button_exit.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
 
-        AL_exit = new ActionListener() {
+        button_exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 scoreboard.dispose();
                 mainMenu.setVisible(false);
                 mainMenu.dispose();
             }
-        };
+        });
     }
 
     @Override
@@ -185,11 +196,6 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
         gbc.insets = new Insets(MARGIN_BUTTONS_MAINMENU[0] * 3, MARGIN_BUTTONS_MAINMENU[1], MARGIN_BUTTONS_MAINMENU[2], MARGIN_BUTTONS_MAINMENU[3]);
         gbc.gridy = 4;
         this.add(button_exit, gbc);
-
-        button_local.addActionListener(AL_local);
-        button_online.addActionListener(AL_online);
-        button_ai.addActionListener(AL_ai);
-        button_exit.addActionListener(AL_exit);
     }
 
     @Override

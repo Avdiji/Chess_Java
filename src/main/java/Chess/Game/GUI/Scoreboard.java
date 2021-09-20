@@ -57,12 +57,6 @@ public class Scoreboard extends JFrame implements IChessFrame {
     private JButton button_exit;
 
     /**
-     * ActionListeners for the buttons of this frame
-     **/
-    private ActionListener AL_menu;
-    private ActionListener AL_exit;
-
-    /**
      * MainMenu of this Scoreboard
      **/
     private final MainMenu mainMenu;
@@ -97,13 +91,13 @@ public class Scoreboard extends JFrame implements IChessFrame {
         button_menu.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
         button_menu.setForeground(MainMenu.COLOR_LABEL);
 
-        AL_menu = new ActionListener() {
+        button_menu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 mainMenu.setVisible(true);
             }
-        };
+        });
     }
 
     /**
@@ -115,7 +109,7 @@ public class Scoreboard extends JFrame implements IChessFrame {
         button_exit.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
         button_exit.setForeground(MainMenu.COLOR_LABEL);
 
-        AL_exit = new ActionListener() {
+        button_exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
@@ -123,7 +117,7 @@ public class Scoreboard extends JFrame implements IChessFrame {
                 mainMenu.setVisible(false);
                 mainMenu.dispose();
             }
-        };
+        });
     }
 
     @Override
@@ -155,9 +149,6 @@ public class Scoreboard extends JFrame implements IChessFrame {
         gbc.insets = new Insets(MARGIN_BUTTONS[0], MARGIN_BUTTONS[1], MARGIN_BUTTONS[2], MARGIN_BUTTONS[3]);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         this.add(button_exit, gbc);
-
-        button_menu.addActionListener(AL_menu);
-        button_exit.addActionListener(AL_exit);
     }
 
     @Override
