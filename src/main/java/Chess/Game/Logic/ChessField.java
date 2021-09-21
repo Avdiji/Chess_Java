@@ -1,12 +1,11 @@
 package Chess.Game.Logic;
 
+import Chess.Game.GUI.MainMenu;
 import Chess.Game.Logic.Pieces.EChessPieces;
-import Chess.Game.Logic.Pieces.IChessPiece;
 import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Player.Player;
 
 import java.awt.Color;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -21,17 +20,20 @@ import java.util.List;
  */
 public class ChessField {
 
-    /** field of the Chess Game **/
+    /**
+     * field of the Chess Game
+     **/
     private List<ChessFieldButton> field;
 
-    /** Movements of the Pieces **/
-    private ChessPieceMovement movement;
-
-    /** Players **/
+    /**
+     * Players
+     **/
     private final Player player1;
     private final Player player2;
 
-    /** Color to determine which players turn it is **/
+    /**
+     * Color to determine which players turn it is
+     **/
     private EPlayerColor currentPlayerColor;
 
     /**
@@ -47,11 +49,11 @@ public class ChessField {
         this.player1 = player1;
         this.player2 = player2;
         currentPlayerColor = player1.getPlayerColor();
-        movement = new ChessPieceMovement();
     }
 
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
+
     /**
      * Getter for {@link #field}
      *
@@ -87,15 +89,6 @@ public class ChessField {
     public Player getPlayer2() {
         return player2;
     }
-
-    /**
-     * Setter for {@link #movement}
-     *
-     * @return movement
-     */
-    public ChessPieceMovement getMovement() {
-        return movement;
-    }
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
 
@@ -125,12 +118,12 @@ public class ChessField {
     public void markButtons(ChessFieldButton currentButton) {
         removeMarkings();
         currentButton.setMarked(true);
-        field.stream().filter(button -> movement
-                .getSafePositions(
-                        currentButton.getPosition(),
-                        currentButton.getPlayerColor(),
-                        field)
-                .contains(button.getPosition()))
+        field.stream().filter(button -> ChessPieceMovement
+                        .getSafePositions(
+                                currentButton.getPosition(),
+                                currentButton.getPlayerColor(),
+                                field)
+                        .contains(button.getPosition()))
                 .forEach(match -> match.setEndangered(true));
     }
 
@@ -151,8 +144,8 @@ public class ChessField {
                 char tmp_row = values[0].length() > 1 ? values[0].charAt(1) : values[0].charAt(0);
                 int tmp_column = Integer.parseInt(values[1]);
                 Color tmp_background = switch (values[3]) {
-                    case "WHITE" -> IChessPiece.COLOR_FIELD_WHITE;
-                    case "BLACK" -> IChessPiece.COLOR_FIELD_BLACK;
+                    case "WHITE" -> MainMenu.COLOR_FIELD_WHITE;
+                    case "BLACK" -> MainMenu.COLOR_FIELD_BLACK;
                     default -> throw new IllegalStateException("Unexpected value: " + values[3]);
                 };
 

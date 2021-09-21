@@ -53,7 +53,7 @@ an enemy piece is located in said field.
 
 #### 1.3.1 Upgrading the Pawn
 
-If the pawn reaches the other side of the Field it can be upgraded to following pieces:
+If the pawn reaches the other side of the Field it can be upgraded to one of the following pieces:
 
 - Queen
 - Rook
@@ -67,7 +67,7 @@ to it. The rules to perform this move are as follows:
 
 - the Black Pawn must be located on the 4th column. The white Pawn can execute the move, when sitting on the 5th column.
 - Only if the enemy Pawn moves to the 5th/4th row by moving 2 Fields from the starting position the move can be executed
-- The enemy pawn must move next to another, hostile Pawn, located in said column (this means the pawn, executing the En Passant must already be at column 4/5 before the enemy pawn moves two steps forward)
+- The enemy pawn must move next to another, hostile Pawn, located in corresponding column (this means the pawn, executing the En Passant must already be at column 4/5 before the enemy pawn moves two steps forward)
 
 #### 1.3.3 Rochade
 
@@ -116,6 +116,7 @@ The Main Menu is the "starting point" of the GUI it provides multiple game mode 
 ### 2.1.1 Server Login
 
 The server login allows the players to insert a hostname, and a port to connect to a server.
+The Window allows the Player to cancel the Game and disconnect from the server.
 
 #### 2.1.2 Loading Window
 

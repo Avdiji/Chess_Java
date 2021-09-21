@@ -70,53 +70,56 @@ public class King implements IChessPiece {
      * @return a Set of new Positions the King could move to (Rochade)
      */
     public Set<Position> getPositionsRochade(final Position currentPosition, final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field) {
-        // TODO cleanup
         Set<Position> result = new HashSet<>();
-        ChessFieldButton currentKing = field.stream().filter(button -> button.getPosition().equals(currentPosition)).findAny().get();
 
-        boolean canRochade_right;
-        boolean canRochade_left;
+        if (!getCorrespondingButton(currentPosition, field).hasKingMoved()) {
+            int column = currentPlayerColor == EPlayerColor.WHITE ? 1 : 8;
 
-        if (!currentKing.hasKingMoved()) {
-            Set<ChessFieldButton> rooks = field.stream()
-                    .filter(button -> button.getPlayerColor() == currentPlayerColor)
-                    .filter(button -> button.getType() == EChessPieces.ROOK_WHITE || button.getType() == EChessPieces.ROOK_BLACK)
-                    .collect(Collectors.toSet());
-            rooks.removeAll(rooks.stream().filter(ChessFieldButton::hasRookMoved).collect(Collectors.toSet()));
+            // pieces between the King and the Rook
+            char char_left_between[] = {'B', 'C', 'D'};
+            char char_right_between[] = {'F', 'G'};
 
-            ChessFieldButton rookRight = rooks.stream()
-                    .filter(rook -> rook.getPosition().getRow() > currentPosition.getRow()).findAny().orElse(null);
-            ChessFieldButton rookLeft = rooks.stream()
-                    .filter(rook -> rook.getPosition().getRow() < currentPosition.getRow()).findAny().orElse(null);
+            // boolean to determine, whether a rochade is possible
+            boolean canCastleLeft = false;
+            boolean canCastleRight = false;
 
-            canRochade_left = rookLeft == null ? false : true;
-            canRochade_right = rookRight == null ? false : true;
+            ChessFieldButton leftRook = getCorrespondingButton(new Position('A', column), field);
+            ChessFieldButton rightRook = getCorrespondingButton(new Position('H', column), field);
 
-            int pos_right[] = {1, 2, 1};
-            int pos_left[] = {-1, -2, -3};
+            // check whether piece is a rook (can never be enemy piece because enemy must move to get to that position)
+            if (leftRook.getType() == EChessPieces.ROOK_WHITE || leftRook.getType() == EChessPieces.ROOK_BLACK)
+                if (!leftRook.hasRookMoved())
+                    canCastleLeft = checkCastle(char_left_between, column, field);
 
-            for (int i = 0; i < pos_right.length; ++i) {
-                ChessFieldButton left_right_button;
-                if (canRochade_right) {
-                    char posX_right = (char) (currentPosition.getRow() + pos_right[i]);
-                    left_right_button = field.stream()
-                            .filter(button -> button.getPosition().equals(new Position(posX_right, currentPosition.getColumn())))
-                            .findAny().get();
-                    canRochade_right = left_right_button.getType() == EChessPieces.EMPTY ? true : false;
-                }
-                if (canRochade_left) {
-                    char posX_left = (char) (currentPosition.getRow() + pos_left[i]);
-                    left_right_button = field.stream()
-                            .filter(button -> button.getPosition().equals(new Position(posX_left, currentPosition.getColumn())))
-                            .findAny().get();
-                    canRochade_left = left_right_button.getType() == EChessPieces.EMPTY ? true : false;
-                }
-            }
-            if (canRochade_right) {
-                result.add(new Position((char) (currentPosition.getRow() + 2), currentPosition.getColumn()));
-            }
-            if (canRochade_left) {
-                result.add(new Position((char) (currentPosition.getRow() - 2), currentPosition.getColumn()));
+            if (rightRook.getType() == EChessPieces.ROOK_WHITE || rightRook.getType() == EChessPieces.ROOK_BLACK)
+                if (!rightRook.hasRookMoved())
+                    canCastleRight = checkCastle(char_right_between, column, field);
+
+            if (canCastleLeft)
+                result.add(new Position(((char) (currentPosition.getRow() - 2)), currentPosition.getColumn()));
+            if (canCastleRight)
+                result.add(new Position(((char) (currentPosition.getRow() + 2)), currentPosition.getColumn()));
+        }
+        return result;
+    }
+
+    /**
+     * Method checks, whether there are pieces between rook and his corresponding King
+     *
+     * @param rook   Rook
+     * @param rows   rows between rook and his king
+     * @param column column of the rook (color)
+     * @param field  field the pieces are located in
+     * @return true if there are no pieces between rook and the corresponding king
+     */
+    private boolean checkCastle(final char rows[], final int column, final List<ChessFieldButton> field) {
+        boolean result = true;
+
+        for (int i = 0; i < rows.length; ++i) {
+            ChessFieldButton nextToKing = getCorrespondingButton(new Position(rows[i], column), field);
+            if (nextToKing.getType() != EChessPieces.EMPTY) {
+                result = false;
+                break;
             }
         }
         return result;

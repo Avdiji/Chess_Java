@@ -1,6 +1,7 @@
 package Chess.Game.GUI.ChessboardGUI;
 
 import Chess.Game.GUI.IChessFrame;
+import Chess.Game.GUI.MainMenu;
 import Chess.Game.Logic.ChessFieldButton;
 import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Pieces.IChessPiece;
@@ -115,25 +116,25 @@ public class UpgradePawn extends JPanel implements IChessFrame {
                 playerColor == EPlayerColor.WHITE ?
                         EChessPieces.ROOK_WHITE :
                         EChessPieces.ROOK_BLACK,
-                IChessPiece.COLOR_FIELD_MARKED);
+                MainMenu.COLOR_FIELD_MARKED);
 
         button_pieces[1] = new ChessFieldButton(GameWindow.idlePosition,
                 playerColor == EPlayerColor.WHITE ?
                         EChessPieces.BISHOP_WHITE :
                         EChessPieces.BISHOP_BLACK,
-                IChessPiece.COLOR_FIELD_MARKED);
+                MainMenu.COLOR_FIELD_MARKED);
 
         button_pieces[2] = new ChessFieldButton(GameWindow.idlePosition,
                 playerColor == EPlayerColor.WHITE ?
                         EChessPieces.KNIGHT_WHITE :
                         EChessPieces.KNIGHT_BLACK,
-                IChessPiece.COLOR_FIELD_MARKED);
+                MainMenu.COLOR_FIELD_MARKED);
 
         button_pieces[3] = new ChessFieldButton(GameWindow.idlePosition,
                 playerColor == EPlayerColor.WHITE ?
                         EChessPieces.QUEEN_WHITE :
                         EChessPieces.QUEEN_BLACK,
-                IChessPiece.COLOR_FIELD_MARKED);
+                MainMenu.COLOR_FIELD_MARKED);
     }
 
     @Override
@@ -142,5 +143,10 @@ public class UpgradePawn extends JPanel implements IChessFrame {
             button_pieces[i].initPiece();
             this.add(button_pieces[i]);
         }
+    }
+
+    @Override
+    public void reColor() {
+
     }
 }
