@@ -108,8 +108,8 @@ public class ServerLogin extends JFrame implements IChessFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SubmitScreen ss = new SubmitScreen(getThis());
-                ss.setString_label("Connecting...");
-                ss.setString_button("Cancel!");
+                ss.setString_label("Connection Failed!");
+                ss.setString_button("Back to Login!");
                 setVisible(false);
             }
         });
