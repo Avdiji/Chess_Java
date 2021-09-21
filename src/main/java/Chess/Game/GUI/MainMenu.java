@@ -108,10 +108,8 @@ public class MainMenu extends JFrame implements IChessFrame {
     @Override
     public void reColor() {
         this.getContentPane().setBackground(COLOR_BACKGROUND);
-
         label_title.setBackground(MainMenu.COLOR_BACKGROUND);
         label_title.setForeground(MainMenu.COLOR_LABEL);
-
         panel_LHS.reColor();
         panel_RHS.reColor();
         scoreboard.reColor();

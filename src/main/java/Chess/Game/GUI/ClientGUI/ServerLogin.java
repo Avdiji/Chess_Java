@@ -88,6 +88,14 @@ public class ServerLogin extends JFrame implements IChessFrame {
     }
 
     /**
+     * Getter for this (used in ActionListener)
+     * @return this
+     */
+    private ServerLogin getThis(){
+        return this;
+    }
+
+    /**
      * Button initializes {@link #button_startGame}
      */
     private void initButton_startGame() {
@@ -95,6 +103,16 @@ public class ServerLogin extends JFrame implements IChessFrame {
         button_startGame.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
         button_startGame.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
         button_startGame.setForeground(MainMenu.COLOR_LABEL);
+
+        button_startGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SubmitScreen ss = new SubmitScreen(getThis());
+                ss.setString_label("Connecting...");
+                ss.setString_button("Cancel!");
+                setVisible(false);
+            }
+        });
     }
 
     /**
@@ -183,7 +201,6 @@ public class ServerLogin extends JFrame implements IChessFrame {
         gbc.gridx = 1;
         gbc.gridy = 2;
         this.add(panel_buttons, gbc);
-
     }
 
     @Override
