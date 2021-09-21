@@ -13,13 +13,13 @@ public class Main_Game {
     public static void main(String... args) {
         MainMenu mm = new MainMenu();
 //        mm.setVisible(false);
-
+//
 //        Player player1 = new Player(EPlayerColor.WHITE);
 //        Player player2 = new Player(EPlayerColor.BLACK);
-
+//
 //        ChessField chessField = new ChessField(player1, player2);
 //        Scoreboard sb = new Scoreboard(mm);
-//        chessField.initField("src/main/resources/initilization/initilization_default.csv");
+//        chessField.initField("src/main/resources/initilization/init_default.csv");
 //        chessField.initField("src/main/resources/initilization/testInit.csv");
 //        chessField.initField("src/main/resources/initilization/checkmate.csv");
 //        chessField.initField("src/main/resources/initilization/stalemate.csv");

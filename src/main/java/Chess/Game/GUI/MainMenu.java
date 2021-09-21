@@ -70,6 +70,14 @@ public class MainMenu extends JFrame implements IChessFrame {
     }
 
     /**
+     * Getter for {@link #scoreboard}
+     * @return scoreboard
+     */
+    public Scoreboard getScoreboard(){
+        return this.scoreboard;
+    }
+
+    /**
      * Method initializes {@link #label_title}
      */
     private void initTitle() {
@@ -94,7 +102,7 @@ public class MainMenu extends JFrame implements IChessFrame {
     public void initComponents() {
         initTitle();
         scoreboard = new Scoreboard(this);
-        panel_LHS = new MainMenu_Panel_LHS(this, scoreboard);
+        panel_LHS = new MainMenu_Panel_LHS(this);
         panel_RHS = new MainMenu_panel_RHS(this);
     }
 

@@ -166,6 +166,17 @@ public class GameWindow implements IChessFrame {
         return result;
     }
 
+    /** Method determines the actual enemy color (in case of an online game **/
+    private EPlayerColor getActualColor(){
+        EPlayerColor result = chessField.getCurrentPlayerColor();
+        if(chessField.getCurrentPlayerColor() == EPlayerColor.NONE && chessField.getPlayer1().getPlayerColor() == EPlayerColor.NONE){
+            result = EPlayerColor.WHITE;
+        }else if(chessField.getCurrentPlayerColor() == EPlayerColor.NONE && chessField.getPlayer2().getPlayerColor() == EPlayerColor.NONE){
+            result = EPlayerColor.BLACK;
+        }
+        return result;
+    }
+
     /**
      * Method adjusts the Game's variables after a move has been executed
      */
@@ -176,13 +187,13 @@ public class GameWindow implements IChessFrame {
                 chessField.getPlayer1().getPlayerColor()); // the the new Playercolor
         chessField.removeMarkings(); // remove all the markings
 
-        if (ChessPieceMovement.isCheckMate(chessField.getCurrentPlayerColor(), chessField.getField())) {
+        if (ChessPieceMovement.isCheckMate(getActualColor(), chessField.getField())) {
             gameFrame.setVisible(false);
             gameFrame.dispose();
             scoreboard.setMessage(String.format("%s Won", Arrays.stream(EPlayerColor.values())
-                    .filter(value -> value != chessField.getCurrentPlayerColor() && value != EPlayerColor.NONE).findAny().get()));
+                    .filter(value -> value != getActualColor() && value != EPlayerColor.NONE).findAny().get()));
             scoreboard.setVisible(true);
-        } else if (ChessPieceMovement.isStalemate(chessField.getCurrentPlayerColor(), chessField.getField())) {
+        } else if (ChessPieceMovement.isStalemate(getActualColor(), chessField.getField())) {
             gameFrame.setVisible(false);
             gameFrame.dispose();
             scoreboard.setMessage(STALEMATE);

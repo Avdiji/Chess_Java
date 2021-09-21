@@ -13,6 +13,7 @@ import Chess.Game.Logic.Player.EPlayerColor;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -23,7 +24,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class ChessPieceMovement {
 
-    /** All the possible pieces **/
+    /**
+     * All the possible pieces
+     **/
     private static final IChessPiece PAWN = new Pawn();
     private static final IChessPiece ROOK = new Rook();
     private static final IChessPiece BISHOP = new Bishop();
@@ -32,7 +35,9 @@ public class ChessPieceMovement {
     private static final IChessPiece QUEEN = new Queen();
     private static final IChessPiece EMPTY = new Empty();
 
-    /** Default Constructor **/
+    /**
+     * Default Constructor
+     **/
     public ChessPieceMovement() {
     }
 
@@ -78,20 +83,20 @@ public class ChessPieceMovement {
      */
     public static final boolean isCheck(final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field) {
         AtomicBoolean result = new AtomicBoolean(false);
-        Position kingsPosition = field.stream()
-                .filter(button -> button.getPlayerColor() == currentPlayerColor)
-                .filter(button -> button.getType() == EChessPieces.KING_WHITE || button.getType() == EChessPieces.KING_BLACK)
-                .map(ChessFieldButton::getPosition)
-                .findAny().get();
+            Position kingsPosition = field.stream()
+                    .filter(button -> button.getPlayerColor() == currentPlayerColor)
+                    .filter(button -> button.getType() == EChessPieces.KING_WHITE || button.getType() == EChessPieces.KING_BLACK)
+                    .map(ChessFieldButton::getPosition)
+                    .findAny().get();
 
-        field.stream()
-                .filter(button -> button.getPlayerColor() != currentPlayerColor)
-                .filter(button -> button.getPlayerColor() != EPlayerColor.NONE)
-                .forEach(button -> {
-                    Set<Position> moves = getActualMoves(button.getPosition(), button.getPlayerColor(), field, button.getType());
-                    if (moves.contains(kingsPosition))
-                        result.set(true);
-                });
+            field.stream()
+                    .filter(button -> button.getPlayerColor() != currentPlayerColor)
+                    .filter(button -> button.getPlayerColor() != EPlayerColor.NONE)
+                    .forEach(button -> {
+                        Set<Position> moves = getActualMoves(button.getPosition(), button.getPlayerColor(), field, button.getType());
+                        if (moves.contains(kingsPosition))
+                            result.set(true);
+                    });
         return result.get();
     }
 
@@ -144,8 +149,8 @@ public class ChessPieceMovement {
         ChessFieldButton currentPiece = EMPTY.getCorrespondingButton(currentPosition, field);
         Set<Position> result = getActualMoves(currentPiece.getPosition(), currentPlayerColor, field, currentPiece.getType());
 
-        if((!isCheck(currentPlayerColor, field)) && (currentPiece.getType() == EChessPieces.KING_WHITE || currentPiece.getType() == EChessPieces.KING_BLACK))
-            result.addAll(((King)KING).getPositionsRochade(currentPosition, currentPlayerColor, field));
+        if ((!isCheck(currentPlayerColor, field)) && (currentPiece.getType() == EChessPieces.KING_WHITE || currentPiece.getType() == EChessPieces.KING_BLACK))
+            result.addAll(((King) KING).getPositionsRochade(currentPosition, currentPlayerColor, field));
 
         Set<Position> toRemove = new HashSet<>();
 

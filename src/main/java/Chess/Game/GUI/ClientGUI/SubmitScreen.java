@@ -55,7 +55,7 @@ public class SubmitScreen extends JFrame implements IChessFrame {
      * Setter for the text of {@link #label_message}
      * @param string string displayed in label
      */
-    protected void setString_label(final String string){
+    public void setString_label(final String string){
         label_message.setText(string);
     }
 
@@ -63,7 +63,7 @@ public class SubmitScreen extends JFrame implements IChessFrame {
      * Setter for the text of {@link #button}
      * @param string string displayed in the button
      */
-    protected void setString_button(final String string){
+    public void setString_button(final String string){
         button.setText(string);
     }
 

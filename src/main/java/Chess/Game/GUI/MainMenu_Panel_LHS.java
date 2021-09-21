@@ -62,11 +62,6 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
     private MainMenu mainMenu;
 
     /**
-     * Scoreboard of the corresponding panel
-     **/
-    private Scoreboard scoreboard;
-
-    /**
      * Combobox with all the different Gamemodes
      **/
     private JComboBox<String> combobox_gamemodes;
@@ -81,9 +76,8 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
      *
      * @param mm mainMenu
      */
-    public MainMenu_Panel_LHS(final MainMenu mm, final Scoreboard scoreboard) {
+    public MainMenu_Panel_LHS(final MainMenu mm) {
         this.mainMenu = mm;
-        this.scoreboard = scoreboard;
 
         initMainFrame();
         initComponents();
@@ -104,7 +98,7 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
             public void actionPerformed(ActionEvent e) {
                 ChessField chessField = new ChessField(new Player(EPlayerColor.WHITE), new Player(EPlayerColor.BLACK));
                 chessField.initField(STRING_GAMEMODE_PATH[combobox_gamemodes.getSelectedIndex()]);
-                new GameWindow(chessField, scoreboard);
+                new GameWindow(chessField, mainMenu.getScoreboard());
                 mainMenu.setVisible(false);
             }
         });
@@ -151,7 +145,7 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
         button_exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                scoreboard.dispose();
+                mainMenu.getScoreboard().dispose();
                 mainMenu.setVisible(false);
                 mainMenu.dispose();
             }

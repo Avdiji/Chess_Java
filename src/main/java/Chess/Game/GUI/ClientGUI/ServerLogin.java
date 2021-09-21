@@ -1,5 +1,6 @@
 package Chess.Game.GUI.ClientGUI;
 
+import Chess.Client.ChessClient;
 import Chess.Game.GUI.IChessFrame;
 import Chess.Game.GUI.MainMenu;
 
@@ -50,6 +51,12 @@ public class ServerLogin extends JFrame implements IChessFrame {
     private static final String STRING_BUTTON_START = "Start Game";
 
     /**
+     * Strings for the Submit Screen
+     **/
+    public static final String STRING_ERROR_LABEL = "Invalid Input!";
+    public static final String STRING_ERROR_BUTTON = "Back to Login";
+
+    /**
      * GridBagConstraints for the Layout of the ServerLogin
      **/
     private GridBagConstraints gbc;
@@ -73,7 +80,9 @@ public class ServerLogin extends JFrame implements IChessFrame {
     private JButton button_startGame;
     private JButton button_menu;
 
-    /** Main Menu **/
+    /**
+     * Main Menu
+     **/
     private final MainMenu mainMenu;
 
     /**
@@ -88,11 +97,44 @@ public class ServerLogin extends JFrame implements IChessFrame {
     }
 
     /**
-     * Getter for this (used in ActionListener)
+     * Getter for {@link #mainMenu}
+     *
+     * @return mainMenu
+     */
+    public MainMenu getMainMenu() {
+        return mainMenu;
+    }
+
+    /**
+     * Getter for this
+     *
      * @return this
      */
-    private ServerLogin getThis(){
+    private ServerLogin getServerLogin() {
         return this;
+    }
+
+    /**
+     * Getter for the portnumber from the GUI
+     *
+     * @return Portnumber
+     */
+    public int getPort() {
+        int result = 0;
+        try {
+            result = Integer.parseInt(textfield_port.getText());
+        } catch (NumberFormatException e) {
+        }
+        return result;
+    }
+
+    /**
+     * Getter for the Hostname from the GUI
+     *
+     * @return Hostname
+     */
+    public String getHostname() {
+        return textfield_hostname.getText();
     }
 
     /**
@@ -107,10 +149,8 @@ public class ServerLogin extends JFrame implements IChessFrame {
         button_startGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SubmitScreen ss = new SubmitScreen(getThis());
-                ss.setString_label("Connection Failed!");
-                ss.setString_button("Back to Login!");
-                setVisible(false);
+                Thread clientThread = new Thread(new ChessClient(getServerLogin()));
+                clientThread.start();
             }
         });
     }
