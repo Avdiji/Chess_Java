@@ -40,7 +40,7 @@ public class Rook implements IChessPiece {
                     Position hlp = new Position(row, column);
                     result.add(hlp);
 
-                    ChessFieldButton button = field.stream().filter(piece -> piece.getPosition().equals(hlp)).findAny().get();
+                    ChessFieldButton button = getCorrespondingButton(hlp, field);
                     if (button.getType() != EChessPieces.EMPTY) {
                         directionX[j] = 0;
                         directionY[j] = 0;

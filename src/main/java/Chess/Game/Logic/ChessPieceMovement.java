@@ -24,33 +24,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ChessPieceMovement {
 
     /** All the possible pieces **/
-    private final IChessPiece pawn;
-    private final IChessPiece rook;
-    private final IChessPiece bishop;
-    private final IChessPiece knight;
-    private final IChessPiece king;
-    private final IChessPiece queen;
-    private final IChessPiece empty;
+    private static final IChessPiece PAWN = new Pawn();
+    private static final IChessPiece ROOK = new Rook();
+    private static final IChessPiece BISHOP = new Bishop();
+    private static final IChessPiece KNIGHT = new Knight();
+    private static final IChessPiece KING = new King();
+    private static final IChessPiece QUEEN = new Queen();
+    private static final IChessPiece EMPTY = new Empty();
 
-    /**
-     * Constructor Initializes:<br>
-     * <p>
-     * {@link #pawn}<br>
-     * {@link #rook}<br>
-     * {@link #bishop}<br>
-     * {@link #knight}<br>
-     * {@link #king}<br>
-     * {@link #queen}<br>
-     * {@link #empty}
-     */
+    /** Default Constructor **/
     public ChessPieceMovement() {
-        pawn = new Pawn();
-        rook = new Rook();
-        bishop = new Bishop();
-        knight = new Knight();
-        king = new King();
-        queen = new Queen();
-        empty = new Empty();
     }
 
     /**
@@ -62,15 +45,15 @@ public class ChessPieceMovement {
      * @param currentPiece       type of the current Piece
      * @return A Set of possible moves of the selected Piece
      */
-    private Set<Position> getActualMoves(final Position currentPosition, final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field, final EChessPieces currentPiece) {
+    private static Set<Position> getActualMoves(final Position currentPosition, final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field, final EChessPieces currentPiece) {
         return switch (currentPiece) {
-            case PAWN_WHITE, PAWN_BLACK -> pawn.getActualPositions(currentPosition, currentPlayerColor, field);
-            case ROOK_WHITE, ROOK_BLACK -> rook.getActualPositions(currentPosition, currentPlayerColor, field);
-            case BISHOP_WHITE, BISHOP_BLACK -> bishop.getActualPositions(currentPosition, currentPlayerColor, field);
-            case KNIGHT_WHITE, KNIGHT_BLACK -> knight.getActualPositions(currentPosition, currentPlayerColor, field);
-            case KING_WHITE, KING_BLACK -> king.getActualPositions(currentPosition, currentPlayerColor, field);
-            case QUEEN_WHITE, QUEEN_BLACK -> queen.getActualPositions(currentPosition, currentPlayerColor, field);
-            case EMPTY -> empty.getActualPositions(currentPosition, currentPlayerColor, field);
+            case PAWN_WHITE, PAWN_BLACK -> PAWN.getActualPositions(currentPosition, currentPlayerColor, field);
+            case ROOK_WHITE, ROOK_BLACK -> ROOK.getActualPositions(currentPosition, currentPlayerColor, field);
+            case BISHOP_WHITE, BISHOP_BLACK -> BISHOP.getActualPositions(currentPosition, currentPlayerColor, field);
+            case KNIGHT_WHITE, KNIGHT_BLACK -> KNIGHT.getActualPositions(currentPosition, currentPlayerColor, field);
+            case KING_WHITE, KING_BLACK -> KING.getActualPositions(currentPosition, currentPlayerColor, field);
+            case QUEEN_WHITE, QUEEN_BLACK -> QUEEN.getActualPositions(currentPosition, currentPlayerColor, field);
+            case EMPTY -> EMPTY.getActualPositions(currentPosition, currentPlayerColor, field);
         };
     }
 
@@ -81,8 +64,8 @@ public class ChessPieceMovement {
      * @param destination   destination of currentButton
      * @param field         field the game is being played in
      */
-    public void updateEnPassant(final ChessFieldButton currentButton, final ChessFieldButton destination, final List<ChessFieldButton> field) {
-        ((Pawn) pawn).enableEnPassant(currentButton, destination, field);
+    public static void updateEnPassant(final ChessFieldButton currentButton, final ChessFieldButton destination, final List<ChessFieldButton> field) {
+        ((Pawn) PAWN).enableEnPassant(currentButton, destination, field);
     }
 
     /**
@@ -93,7 +76,7 @@ public class ChessPieceMovement {
      * @param field              field the King is located in
      * @return
      */
-    public boolean isCheck(final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field) {
+    public static final boolean isCheck(final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field) {
         AtomicBoolean result = new AtomicBoolean(false);
         Position kingsPosition = field.stream()
                 .filter(button -> button.getPlayerColor() == currentPlayerColor)
@@ -104,7 +87,6 @@ public class ChessPieceMovement {
         field.stream()
                 .filter(button -> button.getPlayerColor() != currentPlayerColor)
                 .filter(button -> button.getPlayerColor() != EPlayerColor.NONE)
-                .filter(button -> button.getType() != EChessPieces.KING_WHITE && button.getType() != EChessPieces.KING_BLACK)
                 .forEach(button -> {
                     Set<Position> moves = getActualMoves(button.getPosition(), button.getPlayerColor(), field, button.getType());
                     if (moves.contains(kingsPosition))
@@ -120,7 +102,7 @@ public class ChessPieceMovement {
      * @param field        field the Game is being played in
      * @return true if checkmate
      */
-    public boolean isCheckMate(final EPlayerColor currentColor, final List<ChessFieldButton> field) {
+    public static final boolean isCheckMate(final EPlayerColor currentColor, final List<ChessFieldButton> field) {
         Set<Position> allPossibleMoves = new HashSet<>();
         field.stream()
                 .filter(button -> button.getPlayerColor() == currentColor)
@@ -136,7 +118,7 @@ public class ChessPieceMovement {
      * @param field        field the game is being played in
      * @return true if stalemate
      */
-    public boolean isStalemate(final EPlayerColor currentColor, final List<ChessFieldButton> field) {
+    public static final boolean isStalemate(final EPlayerColor currentColor, final List<ChessFieldButton> field) {
         Set<Position> allPossibleMoves = new HashSet<>();
         field.stream()
                 .filter(button -> button.getPlayerColor() == currentColor)
@@ -158,15 +140,17 @@ public class ChessPieceMovement {
      * @param field              field the Piece is located in
      * @return a Set of save positions the piece can move to
      */
-    public Set<Position> getSafePositions(final Position currentPosition, final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field) {
-        ChessFieldButton currentPiece = field.stream().filter(button -> button.getPosition().equals(currentPosition)).findAny().get();
+    public static Set<Position> getSafePositions(final Position currentPosition, final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field) {
+        ChessFieldButton currentPiece = EMPTY.getCorrespondingButton(currentPosition, field);
         Set<Position> result = getActualMoves(currentPiece.getPosition(), currentPlayerColor, field, currentPiece.getType());
+
+        if((!isCheck(currentPlayerColor, field)) && (currentPiece.getType() == EChessPieces.KING_WHITE || currentPiece.getType() == EChessPieces.KING_BLACK))
+            result.addAll(((King)KING).getPositionsRochade(currentPosition, currentPlayerColor, field));
+
         Set<Position> toRemove = new HashSet<>();
 
-        if (!(currentPiece.getType() == EChessPieces.KING_WHITE || currentPiece.getType() == EChessPieces.KING_BLACK)) {
         result.forEach(position -> {
-
-            ChessFieldButton capturedPiece = field.stream().filter(button -> button.getPosition().equals(position)).findAny().get();
+            ChessFieldButton capturedPiece = EMPTY.getCorrespondingButton(position, field);
 
             EChessPieces capturedType = capturedPiece.getType();
             EPlayerColor capturedColor = capturedPiece.getPlayerColor();
@@ -188,70 +172,6 @@ public class ChessPieceMovement {
             capturedPiece.setPlayerColor(capturedColor);
         });
         result.removeAll(toRemove);
-        } else {
-            result = getKingsSaveMoves(currentPosition, currentPlayerColor, field);
-        }
-        return result;
-    }
-
-    /**
-     * The Method returns a Set of Positions the King can move to, without endangering himself
-     *
-     * @param currentPosition    currentPosition of the King
-     * @param currentPlayerColor currentColor of the King
-     * @param field              field the King is located in
-     * @return A Set of Positions the King is allowed to move to
-     */
-    private Set<Position> getKingsSaveMoves(final Position currentPosition, final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field) {
-        //TODO: cleanup this mess
-        Set<Position> result = king.getActualPositions(currentPosition, currentPlayerColor, field);
-
-        if(!isCheck(currentPlayerColor, field))
-            result.addAll(((King)king).getPositionsRochade(currentPosition, currentPlayerColor, field));
-
-        Set<Position> enemyPositions = new HashSet<>();
-
-        ChessFieldButton currentButton = field.stream().filter(button -> button.getPosition().equals(currentPosition)).findAny().get();
-        // for each ChessFieldButton the king could reach
-        field.stream()
-                .filter(button -> king.getActualPositions(currentPosition, currentPlayerColor, field).contains(button.getPosition()))
-                .forEach(button -> {
-                    // save values
-                    EChessPieces tmp_type = button.getType();
-                    EPlayerColor tmp_color = button.getPlayerColor();
-                    EChessPieces king_type = currentButton.getType();
-                    EPlayerColor king_color = currentButton.getPlayerColor();
-                    // execute the move
-                    button.setType(king_type);
-                    button.setPlayerColor(king_color);
-                    currentButton.setType(EChessPieces.EMPTY);
-                    currentButton.setPlayerColor(EPlayerColor.NONE);
-                    // check, whether the king ends up in an endangered Position
-                    field.stream()
-                            .filter(piece -> piece.getType() != EChessPieces.KING_WHITE && piece.getType() != EChessPieces.KING_BLACK)
-                            .filter(piece -> piece.getType() != EChessPieces.PAWN_WHITE && piece.getType() != EChessPieces.PAWN_BLACK)
-                            .filter(piece -> piece.getPlayerColor() != currentPlayerColor && piece.getPlayerColor() != EPlayerColor.NONE)
-                            .forEach(piece -> enemyPositions.addAll(getActualMoves(piece.getPosition(), piece.getPlayerColor(), field, piece.getType())));
-                    // extra check for pawn
-                    field.stream()
-                            .filter(piece -> piece.getPlayerColor() != currentPlayerColor && piece.getPlayerColor() != EPlayerColor.NONE)
-                            .filter(piece -> piece.getType() == EChessPieces.PAWN_WHITE || piece.getType() == EChessPieces.PAWN_BLACK)
-                            .forEach(piece -> enemyPositions.addAll(((Pawn) pawn).getDiagonalPositions(piece.getPosition(), piece.getPlayerColor(), field)));
-                    // extra check for enemy King
-                    ChessFieldButton enemyKing = field.stream()
-                            .filter(piece -> piece.getPlayerColor() != currentPlayerColor)
-                            .filter(piece -> piece.getType() == EChessPieces.KING_WHITE || piece.getType() == EChessPieces.KING_BLACK)
-                            .findFirst().get();
-                    // remove the kings illegal moves
-                    result.removeAll(king.getActualPositions(enemyKing.getPosition(), enemyKing.getPlayerColor(), field));
-                    // reset type and color of buttons
-                    button.setType(tmp_type);
-                    button.setPlayerColor(tmp_color);
-                    currentButton.setType(king_type);
-                    currentButton.setPlayerColor(king_color);
-                });
-        // remove all other illegal moves
-        result.removeAll(enemyPositions);
         return result;
     }
 
@@ -262,7 +182,7 @@ public class ChessPieceMovement {
      * @param markedButton   button that has executed the move
      * @return true if a rochade can be executed
      */
-    public boolean executeRochade(final ChessFieldButton capturedButton, final ChessFieldButton markedButton, final List<ChessFieldButton> field) {
+    public static boolean executeRochade(final ChessFieldButton capturedButton, final ChessFieldButton markedButton, final List<ChessFieldButton> field) {
         boolean result = false;
         int steps;
 
@@ -301,7 +221,7 @@ public class ChessPieceMovement {
      *
      * @param captured captured button
      */
-    public ChessFieldButton findRedundantPiece(final ChessFieldButton captured, final List<ChessFieldButton> field) {
+    public static ChessFieldButton findRedundantPiece(final ChessFieldButton captured, final List<ChessFieldButton> field) {
         ChessFieldButton result = null;
         // check whether the captured piece was a pawn or not (if it was a pawn a enPassant has been executed
         if (captured.getType() == EChessPieces.PAWN_WHITE || captured.getType() == EChessPieces.PAWN_BLACK) {

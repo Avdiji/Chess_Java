@@ -5,6 +5,7 @@ import Chess.Game.GUI.MainMenu;
 import Chess.Game.GUI.Scoreboard;
 import Chess.Game.Logic.ChessField;
 import Chess.Game.Logic.ChessFieldButton;
+import Chess.Game.Logic.ChessPieceMovement;
 import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Position;
@@ -58,10 +59,6 @@ public class GameWindow implements IChessFrame {
      **/
     private Grave_White panel_LHS;
     private Grave_Black panel_RHS;
-
-    /**
-     * ActionListeners for the Graves
-     **/
     private ActionListener AL_graveWhite;
     private ActionListener AL_graveBlack;
 
@@ -76,7 +73,7 @@ public class GameWindow implements IChessFrame {
     private ChessField chessField;
 
     /**
-     * ActionListener to add Piece to the Grave
+     * ActionListener for the Buttons on the Field
      **/
     private ActionListener buttonListener;
 
@@ -179,13 +176,13 @@ public class GameWindow implements IChessFrame {
                 chessField.getPlayer1().getPlayerColor()); // the the new Playercolor
         chessField.removeMarkings(); // remove all the markings
 
-        if (chessField.getMovement().isCheckMate(chessField.getCurrentPlayerColor(), chessField.getField())) {
+        if (ChessPieceMovement.isCheckMate(chessField.getCurrentPlayerColor(), chessField.getField())) {
             gameFrame.setVisible(false);
             gameFrame.dispose();
             scoreboard.setMessage(String.format("%s Won", Arrays.stream(EPlayerColor.values())
                     .filter(value -> value != chessField.getCurrentPlayerColor() && value != EPlayerColor.NONE).findAny().get()));
             scoreboard.setVisible(true);
-        } else if (chessField.getMovement().isStalemate(chessField.getCurrentPlayerColor(), chessField.getField())) {
+        } else if (ChessPieceMovement.isStalemate(chessField.getCurrentPlayerColor(), chessField.getField())) {
             gameFrame.setVisible(false);
             gameFrame.dispose();
             scoreboard.setMessage(STALEMATE);
@@ -202,7 +199,7 @@ public class GameWindow implements IChessFrame {
      */
     private void adjustPreMove(final ChessFieldButton capturedButton, final ChessFieldButton markedButton) {
         try {
-            chessField.getMovement().updateEnPassant(markedButton, capturedButton, chessField.getField()); // update the enPassant
+            ChessPieceMovement.updateEnPassant(markedButton, capturedButton, chessField.getField()); // update the enPassant
         } catch (IllegalArgumentException e) {
         }
         // mark rooks and kings (to prevent illegal rochade
@@ -223,7 +220,7 @@ public class GameWindow implements IChessFrame {
         adjustPreMove(capturedButton, markedButton);
 
         // check whether the move is a castle and execute it if so
-        if (!chessField.getMovement().executeRochade(capturedButton, markedButton, chessField.getField())) {
+        if (!ChessPieceMovement.executeRochade(capturedButton, markedButton, chessField.getField())) {
             // check how many empty pieces there are pre execution
             int empty_fields_preMove = (int) chessField.getField().stream()
                     .filter(button -> button.getType() == EChessPieces.EMPTY).count();
@@ -242,7 +239,7 @@ public class GameWindow implements IChessFrame {
 
             // remove a redundant pawn (method removeRedundantPiece checks, whether another pawn has been captured or not)
             if (empty_fields_preMove == empty_fields_postMove) {
-                ChessFieldButton toBury = chessField.getMovement().findRedundantPiece(capturedButton, chessField.getField());
+                ChessFieldButton toBury = ChessPieceMovement.findRedundantPiece(capturedButton, chessField.getField());
                 if (toBury != null) {
                     addToGrave(toBury.getType(), toBury.getPlayerColor());
                     toBury.setType(EChessPieces.EMPTY);
@@ -292,7 +289,7 @@ public class GameWindow implements IChessFrame {
     }
 
     /**
-     * Method initializes the Listener to add the Piece to the Grave
+     * Method initializes the Listener to for the Buttons on the Field
      */
     private void initButtonListener() {
         buttonListener = new ActionListener() {

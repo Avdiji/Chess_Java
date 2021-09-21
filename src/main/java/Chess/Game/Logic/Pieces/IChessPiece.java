@@ -4,7 +4,6 @@ import Chess.Game.Logic.ChessFieldButton;
 import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Position;
 
-import java.awt.Color;
 import java.util.List;
 import java.util.Set;
 
@@ -15,17 +14,10 @@ import java.util.Set;
  */
 public interface IChessPiece {
 
-    /** Size of a Field in the Chess Board in px **/
+    /**
+     * Size of a Field in the Chess Board in px
+     **/
     public static final int SIZE_FIELD = 100;
-
-//    /** Color for the white field **/
-//    public static final Color COLOR_FIELD_WHITE = new Color(0x8fbc8f);
-//    /** Color for the black field **/
-//    public static final Color COLOR_FIELD_BLACK = new Color(0x1E7B56);
-//    /** Color of a marked field **/
-//    public static final Color COLOR_FIELD_MARKED = new Color(0x039be5);
-//    /** Color of an endangered field **/
-//    public static final Color COLOR_FIELD_ENDANGERED = new Color(0xec7c26);
 
     /**
      * Method returns a Set of Positions the Piece on the current Position can actually capture
@@ -36,5 +28,16 @@ public interface IChessPiece {
      * @return a Set of Positions the Piece can travel
      */
     public Set<Position> getActualPositions(final Position currentPosition, final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field);
+
+    /**
+     * Method finds and returns a button with the same Position (in field) as currentPosition
+     *
+     * @param currentPosition currentPosition of the button
+     * @param field           field the button is located in
+     * @return button with the same position as currentPosition
+     */
+    default public ChessFieldButton getCorrespondingButton(final Position currentPosition, final List<ChessFieldButton> field) {
+        return field.stream().filter(button -> button.getPosition().equals(currentPosition)).findAny().get();
+    }
 
 }

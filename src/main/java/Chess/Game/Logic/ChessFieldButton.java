@@ -35,7 +35,6 @@ public class ChessFieldButton extends JButton {
      * in a way that enables the other Pawn to execute the EnPassant
      **/
     private boolean enPassant;
-    private boolean missedEnPassant;
 
     /** True if this button is a King/Rook and has moved **/
     private boolean kingMoved;
@@ -62,7 +61,6 @@ public class ChessFieldButton extends JButton {
         endangered = false;
 
         enPassant = false;
-        missedEnPassant = false;
 
         kingMoved = false;
         rookMoved = false;
