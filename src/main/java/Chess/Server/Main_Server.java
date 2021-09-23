@@ -1,10 +1,10 @@
 package Chess.Server;
 
-public class Main_Server {
-    public static void main(String... args){
-        ChessServer server = new ChessServer();
-        Thread runnableServer = new Thread(server);
+import java.io.IOException;
 
-        runnableServer.start();
+public class Main_Server {
+    public static void main(String... args) throws IOException, InterruptedException {
+        ChessServer server = new ChessServer();
+        server.runServer();
     }
 }

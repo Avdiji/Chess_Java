@@ -4,8 +4,11 @@ import Chess.Game.GUI.ChessboardGUI.GameWindow;
 import Chess.Game.GUI.ClientGUI.ServerLogin;
 import Chess.Game.GUI.ClientGUI.SubmitScreen;
 import Chess.Game.Logic.ChessField;
+import Chess.Game.Logic.ChessFieldButton;
+import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Player.Player;
+import Chess.Game.Logic.Position;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -20,11 +23,6 @@ import java.net.Socket;
  * Client, that communicates with the ChessServer
  */
 public class ChessClient implements Runnable {
-
-    /**
-     * Signals
-     **/
-    private static final String SIGNAL_PLAYER1 = "PLAYER1";
 
     /**
      * initialization path of classic chess
@@ -58,6 +56,11 @@ public class ChessClient implements Runnable {
     private Player player2;
 
     /**
+     * Helper Object, sends moves to the Client
+     **/
+    private ClientMoveSender moveGenerator;
+
+    /**
      * Constructor
      *
      * @param serverLogin
@@ -73,11 +76,37 @@ public class ChessClient implements Runnable {
      * {@link #player1}
      * {@link #player2}
      *
-     * @param playerSignal signal from the server
+     * @param playerColor signal from the server
      */
-    private void initPlayers(final String playerSignal) {
-        player1 = new Player(playerSignal.equals(SIGNAL_PLAYER1) ? EPlayerColor.WHITE : EPlayerColor.NONE);
-        player2 = new Player(playerSignal.equals(SIGNAL_PLAYER1) ? EPlayerColor.NONE : EPlayerColor.BLACK);
+    private void initPlayers(final String playerColor) {
+        player1 = new Player(playerColor.equals(EPlayerColor.WHITE.toString()) ? EPlayerColor.WHITE : EPlayerColor.NONE);
+        player2 = new Player(playerColor.equals(EPlayerColor.WHITE.toString()) ? EPlayerColor.NONE : EPlayerColor.BLACK);
+    }
+
+    /**
+     * Method decodes and executes the move, received from the server
+     *
+     * @param move last move Sent from the server
+     */
+    private void executeClientMove(final String move, final GameWindow gameWindow) {
+        String moveValues[] = move.split(";");
+
+        char row_marked = moveValues[0].charAt(0);
+        int column_marked = Integer.parseInt(moveValues[0].split("-")[1]);
+
+        char row_captured = moveValues[1].charAt(0);
+        int column_captured = Integer.parseInt(moveValues[1].split("-")[1]);
+
+        Position pos_marked = new Position(row_marked, column_marked);
+        Position pos_captured = new Position(row_captured, column_captured);
+
+        ChessFieldButton marked = gameWindow.getChessField().getField().stream().filter(button -> button.getPosition().equals(pos_marked)).findAny().get();
+        ChessFieldButton captured = gameWindow.getChessField().getField().stream().filter(button -> button.getPosition().equals(pos_captured)).findAny().get();
+
+        if (!moveValues[2].equals(EChessPieces.EMPTY.toString())) {
+            marked.setType(EChessPieces.valueOf(moveValues[2]));
+        }
+        gameWindow.movePiece(captured, marked);
     }
 
     @Override
@@ -92,16 +121,24 @@ public class ChessClient implements Runnable {
             ss.setString_button(STRING_NOERROR_BUTTON);
             serverLogin.setVisible(false);
 
-            String playersignal;
-            while (!(playersignal = br.readLine()).isEmpty()) {
-                if (playersignal.length() > 0) {
-                    initPlayers(playersignal);
-                }
-            }
+            initPlayers(br.readLine());
+
+            ss.setVisible(false);
             ChessField chessField = new ChessField(player1, player2);
             chessField.initField(PATH_INIT);
             GameWindow gameWindow = new GameWindow(chessField, serverLogin.getMainMenu().getScoreboard());
+            moveGenerator = new ClientMoveSender(gameWindow, player1.getPlayerColor() == EPlayerColor.NONE ? player2 : player1, bw);
+            gameWindow.setNotifyClient(moveGenerator);
 
+            Thread readThread = new Thread(moveGenerator);
+            readThread.start();
+
+            while (!moveGenerator.endedGame()) {
+                String line;
+                if ((line = br.readLine()) != null && !line.isEmpty()) {
+                    executeClientMove(line, gameWindow);
+                }
+            }
 
         } catch (IOException e) {
             SubmitScreen ss = new SubmitScreen(serverLogin);

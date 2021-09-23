@@ -13,7 +13,6 @@ import Chess.Game.Logic.Player.EPlayerColor;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 

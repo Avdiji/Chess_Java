@@ -1,5 +1,6 @@
 package Chess.Game.GUI.ChessboardGUI;
 
+import Chess.Client.ClientMoveSender;
 import Chess.Game.GUI.IChessFrame;
 import Chess.Game.GUI.MainMenu;
 import Chess.Game.GUI.Scoreboard;
@@ -8,6 +9,7 @@ import Chess.Game.Logic.ChessFieldButton;
 import Chess.Game.Logic.ChessPieceMovement;
 import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Player.EPlayerColor;
+import Chess.Game.Logic.Player.Player;
 import Chess.Game.Logic.Position;
 
 import javax.swing.JFrame;
@@ -89,11 +91,17 @@ public class GameWindow implements IChessFrame {
     private final Scoreboard scoreboard;
 
     /**
+     * Variable to notify, after executing a move
+     **/
+    private ClientMoveSender notifyClient;
+
+    /**
      * Constructor
      *
      * @param chessField chessField with all the Logic
      */
     public GameWindow(final ChessField chessField, final Scoreboard scoreboard) {
+        notifyClient = null;
         this.scoreboard = scoreboard;
         this.chessField = chessField;
         panel_LHS = new Grave_White();
@@ -102,6 +110,24 @@ public class GameWindow implements IChessFrame {
         initComponents();
         initMainFrame();
         addComponents();
+    }
+
+    /**
+     * Setter for {@link #notifyClient}
+     *
+     * @param notifyClient
+     */
+    public void setNotifyClient(final ClientMoveSender notifyClient) {
+        this.notifyClient = notifyClient;
+    }
+
+    /**
+     * Getter for {@link #chessField}
+     *
+     * @return chessField
+     */
+    public ChessField getChessField() {
+        return chessField;
     }
 
     /**
@@ -166,12 +192,14 @@ public class GameWindow implements IChessFrame {
         return result;
     }
 
-    /** Method determines the actual enemy color (in case of an online game **/
-    private EPlayerColor getActualColor(){
+    /**
+     * Method determines the actual enemy color (in case of an online game
+     **/
+    private EPlayerColor getActualColor() {
         EPlayerColor result = chessField.getCurrentPlayerColor();
-        if(chessField.getCurrentPlayerColor() == EPlayerColor.NONE && chessField.getPlayer1().getPlayerColor() == EPlayerColor.NONE){
+        if (chessField.getCurrentPlayerColor() == EPlayerColor.NONE && chessField.getPlayer1().getPlayerColor() == EPlayerColor.NONE) {
             result = EPlayerColor.WHITE;
-        }else if(chessField.getCurrentPlayerColor() == EPlayerColor.NONE && chessField.getPlayer2().getPlayerColor() == EPlayerColor.NONE){
+        } else if (chessField.getCurrentPlayerColor() == EPlayerColor.NONE && chessField.getPlayer2().getPlayerColor() == EPlayerColor.NONE) {
             result = EPlayerColor.BLACK;
         }
         return result;
@@ -227,7 +255,7 @@ public class GameWindow implements IChessFrame {
      * @param capturedButton button that has been captured
      * @param markedButton   button that has been moved
      */
-    public void MovePiece(final ChessFieldButton capturedButton, final ChessFieldButton markedButton) {
+    public void movePiece(final ChessFieldButton capturedButton, final ChessFieldButton markedButton) {
         adjustPreMove(capturedButton, markedButton);
 
         // check whether the move is a castle and execute it if so
@@ -262,6 +290,30 @@ public class GameWindow implements IChessFrame {
     }
 
     /**
+     * Method notifies the corresponding client, that a move has been executed
+     **/
+    private void notifyClientMove() {
+        if (notifyClient != null) {
+            notifyClient.setExecutedMove(true);
+            synchronized (notifyClient) {
+                notifyClient.notify();
+            }
+        }
+    }
+
+    /**
+     * Method notifies the corresponding client, that the player has surrendered
+     **/
+    private void notifyClientFF() {
+        if (notifyClient != null) {
+            notifyClient.setEndedGame(true);
+            synchronized (notifyClient) {
+                notifyClient.notify();
+            }
+        }
+    }
+
+    /**
      * The Method creates and returns a new Thread, that executes a move
      * (used an individual thread to enable the pawn upgrade)
      *
@@ -277,6 +329,10 @@ public class GameWindow implements IChessFrame {
             @Override
             public void run() {
                 ChessFieldButton markedButton = chessField.getField().stream().filter(ChessFieldButton::isMarked).findAny().get();
+                Player tmp_player = chessField.getPlayer1().getPlayerColor() == chessField.getCurrentPlayerColor() ?
+                        chessField.getPlayer1() :
+                        chessField.getPlayer2();
+
                 if (hasPawnUpgraded(capturedButton, markedButton)) {
 
                     panel_upgradePawn.setPlayerColor(chessField.getCurrentPlayerColor());
@@ -292,8 +348,12 @@ public class GameWindow implements IChessFrame {
                         }
                     }
                     markedButton.setType(panel_upgradePawn.getSelectedType());
+                    tmp_player.setLastMove(markedButton, capturedButton, panel_upgradePawn.getSelectedType());
+                } else {
+                    tmp_player.setLastMove(markedButton, capturedButton, EChessPieces.EMPTY);
                 }
-                MovePiece(capturedButton, markedButton);
+                movePiece(capturedButton, markedButton);
+                notifyClientMove();
             }
         });
         return result;
@@ -347,10 +407,12 @@ public class GameWindow implements IChessFrame {
         AL_graveWhite = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameFrame.setVisible(false);
-                gameFrame.dispose();
-                scoreboard.setMessage("WHITE gave up!");
-                scoreboard.setVisible(true);
+                if (chessField.getCurrentPlayerColor() == EPlayerColor.WHITE) {
+                    gameFrame.setVisible(false);
+                    gameFrame.dispose();
+                    scoreboard.setMessage("WHITE gave up!");
+                    scoreboard.setVisible(true);
+                }
             }
         };
     }
@@ -362,10 +424,12 @@ public class GameWindow implements IChessFrame {
         AL_graveBlack = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gameFrame.setVisible(false);
-                gameFrame.dispose();
-                scoreboard.setMessage("BLACK gave up!");
-                scoreboard.setVisible(true);
+                if (chessField.getCurrentPlayerColor() == EPlayerColor.BLACK) {
+                    gameFrame.setVisible(false);
+                    gameFrame.dispose();
+                    scoreboard.setMessage("BLACK gave up!");
+                    scoreboard.setVisible(true);
+                }
             }
         };
     }
