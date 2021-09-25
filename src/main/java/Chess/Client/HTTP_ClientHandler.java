@@ -13,27 +13,21 @@ import java.io.IOException;
  */
 public class HTTP_ClientHandler implements Runnable {
 
-    /**
-     * Corresponding gameWindow of the Client
-     **/
+    /** Corresponding gameWindow of the Client **/
     private final GameWindow gameWindow;
-    /**
-     * Player of this client
-     **/
+
+    /** Player of this client **/
     private final Player clientPlayer;
-    /**
-     * BufferedWriter of this Client
-     **/
+    /** BufferedWriter of this Client **/
     private final BufferedWriter bw;
 
-    /**
-     * True if client has executed a move else wrong
-     **/
+    /** Hostname of the correspnding server **/
+    private String hostname;
+
+    /** True if client has executed a move else wrong **/
     private boolean executedMove;
 
-    /**
-     * True if the game is over
-     **/
+    /** True if the game is over **/
     private boolean endedGame;
 
     /**
@@ -48,6 +42,14 @@ public class HTTP_ClientHandler implements Runnable {
 
         executedMove = false;
         endedGame = false;
+    }
+
+    /**
+     * Setter for {@link #hostname}
+     * @param hostname
+     */
+    protected void setHostname(final String hostname){
+        this.hostname = hostname;
     }
 
     /**
@@ -80,8 +82,15 @@ public class HTTP_ClientHandler implements Runnable {
      *
      * @param message
      */
-    private void sendToServer(final String message) throws IOException {
+    private void sendPutRequest(String message) throws IOException {
+        message += "\r\n";
+        bw.write("PUT / HTTP/1.1\r\n");
+        bw.write("Host: " + hostname + "\r\n");
+        bw.write("Content-Type: text/html\r\n");
+        bw.write("Content-Length: " + message.length() + "\r\n");
+        bw.write("\r\n");
         bw.write(message + "\r\n");
+        bw.write("\r\n");
         bw.flush();
     }
 
@@ -92,9 +101,8 @@ public class HTTP_ClientHandler implements Runnable {
                 synchronized (this) {
                     this.wait();
                 }
-
                 if (executedMove) {
-                    sendToServer(clientPlayer.getLastMove());
+                    sendPutRequest(clientPlayer.getLastMove());
                     executedMove = false;
                 }
             } catch (InterruptedException | IOException e) {

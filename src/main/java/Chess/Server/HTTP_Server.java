@@ -43,7 +43,7 @@ public class HTTP_Server {
             System.out.println();
             System.out.println("STARTING GET REQUEST");
             player1.handleGetRequest(color1.toString());
-
+            player1.establishConnection();
 
             player1.start();
             player1.join();

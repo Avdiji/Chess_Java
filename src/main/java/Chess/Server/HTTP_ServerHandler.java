@@ -17,18 +17,26 @@ import java.net.Socket;
  */
 public class HTTP_ServerHandler extends Thread {
 
-    /** Color of the Player **/
+    /**
+     * Color of the Player
+     **/
     private final EPlayerColor playerColor;
 
-    /** Corresponding Serversocket **/
+    /**
+     * Corresponding Serversocket
+     **/
     private final ServerSocket serverSocket;
 
-    /** Socket of the Player **/
+    /**
+     * Socket of the Player
+     **/
     private Socket playerSocket;
     private BufferedReader br;
     private BufferedWriter bw;
 
-    /** Enemy Player **/
+    /**
+     * Enemy Player
+     **/
     private HTTP_ServerHandler enemy;
 
     /**
@@ -44,17 +52,21 @@ public class HTTP_ServerHandler extends Thread {
         establishConnection();
     }
 
-    /** Method establishes a new socket connection **/
-    protected void establishConnection() throws IOException{
-            playerSocket = serverSocket.accept();
-            br = new BufferedReader(new InputStreamReader(playerSocket.getInputStream()));
-            bw = new BufferedWriter(new OutputStreamWriter(playerSocket.getOutputStream()));
+    /**
+     * Method establishes a new socket connection
+     **/
+    protected void establishConnection() throws IOException {
+        playerSocket = serverSocket.accept();
+        br = new BufferedReader(new InputStreamReader(playerSocket.getInputStream()));
+        bw = new BufferedWriter(new OutputStreamWriter(playerSocket.getOutputStream()));
     }
 
-    /** Method handles Get requests **/
+    /**
+     * Method handles Get requests
+     **/
     protected void handleGetRequest(String message) throws IOException {
         String line;
-        while(!(line = br.readLine()).isEmpty()){
+        while (!(line = br.readLine()).isEmpty()) {
             System.out.println(line);
         }
         message += "\r\n";
@@ -70,14 +82,14 @@ public class HTTP_ServerHandler extends Thread {
         bw.close();
         br.close();
         System.out.println("ENDING GET REQUEST");
-
-        establishConnection();
     }
 
-    /** Method handles Put requests **/
+    /**
+     * Method handles Put requests
+     **/
     protected void handlePutRequest() throws IOException {
         String line;
-        while(!(line = br.readLine()).isEmpty()){
+        while (!(line = br.readLine()).isEmpty()) {
             System.out.println(line);
         }
         System.out.println(br.readLine());
@@ -94,30 +106,31 @@ public class HTTP_ServerHandler extends Thread {
         bw.close();
         br.close();
         System.out.println("ENDING PUT REQUEST");
-
-        //enemy should connect here
     }
 
     @Override
     public void run() {
-        while (serverSocket.isBound() && !serverSocket.isClosed()){
+        while (serverSocket.isBound() && !serverSocket.isClosed()) {
             try {
                 String line = br.readLine();
 
-                if(line != null) {
+                if (line != null) {
                     if (line.contains("GET")) {
                         System.out.println();
                         System.out.println("STARTING GET REQUEST");
                         System.out.println(line);
                         handleGetRequest(playerColor.toString());
-                    }else if(line.contains("PUT")){
+                        establishConnection();
+                    } else if (line.contains("PUT")) {
                         System.out.println();
                         System.out.println("STARTING PUT REQUEST");
                         System.out.println(line);
                         handlePutRequest();
+                        establishConnection();
                     }
                 }
-            }catch (IOException e){}
+            } catch (IOException e) {
+            }
         }
 
     }

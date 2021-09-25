@@ -24,27 +24,41 @@ import java.net.Socket;
  */
 public class HTTP_Client implements Runnable {
 
-    /** initialization path of classic chess **/
+    /**
+     * initialization path of classic chess
+     **/
     private static final String PATH_INIT = "src/main/resources/initilization/init_default.csv";
 
-    /** Strings for the submit screen if successfull **/
+    /**
+     * Strings for the submit screen if successfull
+     **/
     private static final String STRING_NOERROR_LABEL = "Waiting for other Player...";
     private static final String STRING_NOERROR_BUTTON = "Cancel";
 
-    /** Port used to connect to server **/
+    /**
+     * Port used to connect to server
+     **/
     private final int port;
 
-    /** Hostname of the Server this client shall connect with **/
+    /**
+     * Hostname of the Server this client shall connect with
+     **/
     private final String hostname;
 
-    /** LoginScreen of this client **/
+    /**
+     * LoginScreen of this client
+     **/
     private final ServerLogin serverLogin;
 
-    /** Players **/
+    /**
+     * Players
+     **/
     private Player player1;
     private Player player2;
 
-    /** Helper Object, sends moves to the Client **/
+    /**
+     * Helper Object, sends moves to the Client
+     **/
     private HTTP_ClientHandler moveGenerator;
 
     /**
@@ -96,7 +110,9 @@ public class HTTP_Client implements Runnable {
         gameWindow.movePiece(captured, marked);
     }
 
-    /** Method sends a Get request to the Server **/
+    /**
+     * Method sends a Get request to the Server
+     **/
     private void sendGetRequest(final BufferedWriter bw, final String hostname) throws IOException {
         bw.write("GET / HTTP/1.1\r\n");
         bw.write("Host: " + hostname + "\r\n");
@@ -119,48 +135,26 @@ public class HTTP_Client implements Runnable {
             sendGetRequest(bw, hostname);
 
             String line;
-            while(!(line = br.readLine()).isEmpty()){
+            while (!(line = br.readLine()).isEmpty()) {
                 System.out.println(line);
             }
-            System.out.println(br.readLine());
+            System.out.println((line = br.readLine()));
 
-            System.out.println();
+            ss.setVisible(false);
+            initPlayers(line);
+            ChessField chessField = new ChessField(player1, player2);
+            chessField.initField(PATH_INIT);
+            GameWindow gameWindow = new GameWindow(chessField, serverLogin.getMainMenu().getScoreboard());
+            moveGenerator = new HTTP_ClientHandler(gameWindow, player1.getPlayerColor() == EPlayerColor.NONE ? player2 : player1, bw);
+            moveGenerator.setHostname(hostname);
+            gameWindow.setNotifyClient(moveGenerator);
 
-            String message = "HI Again\r\n";
-            bw.write("PUT / HTTP/1.1\r\n");
-            bw.write("Host: " + hostname + "\r\n");
-            bw.write("Content-Type: text/html\r\n");
-            bw.write("Content-Length: " + message.length() + "\r\n");
-            bw.write("\r\n");
-            bw.write(message + "\r\n");
-            bw.write("\r\n");
-            bw.flush();
-            while (!(line = br.readLine()).isEmpty()){
-                System.out.println(line);
-            }
-            System.out.println(br.readLine());
+            Thread p1 = new Thread(moveGenerator);
 
-//            ss.setVisible(false);
-//            ChessField chessField = new ChessField(player1, player2);
-//            chessField.initField(PATH_INIT);
-//            GameWindow gameWindow = new GameWindow(chessField, serverLogin.getMainMenu().getScoreboard());
-//            moveGenerator = new HTTP_ClientHandler(gameWindow, player1.getPlayerColor() == EPlayerColor.NONE ? player2 : player1, bw);
-//            gameWindow.setNotifyClient(moveGenerator);
-//
-//            Thread readThread = new Thread(moveGenerator);
-//            readThread.start();
-//
-//            while (!moveGenerator.endedGame()) {
-//                String line;
-//                if ((line = br.readLine()) != null && !line.isEmpty()) {
-//                    executeClientMove(line, gameWindow);
-//                }
-//            }
+            p1.start();
+            p1.join();
 
-
-            while (true);
-
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             SubmitScreen ss = new SubmitScreen(serverLogin);
             ss.setString_button(ServerLogin.STRING_ERROR_BUTTON);
             ss.setString_label(ServerLogin.STRING_ERROR_LABEL);
