@@ -118,11 +118,26 @@ public class HTTP_Client implements Runnable {
 
             sendGetRequest(bw, hostname);
 
-            while(!br.readLine().isEmpty());
+            String line;
+            while(!(line = br.readLine()).isEmpty()){
+                System.out.println(line);
+            }
             System.out.println(br.readLine());
 
-            sendGetRequest(bw, hostname);
-            while (!br.readLine().isEmpty());
+            System.out.println();
+
+            String message = "HI Again\r\n";
+            bw.write("PUT / HTTP/1.1\r\n");
+            bw.write("Host: " + hostname + "\r\n");
+            bw.write("Content-Type: text/html\r\n");
+            bw.write("Content-Length: " + message.length() + "\r\n");
+            bw.write("\r\n");
+            bw.write(message + "\r\n");
+            bw.write("\r\n");
+            bw.flush();
+            while (!(line = br.readLine()).isEmpty()){
+                System.out.println(line);
+            }
             System.out.println(br.readLine());
 
 //            ss.setVisible(false);

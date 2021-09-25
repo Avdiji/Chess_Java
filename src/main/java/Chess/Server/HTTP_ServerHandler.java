@@ -80,6 +80,7 @@ public class HTTP_ServerHandler extends Thread {
         while(!(line = br.readLine()).isEmpty()){
             System.out.println(line);
         }
+        System.out.println(br.readLine());
         String message = "PUTEN\r\n";
         bw.write("HTTP/1.1 200 OK\r\n");
         bw.write("Content-Type: text/html\r\n");
