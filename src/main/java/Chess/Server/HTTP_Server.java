@@ -20,7 +20,7 @@ public class HTTP_Server {
 
 
     /** Port of this Server **/
-    private static final int PORT = 4711;
+    private static final int PORT = 80;
 
     /** Random object **/
     private final static Random random = new Random();
@@ -34,15 +34,20 @@ public class HTTP_Server {
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
 
-            try (Socket socket1 = serverSocket.accept();
-                 Socket socket2 = serverSocket.accept();
-                 BufferedReader br1 = new BufferedReader(new InputStreamReader(socket1.getInputStream()));
-                 BufferedReader br2 = new BufferedReader(new InputStreamReader(socket2.getInputStream()));
-                 BufferedWriter bw1 = new BufferedWriter(new OutputStreamWriter(socket1.getOutputStream()));
-                 BufferedWriter bw2 = new BufferedWriter(new OutputStreamWriter(socket2.getOutputStream()));
-            ) {
+//            EPlayerColor color1 = random.nextInt(2) == 0 ? EPlayerColor.WHITE : EPlayerColor.BLACK;
+            EPlayerColor color1 = EPlayerColor.WHITE;
+            EPlayerColor color2 = color1 == EPlayerColor.WHITE ? EPlayerColor.BLACK : EPlayerColor.WHITE;
 
-            }
+            HTTP_ServerHandler player1 = new HTTP_ServerHandler(color1, serverSocket);
+
+            System.out.println();
+            System.out.println("STARTING GET REQUEST");
+            player1.handleGetRequest(color1.toString());
+
+
+            player1.start();
+            player1.join();
+
         }
     }
 }

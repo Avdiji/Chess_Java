@@ -96,6 +96,14 @@ public class HTTP_Client implements Runnable {
         gameWindow.movePiece(captured, marked);
     }
 
+    /** Method sends a Get request to the Server **/
+    private void sendGetRequest(final BufferedWriter bw, final String hostname) throws IOException {
+        bw.write("GET / HTTP/1.1\r\n");
+        bw.write("Host: " + hostname + "\r\n");
+        bw.write("\r\n");
+        bw.flush();
+    }
+
     @Override
     public void run() {
         try (Socket socket = new Socket(hostname, port);
@@ -108,7 +116,14 @@ public class HTTP_Client implements Runnable {
             ss.setString_button(STRING_NOERROR_BUTTON);
             serverLogin.setVisible(false);
 
-            initPlayers(br.readLine());
+            sendGetRequest(bw, hostname);
+
+            while(!br.readLine().isEmpty());
+            System.out.println(br.readLine());
+
+            sendGetRequest(bw, hostname);
+            while (!br.readLine().isEmpty());
+            System.out.println(br.readLine());
 
 //            ss.setVisible(false);
 //            ChessField chessField = new ChessField(player1, player2);
@@ -126,6 +141,9 @@ public class HTTP_Client implements Runnable {
 //                    executeClientMove(line, gameWindow);
 //                }
 //            }
+
+
+            while (true);
 
         } catch (IOException e) {
             SubmitScreen ss = new SubmitScreen(serverLogin);
