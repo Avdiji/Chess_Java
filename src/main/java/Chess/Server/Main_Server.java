@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class Main_Server {
     public static void main(String... args) throws IOException, InterruptedException {
-        ChessServer server = new ChessServer();
+        HTTP_Server server = new HTTP_Server();
         server.runServer();
     }
 }

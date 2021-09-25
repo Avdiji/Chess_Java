@@ -1,6 +1,6 @@
 package Chess.Game.GUI.ClientGUI;
 
-import Chess.Client.ChessClient;
+import Chess.Client.HTTP_Client;
 import Chess.Game.GUI.IChessFrame;
 import Chess.Game.GUI.MainMenu;
 
@@ -149,7 +149,7 @@ public class ServerLogin extends JFrame implements IChessFrame {
         button_startGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Thread clientThread = new Thread(new ChessClient(getServerLogin()));
+                Thread clientThread = new Thread(new HTTP_Client(getServerLogin()));
                 clientThread.start();
             }
         });

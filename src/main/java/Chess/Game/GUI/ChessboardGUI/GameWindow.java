@@ -1,6 +1,6 @@
 package Chess.Game.GUI.ChessboardGUI;
 
-import Chess.Client.ClientMoveSender;
+import Chess.Client.HTTP_ClientHandler;
 import Chess.Game.GUI.IChessFrame;
 import Chess.Game.GUI.MainMenu;
 import Chess.Game.GUI.Scoreboard;
@@ -93,7 +93,7 @@ public class GameWindow implements IChessFrame {
     /**
      * Variable to notify, after executing a move
      **/
-    private ClientMoveSender notifyClient;
+    private HTTP_ClientHandler notifyClient;
 
     /**
      * Constructor
@@ -117,7 +117,7 @@ public class GameWindow implements IChessFrame {
      *
      * @param notifyClient
      */
-    public void setNotifyClient(final ClientMoveSender notifyClient) {
+    public void setNotifyClient(final HTTP_ClientHandler notifyClient) {
         this.notifyClient = notifyClient;
     }
 

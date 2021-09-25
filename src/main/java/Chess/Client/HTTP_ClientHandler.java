@@ -11,7 +11,7 @@ import java.io.IOException;
  * <p>
  * Class generates The move to be sent to the server after executing it
  */
-public class ClientMoveSender implements Runnable {
+public class HTTP_ClientHandler implements Runnable {
 
     /**
      * Corresponding gameWindow of the Client
@@ -41,7 +41,7 @@ public class ClientMoveSender implements Runnable {
      *
      * @param gameWindow
      */
-    public ClientMoveSender(final GameWindow gameWindow, final Player clientPlayer, final BufferedWriter bw) {
+    public HTTP_ClientHandler(final GameWindow gameWindow, final Player clientPlayer, final BufferedWriter bw) {
         this.gameWindow = gameWindow;
         this.clientPlayer = clientPlayer;
         this.bw = bw;

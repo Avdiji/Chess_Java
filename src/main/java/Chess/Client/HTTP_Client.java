@@ -22,50 +22,37 @@ import java.net.Socket;
  * <p>
  * Client, that communicates with the ChessServer
  */
-public class ChessClient implements Runnable {
+public class HTTP_Client implements Runnable {
 
-    /**
-     * initialization path of classic chess
-     **/
+    /** initialization path of classic chess **/
     private static final String PATH_INIT = "src/main/resources/initilization/init_default.csv";
 
-    /**
-     * Strings for the submit screen if successfull
-     **/
+    /** Strings for the submit screen if successfull **/
     private static final String STRING_NOERROR_LABEL = "Waiting for other Player...";
     private static final String STRING_NOERROR_BUTTON = "Cancel";
 
-    /**
-     * Port used to connect to server
-     **/
+    /** Port used to connect to server **/
     private final int port;
-    /**
-     * Hostname of the Server this client shall connect with
-     **/
+
+    /** Hostname of the Server this client shall connect with **/
     private final String hostname;
 
-    /**
-     * LoginScreen of this client
-     **/
+    /** LoginScreen of this client **/
     private final ServerLogin serverLogin;
 
-    /**
-     * Players
-     **/
+    /** Players **/
     private Player player1;
     private Player player2;
 
-    /**
-     * Helper Object, sends moves to the Client
-     **/
-    private ClientMoveSender moveGenerator;
+    /** Helper Object, sends moves to the Client **/
+    private HTTP_ClientHandler moveGenerator;
 
     /**
      * Constructor
      *
      * @param serverLogin
      */
-    public ChessClient(final ServerLogin serverLogin) {
+    public HTTP_Client(final ServerLogin serverLogin) {
         this.serverLogin = serverLogin;
         port = serverLogin.getPort();
         hostname = serverLogin.getHostname();
@@ -123,22 +110,22 @@ public class ChessClient implements Runnable {
 
             initPlayers(br.readLine());
 
-            ss.setVisible(false);
-            ChessField chessField = new ChessField(player1, player2);
-            chessField.initField(PATH_INIT);
-            GameWindow gameWindow = new GameWindow(chessField, serverLogin.getMainMenu().getScoreboard());
-            moveGenerator = new ClientMoveSender(gameWindow, player1.getPlayerColor() == EPlayerColor.NONE ? player2 : player1, bw);
-            gameWindow.setNotifyClient(moveGenerator);
-
-            Thread readThread = new Thread(moveGenerator);
-            readThread.start();
-
-            while (!moveGenerator.endedGame()) {
-                String line;
-                if ((line = br.readLine()) != null && !line.isEmpty()) {
-                    executeClientMove(line, gameWindow);
-                }
-            }
+//            ss.setVisible(false);
+//            ChessField chessField = new ChessField(player1, player2);
+//            chessField.initField(PATH_INIT);
+//            GameWindow gameWindow = new GameWindow(chessField, serverLogin.getMainMenu().getScoreboard());
+//            moveGenerator = new HTTP_ClientHandler(gameWindow, player1.getPlayerColor() == EPlayerColor.NONE ? player2 : player1, bw);
+//            gameWindow.setNotifyClient(moveGenerator);
+//
+//            Thread readThread = new Thread(moveGenerator);
+//            readThread.start();
+//
+//            while (!moveGenerator.endedGame()) {
+//                String line;
+//                if ((line = br.readLine()) != null && !line.isEmpty()) {
+//                    executeClientMove(line, gameWindow);
+//                }
+//            }
 
         } catch (IOException e) {
             SubmitScreen ss = new SubmitScreen(serverLogin);
