@@ -40,24 +40,16 @@ public class HTTP_Server {
 
             HTTP_ServerHandler player1 = new HTTP_ServerHandler(color1, serverSocket);
             HTTP_ServerHandler player2 = new HTTP_ServerHandler(color2, serverSocket);
-            player1.setEnemy(player2);
-            player2.setEnemy(player1);
 
-
-            System.out.println();
-            System.out.println("STARTING GET REQUEST");
             player1.handleGetRequest(color1.toString());
-            System.out.println();
-            System.out.println("STARTING GET REQUEST");
             player2.handleGetRequest(color2.toString());
 
             player1.establishConnection();
+            player2.establishConnection();
+            player1.handlePutRequest();
+            player2.handleGetRequest("COOLEN");
 
-            player1.start();
-            player2.start();
-            player1.join();
-            player2.join();
-
+            while (true);
         }
     }
 }

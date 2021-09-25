@@ -135,9 +135,7 @@ public class HTTP_Client implements Runnable {
             sendGetRequest(bw, hostname);
 
             String line;
-            while (!(line = br.readLine()).isEmpty()) {
-                System.out.println(line);
-            }
+            while (!br.readLine().isEmpty()) ;
             System.out.println((line = br.readLine()));
 
             ss.setVisible(false);

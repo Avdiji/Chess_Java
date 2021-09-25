@@ -1,6 +1,7 @@
 package Chess.Client;
 
 import Chess.Game.GUI.ChessboardGUI.GameWindow;
+import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Player.Player;
 
 import java.io.BufferedReader;
@@ -102,15 +103,16 @@ public class HTTP_ClientHandler implements Runnable {
      */
     private void sendPutRequest(String message) throws IOException {
         message += "\r\n";
-        bw.write("PUT / HTTP/1.1\r\n");
+        bw.write("POST / HTTP/1.1\r\n");
         bw.write("Host: " + hostname + "\r\n");
-        bw.write("Content-Type: text/html\r\n");
+        bw.write("Content-Type: text/plain\r\n");
         bw.write("Content-Length: " + message.length() + "\r\n");
         bw.write("\r\n");
         bw.write(message + "\r\n");
         bw.write("\r\n");
         bw.flush();
 
+        System.out.println();
         String line;
         while ((line = br.readLine()) != null){
             System.out.println(line);
@@ -118,13 +120,32 @@ public class HTTP_ClientHandler implements Runnable {
 
     }
 
+    /** Method sends Get request **/
+    private void sendGetRequest() throws IOException {
+        bw.write("GET / HTTP/1.1\r\n");
+        bw.write("Host: " + hostname + "\r\n");
+        bw.write("\r\n");
+        bw.flush();
+
+        System.out.println();
+        String line;
+        while ((line = br.readLine()) != null){
+            System.out.println(line);
+        }
+    }
+
     @Override
     public void run() {
         while (!endedGame) {
             try {
+                if(clientPlayer.getPlayerColor() == EPlayerColor.BLACK){
+                    sendGetRequest();
+                }
+
                 synchronized (this) {
                     this.wait();
                 }
+
                 if (executedMove) {
                     sendPutRequest(clientPlayer.getLastMove());
                     executedMove = false;

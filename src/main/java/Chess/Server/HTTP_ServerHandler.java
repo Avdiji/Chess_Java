@@ -15,7 +15,7 @@ import java.net.Socket;
  * <p>
  * Class represents a Client Connection (an online Player)
  */
-public class HTTP_ServerHandler extends Thread {
+public class HTTP_ServerHandler{
 
     /**
      * Color of the Player
@@ -35,11 +35,6 @@ public class HTTP_ServerHandler extends Thread {
     private BufferedWriter bw;
 
     /**
-     * Enemy Player
-     **/
-    private HTTP_ServerHandler enemy;
-
-    /**
      * Constructor
      *
      * @param playerColor  color of the Player
@@ -50,14 +45,6 @@ public class HTTP_ServerHandler extends Thread {
         this.serverSocket = serverSocket;
 
         establishConnection();
-    }
-
-    /**
-     * Setter for {@link #enemy}
-     * @param enemy
-     */
-    protected void setEnemy(final HTTP_ServerHandler enemy){
-        this.enemy = enemy;
     }
 
     /**
@@ -73,13 +60,15 @@ public class HTTP_ServerHandler extends Thread {
      * Method handles Get requests
      **/
     protected void handleGetRequest(String message) throws IOException {
+        System.out.println();
+        System.out.println("START GET REQUEST");
         String line;
         while (!(line = br.readLine()).isEmpty()) {
             System.out.println(line);
         }
         message += "\r\n";
         bw.write("HTTP/1.1 200 OK\r\n");
-        bw.write("Content-Type: text/html; charset=iso-8859-1\r\n");
+        bw.write("Content-Type: text/plain\r\n");
         bw.write("Content-Length: " + message.length() + "\r\n");
         bw.write("\r\n");
         bw.write(message + "\r\n");
@@ -96,17 +85,15 @@ public class HTTP_ServerHandler extends Thread {
      * Method handles Put requests
      **/
     protected void handlePutRequest() throws IOException {
+        System.out.println();
+        System.out.println("START PUT REQUEST");
         String line;
-        while (!(line = br.readLine()).isEmpty()) {
-            System.out.println(line);
-        }
-        System.out.println(br.readLine());
-        String message = "PUTEN\r\n";
+//        while (!(line = br.readLine()).isEmpty()) {
+//            System.out.println(line);
+//        }
+//        System.out.println(br.readLine());
         bw.write("HTTP/1.1 200 OK\r\n");
-        bw.write("Content-Type: text/html\r\n");
-        bw.write("Content-Length: " + message.length() + "\r\n");
-        bw.write("\r\n");
-        bw.write(message + "\r\n");
+        bw.write("Content-Type: text/plain\r\n");
         bw.write("\r\n");
         bw.flush();
 
@@ -114,32 +101,5 @@ public class HTTP_ServerHandler extends Thread {
         bw.close();
         br.close();
         System.out.println("ENDING PUT REQUEST");
-    }
-
-    @Override
-    public void run() {
-        while (serverSocket.isBound() && !serverSocket.isClosed()) {
-            try {
-                String line = br.readLine();
-
-                if (line != null) {
-                    if (line.contains("GET")) {
-                        System.out.println();
-                        System.out.println("STARTING GET REQUEST");
-                        System.out.println(line);
-                        handleGetRequest(playerColor.toString());
-                        establishConnection();
-                    } else if (line.contains("PUT")) {
-                        System.out.println();
-                        System.out.println("STARTING PUT REQUEST");
-                        System.out.println(line);
-                        handlePutRequest();
-                        enemy.establishConnection();
-                    }
-                }
-            } catch (IOException e) {
-            }
-        }
-
     }
 }
