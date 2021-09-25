@@ -53,6 +53,14 @@ public class HTTP_ServerHandler extends Thread {
     }
 
     /**
+     * Setter for {@link #enemy}
+     * @param enemy
+     */
+    protected void setEnemy(final HTTP_ServerHandler enemy){
+        this.enemy = enemy;
+    }
+
+    /**
      * Method establishes a new socket connection
      **/
     protected void establishConnection() throws IOException {
@@ -126,7 +134,7 @@ public class HTTP_ServerHandler extends Thread {
                         System.out.println("STARTING PUT REQUEST");
                         System.out.println(line);
                         handlePutRequest();
-                        establishConnection();
+                        enemy.establishConnection();
                     }
                 }
             } catch (IOException e) {
