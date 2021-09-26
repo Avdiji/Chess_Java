@@ -18,7 +18,9 @@ import java.io.IOException;
  */
 public class HTTP_ClientHandler implements Runnable {
 
-    /** Signal to continue without altering the game **/
+    /**
+     * Signal to continue without altering the game
+     **/
     public final static String SIGNAL_CONTINUE = "CONTINUE";
 
     /**
@@ -147,6 +149,23 @@ public class HTTP_ClientHandler implements Runnable {
     }
 
     /**
+     * Method extracts the Body from a request
+     **/
+    private String extractBody() throws IOException {
+        System.out.println();
+        System.out.println("IN");
+        String result;
+        while (!(result = br.readLine()).isEmpty()) {
+            System.out.println(result);
+        }
+        result = br.readLine();
+        System.out.println(result);
+        System.out.println("OUT");
+        System.out.println();
+        return result;
+    }
+
+    /**
      * Method sends Get request
      **/
     private void sendGetRequest() throws IOException {
@@ -154,28 +173,20 @@ public class HTTP_ClientHandler implements Runnable {
         bw.write("Host: " + hostname + "\r\n");
         bw.write("\r\n");
         bw.flush();
-
-        String line;
-        System.out.println();
-        System.out.println("STRATING GET");
-        while (!(line = br.readLine()).isEmpty()){
-            System.out.println(line);
-        }
-        line = br.readLine();
-        System.out.println(line);
-        System.out.println("ENDING GET");
-        System.out.println();
-        if(!line.equals(SIGNAL_CONTINUE))
-            executeClientMove(line, gameWindow);
     }
 
     @Override
     public void run() {
         while (!endedGame) {
             try {
+                synchronized (this) {
+                    this.wait(1000);
+                }
                 if (clientPlayer.getPlayerColor() == EPlayerColor.BLACK) {
                     sendGetRequest();
+                    extractBody();
                     sendGetRequest();
+                    executeClientMove(extractBody(), gameWindow);
                 }
 
                 synchronized (this) {
@@ -183,12 +194,21 @@ public class HTTP_ClientHandler implements Runnable {
                 }
                 if (executedMove) {
                     sendPostRequest(clientPlayer.getLastMove());
+                    extractBody();
                     executedMove = false;
                 }
+
+                if (clientPlayer.getPlayerColor() == EPlayerColor.WHITE) {
+                    sendGetRequest();
+                    extractBody();
+                    extractBody();
+                    sendGetRequest();
+                    extractBody();
+                }
+
 
             } catch (InterruptedException | IOException e) {
             }
         }
-
     }
 }

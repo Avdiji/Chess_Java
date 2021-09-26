@@ -53,12 +53,12 @@ public class HTTP_Server {
             player2.establishConnection();
             player2.handleGetRequest(player1.getLastMoveReceived());
 
-//            player1.establishConnection();
-//            player2.establishConnection();
-//            player1.handleGetRequest(HTTP_ClientHandler.SIGNAL_CONTINUE);
-//            player2.handlePostRequest();
-//            player1.establishConnection();
-//            player1.handleGetRequest(player2.getLastMoveReceived());
+            player1.establishConnection();
+            player2.establishConnection();
+            player1.handleGetRequest(HTTP_ClientHandler.SIGNAL_CONTINUE);
+            player2.handlePostRequest();
+            player1.establishConnection();
+            player1.handleGetRequest(player2.getLastMoveReceived());
 
             while (true);
         }

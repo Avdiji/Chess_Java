@@ -106,6 +106,7 @@ public class HTTP_ServerHandler {
             System.out.println(line);
         }
         lastMoveReceived = br.readLine();
+        System.out.println(lastMoveReceived);
         bw.write("HTTP/1.1 200 OK\r\n");
         bw.write("Content-Type: text/plain\r\n");
         bw.write("\r\n");
