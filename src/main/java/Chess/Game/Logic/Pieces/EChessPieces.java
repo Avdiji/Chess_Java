@@ -7,19 +7,19 @@ package Chess.Game.Logic.Pieces;
  */
 public enum EChessPieces {
 
-    PAWN_WHITE("src/main/resources/Pieces/White/pawn_white.png"),
-    PAWN_BLACK("src/main/resources/Pieces/Black/pawn_black.png"),
-    ROOK_WHITE("src/main/resources/Pieces/White/rook_white.png"),
-    ROOK_BLACK("src/main/resources/Pieces/Black/rook_black.png"),
-    BISHOP_WHITE("src/main/resources/Pieces/White/bishop_white.png"),
-    BISHOP_BLACK("src/main/resources/Pieces/Black/bishop_black.png"),
-    KNIGHT_WHITE("src/main/resources/Pieces/White/knight_white.png"),
-    KNIGHT_BLACK("src/main/resources/Pieces/Black/knight_black.png"),
-    QUEEN_WHITE("src/main/resources/Pieces/White/queen_white.png"),
-    QUEEN_BLACK("src/main/resources/Pieces/Black/queen_black.png"),
-    KING_WHITE("src/main/resources/Pieces/White/king_white.png"),
-    KING_BLACK("src/main/resources/Pieces/Black/king_black.png"),
-    EMPTY("src/main/resources/Pieces/empty.png");
+    PAWN_WHITE("/Pieces/White/pawn_white.png"),
+    PAWN_BLACK("/Pieces/Black/pawn_black.png"),
+    ROOK_WHITE("/Pieces/White/rook_white.png"),
+    ROOK_BLACK("/Pieces/Black/rook_black.png"),
+    BISHOP_WHITE("/Pieces/White/bishop_white.png"),
+    BISHOP_BLACK("/Pieces/Black/bishop_black.png"),
+    KNIGHT_WHITE("/Pieces/White/knight_white.png"),
+    KNIGHT_BLACK("/Pieces/Black/knight_black.png"),
+    QUEEN_WHITE("/Pieces/White/queen_white.png"),
+    QUEEN_BLACK("/Pieces/Black/queen_black.png"),
+    KING_WHITE("/Pieces/White/king_white.png"),
+    KING_BLACK("/Pieces/Black/king_black.png"),
+    EMPTY("/Pieces/empty.png");
 
     /**
      * variable contains the path to the corresponding piece

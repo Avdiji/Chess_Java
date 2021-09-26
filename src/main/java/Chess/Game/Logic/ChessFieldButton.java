@@ -5,10 +5,13 @@ import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Pieces.IChessPiece;
 import Chess.Game.Logic.Player.EPlayerColor;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Fitor Avdiji
@@ -171,7 +174,7 @@ public class ChessFieldButton extends JButton {
         this.endangered = endangered;
         if (type == EChessPieces.EMPTY) {
             if (endangered) {
-                this.setIcon(new ImageIcon(EChessPieces.EMPTY.getPath()));
+                setPieceIcon(EChessPieces.EMPTY.getPath());
             } else {
                 this.setIcon(new ImageIcon());
             }
@@ -227,6 +230,17 @@ public class ChessFieldButton extends JButton {
     //SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER //
     //SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER //
 
+    /**
+     * Method sets the icon of a Piece (needed for jar)
+     * @param path path of the corresponding Image
+     */
+    private void setPieceIcon(final String path){
+        InputStream is = getClass().getResourceAsStream(path);
+        try {
+            this.setIcon(new ImageIcon(ImageIO.read(is)));
+        }catch (IOException e){}
+    }
+
     /** Method initializes the Button */
     public void initPiece() {
         this.setPreferredSize(new Dimension(IChessPiece.SIZE_FIELD, IChessPiece.SIZE_FIELD));
@@ -239,7 +253,7 @@ public class ChessFieldButton extends JButton {
         if (type == EChessPieces.EMPTY) {
             this.setIcon(new ImageIcon());
         } else {
-            this.setIcon(new ImageIcon(type.getPath()));
+            setPieceIcon(type.getPath());
         }
     }
 }

@@ -44,9 +44,9 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
      **/
     private static final String[] STRING_GAMEMODES = {"Classic", "Rook/Bishop Only", "Pawn/Knight Only"};
     private static final String STRING_GAMEMODE_PATH[] = {
-            "src/main/resources/initilization/init_default.csv",
-            "src/main/resources/initilization/init_rook_bishop.csv",
-            "src/main/resources/initilization/init_pawn_knight.csv"};
+            "/initilization/init_default.csv",
+            "/initilization/init_rook_bishop.csv",
+            "/initilization/init_pawn_knight.csv"};
 
     /**
      * Components of this Panel

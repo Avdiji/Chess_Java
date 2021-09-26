@@ -1,5 +1,6 @@
 package Chess.Game.GUI;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -11,6 +12,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Fitor Avdiji
@@ -22,10 +25,10 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
     /**
      * Path to the Image of the Main Menu
      **/
-    private static final String IMAGE_PATH_DARKMODE = "src/main/resources/Images/MainMenuImage_Darkmode.png";
-    private static final String IMAGE_PATH_LIGHTMODE = "src/main/resources/Images/MainMenuImage_Lightmode.png";
-    private static final String IMAGE_PATH_BLUE = "src/main/resources/Images/MainMenuImage_Blue.png";
-    private static final String IMAGE_PATH_GREEN = "src/main/resources/Images/MainMenuImage_Green.png";
+    private static final String IMAGE_PATH_DARKMODE = "/Images/MainMenuImage_Darkmode.png";
+    private static final String IMAGE_PATH_LIGHTMODE = "/Images/MainMenuImage_Lightmode.png";
+    private static final String IMAGE_PATH_BLUE = "/Images/MainMenuImage_Blue.png";
+    private static final String IMAGE_PATH_GREEN = "/Images/MainMenuImage_Green.png";
 
     /**
      * Margins of the components of this panel
@@ -74,6 +77,17 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
     }
 
     /**
+     * Method sets the Icon of {@link #label_image}
+     * @param path path of the Image
+     */
+    private void setLabelIcon(final String path){
+        InputStream is = getClass().getResourceAsStream(path);
+        try{
+            label_image.setIcon(new ImageIcon(ImageIO.read(is)));
+        }catch (IOException e){}
+    }
+
+    /**
      * Method initializes {@link #button_lightmode}
      */
     private void initButton_lightmode() {
@@ -91,7 +105,7 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
                 MainMenu.COLOR_FIELD_WHITE = COLOR_FIELD_WHITE_LIGHTMODE;
                 MainMenu.COLOR_FIELD_BLACK = COLOR_FIELD_BLACK_LIGHTMODE;
                 MainMenu.COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_LIGHTMODE;
-                label_image.setIcon(new ImageIcon(IMAGE_PATH_LIGHTMODE));
+                setLabelIcon(IMAGE_PATH_LIGHTMODE);
                 mainMenu.reColor();
             }
         });
@@ -115,7 +129,7 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
                 MainMenu.COLOR_FIELD_WHITE = COLOR_FIELD_WHITE_DARKMODE;
                 MainMenu.COLOR_FIELD_BLACK = COLOR_FIELD_BLACK_DARKMODE;
                 MainMenu.COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_DARKMODE;
-                label_image.setIcon(new ImageIcon(IMAGE_PATH_DARKMODE));
+                setLabelIcon(IMAGE_PATH_DARKMODE);
                 mainMenu.reColor();
             }
         });
@@ -138,7 +152,7 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
                 MainMenu.COLOR_FIELD_WHITE = COLOR_FIELD_WHITE_BLUE;
                 MainMenu.COLOR_FIELD_BLACK = COLOR_FIELD_BLACK_BLUE;
                 MainMenu.COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_BLUE;
-                label_image.setIcon(new ImageIcon(IMAGE_PATH_BLUE));
+                setLabelIcon(IMAGE_PATH_BLUE);
                 mainMenu.reColor();
             }
         });
@@ -162,7 +176,7 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
                 MainMenu.COLOR_FIELD_WHITE = COLOR_FIELD_WHITE_GREEN;
                 MainMenu.COLOR_FIELD_BLACK = COLOR_FIELD_BLACK_GREEN;
                 MainMenu.COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_GREEN;
-                label_image.setIcon(new ImageIcon(IMAGE_PATH_GREEN));
+                setLabelIcon(IMAGE_PATH_GREEN);
                 mainMenu.reColor();
             }
         });
@@ -178,7 +192,7 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
     public void initComponents() {
         label_image = new JLabel();
         label_image.setBorder(new EmptyBorder(MARGIN_LABEL_IMAGE[0], MARGIN_LABEL_IMAGE[1], MARGIN_LABEL_IMAGE[2], MARGIN_LABEL_IMAGE[3]));
-        label_image.setIcon(new ImageIcon(IMAGE_PATH_DARKMODE));
+        setLabelIcon(IMAGE_PATH_DARKMODE);
 
         panel_colorModes = new JPanel();
         panel_colorModes.setLayout(new GridBagLayout());
