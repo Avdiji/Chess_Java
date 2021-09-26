@@ -18,6 +18,9 @@ import java.io.IOException;
  */
 public class HTTP_ClientHandler implements Runnable {
 
+    /** Time to wait after a response has been read **/
+    private static final int TIMER_WAIT = 500;
+
     /**
      * Signal to continue without altering the game
      **/
@@ -153,16 +156,9 @@ public class HTTP_ClientHandler implements Runnable {
      * Method extracts the Body from a request
      **/
     private String extractBody() throws IOException {
-        System.out.println();
-        System.out.println("IN");
         String result;
-        while (!(result = br.readLine()).isEmpty()) {
-            System.out.println(result);
-        }
+        while (!br.readLine().isEmpty());
         result = br.readLine();
-        System.out.println(result);
-        System.out.println("OUT");
-        System.out.println();
         if (result.equals(SIGNAL_REPEAT) || result.equals(SIGNAL_CONTINUE))
             result = extractBody();
         return result;
@@ -178,15 +174,22 @@ public class HTTP_ClientHandler implements Runnable {
         bw.flush();
     }
 
+    /** Method pauses the game for a bit (to prevent issues) **/
+    private void pause() throws InterruptedException {
+        synchronized (this){
+            this.wait(TIMER_WAIT);
+        }
+
+    }
+
     @Override
     public void run() {
         boolean first = true;
         while (!endedGame) {
             try {
-                synchronized (this) {
-                    this.wait(1000);
-                }
+
                 if (clientPlayer.getPlayerColor() == EPlayerColor.BLACK) {
+                    pause();
                     sendGetRequest();
                     sendGetRequest();
                     executeClientMove(extractBody(), gameWindow);
@@ -202,6 +205,7 @@ public class HTTP_ClientHandler implements Runnable {
                 }
 
                 if (clientPlayer.getPlayerColor() == EPlayerColor.WHITE) {
+                    pause();
                     sendGetRequest();
                     sendGetRequest();
                     executeClientMove(extractBody(), gameWindow);

@@ -36,8 +36,7 @@ public class HTTP_Server {
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
 
-//            EPlayerColor color1 = random.nextInt(2) == 0 ? EPlayerColor.WHITE : EPlayerColor.BLACK;
-            EPlayerColor color1 = EPlayerColor.WHITE;
+            EPlayerColor color1 = random.nextInt(2) == 0 ? EPlayerColor.WHITE : EPlayerColor.BLACK;
             EPlayerColor color2 = color1 == EPlayerColor.WHITE ? EPlayerColor.BLACK : EPlayerColor.WHITE;
 
             HTTP_ServerHandler player1 = new HTTP_ServerHandler(color1, serverSocket);

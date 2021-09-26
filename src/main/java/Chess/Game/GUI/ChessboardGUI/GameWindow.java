@@ -142,6 +142,14 @@ public class GameWindow implements IChessFrame {
     }
 
     /**
+     * Setter for the Text of {@link #title}
+     * @param title
+     */
+    public void setTitleText(final String title){
+        this.title.setText(title);
+    }
+
+    /**
      * Method adds a Piece to the corresponding Grave
      *
      * @param type  type of the captured button

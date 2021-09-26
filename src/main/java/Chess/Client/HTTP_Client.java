@@ -111,13 +111,14 @@ public class HTTP_Client implements Runnable {
 
             String line;
             while (!br.readLine().isEmpty()) ;
-            System.out.println((line = br.readLine()));
+            line = br.readLine();
 
             ss.setVisible(false);
             initPlayers(line);
             ChessField chessField = new ChessField(player1, player2);
             chessField.initField(PATH_INIT);
             GameWindow gameWindow = new GameWindow(chessField, serverLogin.getMainMenu().getScoreboard());
+            gameWindow.setTitleText(line);
             moveGenerator = new HTTP_ClientHandler(gameWindow, player1.getPlayerColor() == EPlayerColor.NONE ? player2 : player1, bw, br);
             moveGenerator.setHostname(hostname);
             gameWindow.setNotifyClient(moveGenerator);

@@ -74,12 +74,7 @@ public class HTTP_ServerHandler {
      * Method handles Get requests
      **/
     protected void handleGetRequest(String message) throws IOException {
-        System.out.println();
-        System.out.println("START GET REQUEST");
-        String line;
-        while (!(line = br.readLine()).isEmpty()) {
-            System.out.println(line);
-        }
+        while (!br.readLine().isEmpty()) ;
         message += "\r\n";
         bw.write("HTTP/1.1 200 OK\r\n");
         bw.write("Content-Type: text/plain\r\n");
@@ -92,21 +87,15 @@ public class HTTP_ServerHandler {
         playerSocket.close();
         bw.close();
         br.close();
-        System.out.println("ENDING GET REQUEST");
     }
 
     /**
      * Method handles Put requests
      **/
     protected void handlePostRequest() throws IOException {
-        System.out.println();
-        System.out.println("START POST REQUEST");
         String line;
-        while (!(line = br.readLine()).isEmpty()) {
-            System.out.println(line);
-        }
+        while (!br.readLine().isEmpty()) ;
         lastMoveReceived = br.readLine();
-        System.out.println(lastMoveReceived);
         bw.write("HTTP/1.1 200 OK\r\n");
         bw.write("Content-Type: text/plain\r\n");
         bw.write("\r\n");
@@ -115,6 +104,5 @@ public class HTTP_ServerHandler {
         playerSocket.close();
         bw.close();
         br.close();
-        System.out.println("ENDING POST REQUEST");
     }
 }
