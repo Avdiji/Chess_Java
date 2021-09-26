@@ -163,7 +163,7 @@ public class HTTP_ClientHandler implements Runnable {
         System.out.println(result);
         System.out.println("OUT");
         System.out.println();
-        if (result.equals(SIGNAL_REPEAT))
+        if (result.equals(SIGNAL_REPEAT) || result.equals(SIGNAL_CONTINUE))
             result = extractBody();
         return result;
     }
@@ -188,7 +188,6 @@ public class HTTP_ClientHandler implements Runnable {
                 }
                 if (clientPlayer.getPlayerColor() == EPlayerColor.BLACK) {
                     sendGetRequest();
-                    extractBody();
                     sendGetRequest();
                     executeClientMove(extractBody(), gameWindow);
                 }
@@ -204,7 +203,6 @@ public class HTTP_ClientHandler implements Runnable {
 
                 if (clientPlayer.getPlayerColor() == EPlayerColor.WHITE) {
                     sendGetRequest();
-                    extractBody();
                     sendGetRequest();
                     executeClientMove(extractBody(), gameWindow);
                 }
