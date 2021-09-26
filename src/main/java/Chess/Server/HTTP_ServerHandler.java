@@ -15,7 +15,7 @@ import java.net.Socket;
  * <p>
  * Class represents a Client Connection (an online Player)
  */
-public class HTTP_ServerHandler{
+public class HTTP_ServerHandler {
 
     /**
      * Color of the Player
@@ -35,6 +35,11 @@ public class HTTP_ServerHandler{
     private BufferedWriter bw;
 
     /**
+     * Last move received from the Clients
+     **/
+    private String lastMoveReceived;
+
+    /**
      * Constructor
      *
      * @param playerColor  color of the Player
@@ -45,6 +50,15 @@ public class HTTP_ServerHandler{
         this.serverSocket = serverSocket;
 
         establishConnection();
+    }
+
+    /**
+     * Getter for {@link #lastMoveReceived}
+     *
+     * @return lastMoveReceived
+     */
+    protected String getLastMoveReceived() {
+        return lastMoveReceived;
     }
 
     /**
@@ -84,14 +98,14 @@ public class HTTP_ServerHandler{
     /**
      * Method handles Put requests
      **/
-    protected void handlePutRequest() throws IOException {
+    protected void handlePostRequest() throws IOException {
         System.out.println();
-        System.out.println("START PUT REQUEST");
+        System.out.println("START POST REQUEST");
         String line;
-//        while (!(line = br.readLine()).isEmpty()) {
-//            System.out.println(line);
-//        }
-//        System.out.println(br.readLine());
+        while (!(line = br.readLine()).isEmpty()) {
+            System.out.println(line);
+        }
+        lastMoveReceived = br.readLine();
         bw.write("HTTP/1.1 200 OK\r\n");
         bw.write("Content-Type: text/plain\r\n");
         bw.write("\r\n");
@@ -100,6 +114,6 @@ public class HTTP_ServerHandler{
         playerSocket.close();
         bw.close();
         br.close();
-        System.out.println("ENDING PUT REQUEST");
+        System.out.println("ENDING POST REQUEST");
     }
 }

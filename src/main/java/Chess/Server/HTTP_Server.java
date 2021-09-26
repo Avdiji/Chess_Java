@@ -2,13 +2,8 @@ package Chess.Server;
 
 import Chess.Game.Logic.Player.EPlayerColor;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.Random;
 
 /**
@@ -44,10 +39,14 @@ public class HTTP_Server {
             player1.handleGetRequest(color1.toString());
             player2.handleGetRequest(color2.toString());
 
-            player1.establishConnection();
             player2.establishConnection();
-            player1.handlePutRequest();
-            player2.handleGetRequest("COOLEN");
+            player1.establishConnection();
+            player2.handleGetRequest("HALLOREN");
+            player1.handlePostRequest();
+
+            player2.establishConnection();
+            player2.handleGetRequest(player1.getLastMoveReceived());
+
 
             while (true);
         }

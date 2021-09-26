@@ -101,7 +101,7 @@ public class HTTP_ClientHandler implements Runnable {
      *
      * @param message
      */
-    private void sendPutRequest(String message) throws IOException {
+    private void sendPostRequest(String message) throws IOException {
         message += "\r\n";
         bw.write("POST / HTTP/1.1\r\n");
         bw.write("Host: " + hostname + "\r\n");
@@ -114,13 +114,15 @@ public class HTTP_ClientHandler implements Runnable {
 
         System.out.println();
         String line;
-        while ((line = br.readLine()) != null){
+        while ((line = br.readLine()) != null) {
             System.out.println(line);
         }
 
     }
 
-    /** Method sends Get request **/
+    /**
+     * Method sends Get request
+     **/
     private void sendGetRequest() throws IOException {
         bw.write("GET / HTTP/1.1\r\n");
         bw.write("Host: " + hostname + "\r\n");
@@ -129,16 +131,20 @@ public class HTTP_ClientHandler implements Runnable {
 
         System.out.println();
         String line;
-        while ((line = br.readLine()) != null){
+        System.out.println("GET REQUESTI");
+        while (!(line = br.readLine()).isEmpty()) {
             System.out.println(line);
         }
+        System.out.println(br.readLine());
+        System.out.println("JUMOPED OUT");
     }
 
     @Override
     public void run() {
         while (!endedGame) {
             try {
-                if(clientPlayer.getPlayerColor() == EPlayerColor.BLACK){
+                if (clientPlayer.getPlayerColor() == EPlayerColor.BLACK) {
+                    sendGetRequest();
                     sendGetRequest();
                 }
 
@@ -147,7 +153,7 @@ public class HTTP_ClientHandler implements Runnable {
                 }
 
                 if (executedMove) {
-                    sendPutRequest(clientPlayer.getLastMove());
+                    sendPostRequest(clientPlayer.getLastMove());
                     executedMove = false;
                 }
             } catch (InterruptedException | IOException e) {
