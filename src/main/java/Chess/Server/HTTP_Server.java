@@ -1,5 +1,6 @@
 package Chess.Server;
 
+import Chess.Client.HTTP_ClientHandler;
 import Chess.Game.Logic.Player.EPlayerColor;
 
 import java.io.IOException;
@@ -14,13 +15,19 @@ import java.util.Random;
 public class HTTP_Server {
 
 
-    /** Port of this Server **/
+    /**
+     * Port of this Server
+     **/
     private static final int PORT = 80;
 
-    /** Random object **/
+    /**
+     * Random object
+     **/
     private final static Random random = new Random();
 
-    /** Constructor **/
+    /**
+     * Constructor
+     **/
     public HTTP_Server() {
     }
 
@@ -41,12 +48,17 @@ public class HTTP_Server {
 
             player2.establishConnection();
             player1.establishConnection();
-            player2.handleGetRequest("HALLOREN");
+            player2.handleGetRequest(HTTP_ClientHandler.SIGNAL_CONTINUE);
             player1.handlePostRequest();
-
             player2.establishConnection();
             player2.handleGetRequest(player1.getLastMoveReceived());
 
+//            player1.establishConnection();
+//            player2.establishConnection();
+//            player1.handleGetRequest(HTTP_ClientHandler.SIGNAL_CONTINUE);
+//            player2.handlePostRequest();
+//            player1.establishConnection();
+//            player1.handleGetRequest(player2.getLastMoveReceived());
 
             while (true);
         }

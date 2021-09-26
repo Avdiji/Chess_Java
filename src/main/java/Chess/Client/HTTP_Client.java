@@ -84,31 +84,6 @@ public class HTTP_Client implements Runnable {
         player2 = new Player(playerColor.equals(EPlayerColor.WHITE.toString()) ? EPlayerColor.NONE : EPlayerColor.BLACK);
     }
 
-    /**
-     * Method decodes and executes the move, received from the server
-     *
-     * @param move last move Sent from the server
-     */
-    private void executeClientMove(final String move, final GameWindow gameWindow) {
-        String moveValues[] = move.split(";");
-
-        char row_marked = moveValues[0].charAt(0);
-        int column_marked = Integer.parseInt(moveValues[0].split("-")[1]);
-
-        char row_captured = moveValues[1].charAt(0);
-        int column_captured = Integer.parseInt(moveValues[1].split("-")[1]);
-
-        Position pos_marked = new Position(row_marked, column_marked);
-        Position pos_captured = new Position(row_captured, column_captured);
-
-        ChessFieldButton marked = gameWindow.getChessField().getField().stream().filter(button -> button.getPosition().equals(pos_marked)).findAny().get();
-        ChessFieldButton captured = gameWindow.getChessField().getField().stream().filter(button -> button.getPosition().equals(pos_captured)).findAny().get();
-
-        if (!moveValues[2].equals(EChessPieces.EMPTY.toString())) {
-            marked.setType(EChessPieces.valueOf(moveValues[2]));
-        }
-        gameWindow.movePiece(captured, marked);
-    }
 
     /**
      * Method sends a Get request to the Server

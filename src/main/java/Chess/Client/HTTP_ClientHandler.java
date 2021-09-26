@@ -1,8 +1,11 @@
 package Chess.Client;
 
 import Chess.Game.GUI.ChessboardGUI.GameWindow;
+import Chess.Game.Logic.ChessFieldButton;
+import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Player.Player;
+import Chess.Game.Logic.Position;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,6 +17,9 @@ import java.io.IOException;
  * Class generates The move to be sent to the server after executing it
  */
 public class HTTP_ClientHandler implements Runnable {
+
+    /** Signal to continue without altering the game **/
+    public final static String SIGNAL_CONTINUE = "CONTINUE";
 
     /**
      * Corresponding gameWindow of the Client
@@ -97,6 +103,33 @@ public class HTTP_ClientHandler implements Runnable {
     }
 
     /**
+     * Method decodes and executes the move, received from the server
+     *
+     * @param move last move Sent from the server
+     */
+    private void executeClientMove(final String move, final GameWindow gameWindow) {
+        String moveValues[] = move.split(";");
+
+        char row_marked = moveValues[0].charAt(0);
+        int column_marked = Integer.parseInt(moveValues[0].split("-")[1]);
+
+        char row_captured = moveValues[1].charAt(0);
+        int column_captured = Integer.parseInt(moveValues[1].split("-")[1]);
+
+        Position pos_marked = new Position(row_marked, column_marked);
+        Position pos_captured = new Position(row_captured, column_captured);
+
+        ChessFieldButton marked = gameWindow.getChessField().getField().stream().filter(button -> button.getPosition().equals(pos_marked)).findAny().get();
+        ChessFieldButton captured = gameWindow.getChessField().getField().stream().filter(button -> button.getPosition().equals(pos_captured)).findAny().get();
+
+        if (!moveValues[2].equals(EChessPieces.EMPTY.toString())) {
+            marked.setType(EChessPieces.valueOf(moveValues[2]));
+        }
+        gameWindow.movePiece(captured, marked);
+    }
+
+
+    /**
      * Method sends a message to the Server
      *
      * @param message
@@ -111,13 +144,6 @@ public class HTTP_ClientHandler implements Runnable {
         bw.write(message + "\r\n");
         bw.write("\r\n");
         bw.flush();
-
-        System.out.println();
-        String line;
-        while ((line = br.readLine()) != null) {
-            System.out.println(line);
-        }
-
     }
 
     /**
@@ -129,14 +155,18 @@ public class HTTP_ClientHandler implements Runnable {
         bw.write("\r\n");
         bw.flush();
 
-        System.out.println();
         String line;
-        System.out.println("GET REQUESTI");
-        while (!(line = br.readLine()).isEmpty()) {
+        System.out.println();
+        System.out.println("STRATING GET");
+        while (!(line = br.readLine()).isEmpty()){
             System.out.println(line);
         }
-        System.out.println(br.readLine());
-        System.out.println("JUMOPED OUT");
+        line = br.readLine();
+        System.out.println(line);
+        System.out.println("ENDING GET");
+        System.out.println();
+        if(!line.equals(SIGNAL_CONTINUE))
+            executeClientMove(line, gameWindow);
     }
 
     @Override
@@ -151,11 +181,11 @@ public class HTTP_ClientHandler implements Runnable {
                 synchronized (this) {
                     this.wait();
                 }
-
                 if (executedMove) {
                     sendPostRequest(clientPlayer.getLastMove());
                     executedMove = false;
                 }
+
             } catch (InterruptedException | IOException e) {
             }
         }
