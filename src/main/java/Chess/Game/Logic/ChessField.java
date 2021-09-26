@@ -136,7 +136,7 @@ public class ChessField {
     public void initField(final String initPath) {
         field = new ArrayList<>();
         InputStream is = getClass().getResourceAsStream(initPath);
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {
 
             String line;
             while ((line = br.readLine()) != null) {
