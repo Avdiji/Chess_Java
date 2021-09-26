@@ -46,21 +46,21 @@ public class HTTP_Server {
             player1.handleGetRequest(color1.toString());
             player2.handleGetRequest(color2.toString());
 
-            player2.establishConnection();
-            player1.establishConnection();
-            player2.handleGetRequest(HTTP_ClientHandler.SIGNAL_CONTINUE);
-            player1.handlePostRequest();
-            player2.establishConnection();
-            player2.handleGetRequest(player1.getLastMoveReceived());
+            while (true) {
+                player2.establishConnection();
+                player1.establishConnection();
+                player2.handleGetRequest(HTTP_ClientHandler.SIGNAL_CONTINUE);
+                player1.handlePostRequest();
+                player2.establishConnection();
+                player2.handleGetRequest(player1.getLastMoveReceived());
 
-            player1.establishConnection();
-            player2.establishConnection();
-            player1.handleGetRequest(HTTP_ClientHandler.SIGNAL_CONTINUE);
-            player2.handlePostRequest();
-            player1.establishConnection();
-            player1.handleGetRequest(player2.getLastMoveReceived());
-
-            while (true);
+                player1.establishConnection();
+                player2.establishConnection();
+                player1.handleGetRequest(HTTP_ClientHandler.SIGNAL_CONTINUE);
+                player2.handlePostRequest();
+                player1.establishConnection();
+                player1.handleGetRequest(player2.getLastMoveReceived());
+            }
         }
     }
 }

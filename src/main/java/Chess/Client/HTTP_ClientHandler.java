@@ -203,9 +203,8 @@ public class HTTP_ClientHandler implements Runnable {
                     extractBody();
                     extractBody();
                     sendGetRequest();
-                    extractBody();
+                    executeClientMove(extractBody(), gameWindow);
                 }
-
 
             } catch (InterruptedException | IOException e) {
             }
