@@ -21,7 +21,8 @@ public class HTTP_ClientHandler implements Runnable {
     /**
      * Signal to continue without altering the game
      **/
-    public final static String SIGNAL_CONTINUE = "CONTINUE";
+    public static final String SIGNAL_CONTINUE = "CONTINUE";
+    private static final String SIGNAL_REPEAT = "HTTP/1.1 200 OK";
 
     /**
      * Corresponding gameWindow of the Client
@@ -162,6 +163,8 @@ public class HTTP_ClientHandler implements Runnable {
         System.out.println(result);
         System.out.println("OUT");
         System.out.println();
+        if (result.equals(SIGNAL_REPEAT))
+            result = extractBody();
         return result;
     }
 
@@ -177,6 +180,7 @@ public class HTTP_ClientHandler implements Runnable {
 
     @Override
     public void run() {
+        boolean first = true;
         while (!endedGame) {
             try {
                 synchronized (this) {
@@ -200,7 +204,6 @@ public class HTTP_ClientHandler implements Runnable {
 
                 if (clientPlayer.getPlayerColor() == EPlayerColor.WHITE) {
                     sendGetRequest();
-                    extractBody();
                     extractBody();
                     sendGetRequest();
                     executeClientMove(extractBody(), gameWindow);
