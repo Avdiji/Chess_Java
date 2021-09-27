@@ -21,47 +21,34 @@ import java.net.Socket;
  */
 public class HTTP_Client implements Runnable {
 
-    /**
-     * initialization path of classic chess
-     **/
-    private static final String PATH_INIT = "/initilization/stalemate.csv";
+    /** initialization path of classic chess **/
+    private static final String PATH_INIT = "/initilization/checkmate.csv";
 
-    /**
-     * Strings for the submit screen if successfull
-     **/
+    /** Strings for the submit screen if the Connection was Successfull **/
     private static final String STRING_NOERROR_LABEL = "Waiting for other Player...";
     private static final String STRING_NOERROR_BUTTON = "Cancel";
 
-    /**
-     * Port used to connect to server
-     **/
+    /** Port used to connect to server **/
     private final int port;
 
-    /**
-     * Hostname of the Server this client shall connect with
-     **/
+    /** Hostname of the Server this client shall connect with **/
     private final String hostname;
 
-    /**
-     * LoginScreen of this client
-     **/
+    /** LoginScreen of this client **/
     private final ServerLogin serverLogin;
 
-    /**
-     * Players
-     **/
+    /** Player 1 **/
     private Player player1;
+    /** Player 2 **/
     private Player player2;
 
-    /**
-     * Helper Object, sends moves to the Client
-     **/
+    /** Helper Object, to handle the communication with the server **/
     private HTTP_ClientHandler moveGenerator;
 
     /**
      * Constructor
      *
-     * @param serverLogin
+     * @param serverLogin login screen
      */
     public HTTP_Client(final ServerLogin serverLogin) {
         this.serverLogin = serverLogin;
@@ -73,6 +60,7 @@ public class HTTP_Client implements Runnable {
      * Method initializes:<br>
      * {@link #player1}
      * {@link #player2}
+     * according to the received PlayerColor
      *
      * @param playerColor signal from the server
      */
@@ -81,10 +69,13 @@ public class HTTP_Client implements Runnable {
         player2 = new Player(playerColor.equals(EPlayerColor.WHITE.toString()) ? EPlayerColor.NONE : EPlayerColor.BLACK);
     }
 
-
     /**
-     * Method sends a Get request to the Server
-     **/
+     * Method sends an initial Get-request to the server
+     *
+     * @param bw buffered writer of the client
+     * @param hostname hostname of the server
+     * @throws IOException
+     */
     private void sendGetRequest(final BufferedWriter bw, final String hostname) throws IOException {
         bw.write("GET / HTTP/1.1\r\n");
         bw.write("Host: " + hostname + "\r\n");
@@ -116,7 +107,10 @@ public class HTTP_Client implements Runnable {
             chessField.initField(PATH_INIT);
             GameWindow gameWindow = new GameWindow(chessField, serverLogin.getMainMenu().getScoreboard());
             gameWindow.setTitleText(line);
-            moveGenerator = new HTTP_ClientHandler(gameWindow, serverLogin.getMainMenu().getScoreboard(), player1.getPlayerColor() == EPlayerColor.NONE ? player2 : player1, bw, br);
+            moveGenerator = new HTTP_ClientHandler(gameWindow,
+                    serverLogin.getMainMenu().getScoreboard(),
+                    player1.getPlayerColor() == EPlayerColor.NONE ? player2 : player1,
+                    bw, br);
             moveGenerator.setHostname(hostname);
             gameWindow.setNotifyClient(moveGenerator);
 

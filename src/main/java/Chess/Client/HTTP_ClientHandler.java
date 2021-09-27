@@ -15,85 +15,66 @@ import java.io.IOException;
 /**
  * @author Fitor Avdiji
  * <p>
- * Class generates The move to be sent to the server after executing it
+ * Class is responsible to communicate with the corresponding server
  */
 public class HTTP_ClientHandler implements Runnable {
 
-    /**
-     * Time to wait after a response has been read
-     **/
+    /** Time to wait after a response has been read **/
     private static final int TIMER_WAIT = 500;
 
-    /**
-     * Strings for the Scoreboard
-     **/
+    /** Strings to end the game and initialize the scoreboard **/
     private static final String STRING_FF_WHITE = "WHITE gave up";
     private static final String STRING_FF_BLACK = "BLACK gave up";
     public static final String STRING_WIN_WHITE = "WHITE Won";
     public static final String STRING_WIN_BLACK = "BLACK Won";
     public static final String STRING_STALEMATE = "STALEMATE";
 
-    /**
-     * Signal to continue without altering the game
-     **/
+    /** Signals, to look out for **/
     public static final String SIGNAL_CONTINUE = "CONTINUE";
     public static final String SIGNAL_FF_WHITE = "FF_WHITE";
     public static final String SIGNAL_FF_BLACK = "FF_BLACK";
     private static final String SIGNAL_REPEAT = "HTTP/1.1 200 OK";
 
-    /**
-     * Corresponding gameWindow of the Client
-     **/
+    /** Corresponding gameWindow of the client **/
     private final GameWindow gameWindow;
 
-    /**
-     * Corresponding Scoreboard
-     **/
+    /** Corresponding scoreboard **/
     private final Scoreboard scoreboard;
 
-    /**
-     * Player of this client
-     **/
+    /** Player of this client **/
     private final Player clientPlayer;
-    /**
-     * BufferedWriter/Reader of this Client
-     **/
+
+    /** BufferedWriter/Reader of this client **/
     private final BufferedWriter bw;
     private final BufferedReader br;
 
-
-    /**
-     * Hostname of the correspnding server
-     **/
+    /** Hostname of the corresponding server **/
     private String hostname;
 
-    /**
-     * True if client has executed a move else wrong
-     **/
-    private boolean executedMove;
-
-    /**
-     * True if the game is over
-     **/
+    /** True if the game is over **/
     private boolean endedGame;
 
     /**
      * Constructor
      *
-     * @param gameWindow
+     * @param gameWindow gamewindow of this client
+     * @param scoreboard scoreboard of this client (needed to end a game)
+     * @param clientPlayer player of this client
+     * @param bw bufferedwriter to communicate with the server
+     * @param br bufferedreader to communicate with the server
      */
     public HTTP_ClientHandler(final GameWindow gameWindow,
                               final Scoreboard scoreboard,
                               final Player clientPlayer,
                               final BufferedWriter bw,
-                              final BufferedReader br) {
+                              final BufferedReader br)
+    {
         this.gameWindow = gameWindow;
         this.scoreboard = scoreboard;
         this.clientPlayer = clientPlayer;
         this.bw = bw;
         this.br = br;
 
-        executedMove = false;
         endedGame = false;
     }
 
@@ -107,15 +88,6 @@ public class HTTP_ClientHandler implements Runnable {
     }
 
     /**
-     * Setter for {@link #executedMove}
-     *
-     * @param value new value for executedMove
-     */
-    public void setExecutedMove(final boolean value) {
-        executedMove = value;
-    }
-
-    /**
      * Setter for {@link #endedGame}
      *
      * @param value new value for endedGame
@@ -125,9 +97,10 @@ public class HTTP_ClientHandler implements Runnable {
     }
 
     /**
-     * Method decodes and executes the move, received from the server
+     * The Method decodes and executes the move received
      *
-     * @param move last move Sent from the server
+     * @param move move to be executed
+     * @param gameWindow gamewindow, in which the move will be executed
      */
     private void executeClientMove(final String move, final GameWindow gameWindow) {
         try {
@@ -153,11 +126,12 @@ public class HTTP_ClientHandler implements Runnable {
         }
     }
 
-
     /**
-     * Method sends a message to the Server
+     * Method sends a post request to the server,
+     * which contains the move, that the player has made
      *
      * @param message
+     * @throws IOException
      */
     private void sendPostRequest(String message) throws IOException {
         message += "\r\n";
@@ -172,8 +146,12 @@ public class HTTP_ClientHandler implements Runnable {
     }
 
     /**
-     * Method extracts the Body from a request
-     **/
+     * Method reads from the BufferedReader, and returns the last line of it,
+     * which contains a command for this client
+     *
+     * @return The last line in the BufferedReader
+     * @throws IOException
+     */
     private String extractBody() throws IOException {
         String result;
         while (!br.readLine().isEmpty()) ;
@@ -184,8 +162,10 @@ public class HTTP_ClientHandler implements Runnable {
     }
 
     /**
-     * Method sends Get request
-     **/
+     * Method sends a get request to the server
+     *
+     * @throws IOException
+     */
     private void sendGetRequest() throws IOException {
         bw.write("GET / HTTP/1.1\r\n");
         bw.write("Host: " + hostname + "\r\n");
@@ -194,21 +174,22 @@ public class HTTP_ClientHandler implements Runnable {
     }
 
     /**
-     * Method pauses the game for a bit (to prevent issues)
-     **/
+     * Method pauses this thread (to prevent bugs)
+     *
+     * @throws InterruptedException
+     */
     private void pause() throws InterruptedException {
         synchronized (this) {
             this.wait(TIMER_WAIT);
         }
-
     }
 
     /**
-     * Method executes the Move of the Player and determines, wheter the Game should end or not
+     * Method executes the move of the player and determines, whether the game should end or not
      *
      * @param signal  signal the client shall look for
      * @param message message displayed on the scoreboard
-     * @return true if the loop shall be breaked
+     * @return true if this thread shall be terminated
      * @throws InterruptedException
      * @throws IOException
      */
@@ -238,7 +219,8 @@ public class HTTP_ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+
+        while (true) { // Method is kinda clumsy because I used ngrok, which forces me to reconnect after every response
             try {
                 if (clientPlayer.getPlayerColor() == EPlayerColor.BLACK) {
                     if (playerHandling(SIGNAL_FF_WHITE, STRING_FF_WHITE)) {
@@ -246,26 +228,22 @@ public class HTTP_ClientHandler implements Runnable {
                     }
                 }
 
-                synchronized (this) {
-                    this.wait();
-                }
-                if (executedMove) {
-                    if (!gameWindow.getVisible()) {
-                        sendPostRequest(scoreboard.getWinner());
-                        break;
-                    } else {
-                        sendPostRequest(clientPlayer.getLastMove());
-                    }
-                    extractBody();
-                    executedMove = false;
-                } else if (endedGame) {
+                synchronized (this) { this.wait(); } // Wait until this thread gets notified (happens when moving a piece)
+
+                if (endedGame) { // one of the players has surrendered
                     if (clientPlayer.getPlayerColor() == EPlayerColor.WHITE) {
                         sendPostRequest(SIGNAL_FF_WHITE);
                     } else if (clientPlayer.getPlayerColor() == EPlayerColor.BLACK) {
                         sendPostRequest(SIGNAL_FF_BLACK);
                     }
                     break;
+                } else if (!gameWindow.getVisible()) { // the game came to an end naturally
+                    sendPostRequest(scoreboard.getWinner());
+                    break;
+                } else {
+                    sendPostRequest(clientPlayer.getLastMove()); // the game has not ended
                 }
+                extractBody();
 
                 if (clientPlayer.getPlayerColor() == EPlayerColor.WHITE) {
                     if (playerHandling(SIGNAL_FF_BLACK, STRING_FF_BLACK)) {

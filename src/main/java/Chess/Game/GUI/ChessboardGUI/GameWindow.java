@@ -346,7 +346,6 @@ public class GameWindow implements IChessFrame {
      **/
     private void notifyClientMove() {
         if (notifyClient != null) {
-            notifyClient.setExecutedMove(true);
             synchronized (notifyClient) {
                 notifyClient.notify();
             }
