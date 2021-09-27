@@ -13,6 +13,7 @@ import Chess.Game.Logic.Player.EPlayerColor;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -82,12 +83,12 @@ public class ChessPieceMovement {
      */
     public static final boolean isCheck(final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field) {
         AtomicBoolean result = new AtomicBoolean(false);
+        try {
             Position kingsPosition = field.stream()
                     .filter(button -> button.getPlayerColor() == currentPlayerColor)
                     .filter(button -> button.getType() == EChessPieces.KING_WHITE || button.getType() == EChessPieces.KING_BLACK)
                     .map(ChessFieldButton::getPosition)
                     .findAny().get();
-
             field.stream()
                     .filter(button -> button.getPlayerColor() != currentPlayerColor)
                     .filter(button -> button.getPlayerColor() != EPlayerColor.NONE)
@@ -96,6 +97,8 @@ public class ChessPieceMovement {
                         if (moves.contains(kingsPosition))
                             result.set(true);
                     });
+        } catch (NoSuchElementException e) {
+        }
         return result.get();
     }
 

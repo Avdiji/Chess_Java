@@ -74,6 +74,15 @@ public class Scoreboard extends JFrame implements IChessFrame {
     }
 
     /**
+     * Getter for the Text of {@link #label_message}
+     *
+     * @return label_message.getText
+     */
+    public String getWinner() {
+        return label_message.getText();
+    }
+
+    /**
      * Setter for {@link #message}
      *
      * @param message newMessage of the scoreboard

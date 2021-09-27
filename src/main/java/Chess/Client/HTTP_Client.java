@@ -4,11 +4,8 @@ import Chess.Game.GUI.ChessboardGUI.GameWindow;
 import Chess.Game.GUI.ClientGUI.ServerLogin;
 import Chess.Game.GUI.ClientGUI.SubmitScreen;
 import Chess.Game.Logic.ChessField;
-import Chess.Game.Logic.ChessFieldButton;
-import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Player.Player;
-import Chess.Game.Logic.Position;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -101,10 +98,10 @@ public class HTTP_Client implements Runnable {
              BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         ) {
-
             SubmitScreen ss = new SubmitScreen(serverLogin);
             ss.setString_label(STRING_NOERROR_LABEL);
             ss.setString_button(STRING_NOERROR_BUTTON);
+            ss.removeButton();
             serverLogin.setVisible(false);
 
             sendGetRequest(bw, hostname);
@@ -119,14 +116,14 @@ public class HTTP_Client implements Runnable {
             chessField.initField(PATH_INIT);
             GameWindow gameWindow = new GameWindow(chessField, serverLogin.getMainMenu().getScoreboard());
             gameWindow.setTitleText(line);
-            moveGenerator = new HTTP_ClientHandler(gameWindow, player1.getPlayerColor() == EPlayerColor.NONE ? player2 : player1, bw, br);
+            moveGenerator = new HTTP_ClientHandler(gameWindow, serverLogin.getMainMenu().getScoreboard(), player1.getPlayerColor() == EPlayerColor.NONE ? player2 : player1, bw, br);
             moveGenerator.setHostname(hostname);
             gameWindow.setNotifyClient(moveGenerator);
 
-            Thread p1 = new Thread(moveGenerator);
-
-            p1.start();
-            p1.join();
+            Thread clientThread = new Thread(moveGenerator);
+            clientThread.start();
+            clientThread.join();
+            ss.dispose();
 
         } catch (IOException | InterruptedException e) {
             SubmitScreen ss = new SubmitScreen(serverLogin);

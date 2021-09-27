@@ -32,33 +32,53 @@ public class HTTP_Server {
     }
 
     public void runServer() throws IOException, InterruptedException {
-        System.out.println("Starting the Server...");
 
-        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+        while (true) {
+            try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+                System.out.println("Starting New Game");
+                System.out.println("Waiting for Other Players...");
 
-            EPlayerColor color1 = random.nextInt(2) == 0 ? EPlayerColor.WHITE : EPlayerColor.BLACK;
-            EPlayerColor color2 = color1 == EPlayerColor.WHITE ? EPlayerColor.BLACK : EPlayerColor.WHITE;
+                EPlayerColor color1 = random.nextInt(2) == 0 ? EPlayerColor.WHITE : EPlayerColor.BLACK;
+                EPlayerColor color2 = color1 == EPlayerColor.WHITE ? EPlayerColor.BLACK : EPlayerColor.WHITE;
 
-            HTTP_ServerHandler player1 = new HTTP_ServerHandler(color1, serverSocket);
-            HTTP_ServerHandler player2 = new HTTP_ServerHandler(color2, serverSocket);
+                HTTP_ServerHandler player1 = new HTTP_ServerHandler(color1, serverSocket);
+                HTTP_ServerHandler player2 = new HTTP_ServerHandler(color2, serverSocket);
 
-            player1.handleGetRequest(color1.toString());
-            player2.handleGetRequest(color2.toString());
+                player1.handleGetRequest(color1.toString());
+                player2.handleGetRequest(color2.toString());
 
-            while (true) {
-                player2.establishConnection();
-                player1.establishConnection();
-                player2.handleGetRequest(HTTP_ClientHandler.SIGNAL_CONTINUE);
-                player1.handlePostRequest();
-                player2.establishConnection();
-                player2.handleGetRequest(player1.getLastMoveReceived());
+                while (true) {
+                    player2.establishConnection();
+                    player1.establishConnection();
+                    player2.handleGetRequest(HTTP_ClientHandler.SIGNAL_CONTINUE);
+                    player1.handlePostRequest();
+                    player2.establishConnection();
+                    player2.handleGetRequest(player1.getLastMoveReceived());
 
-                player1.establishConnection();
-                player2.establishConnection();
-                player1.handleGetRequest(HTTP_ClientHandler.SIGNAL_CONTINUE);
-                player2.handlePostRequest();
-                player1.establishConnection();
-                player1.handleGetRequest(player2.getLastMoveReceived());
+                    System.out.println("WHITE Move: " + player1.getLastMoveReceived());
+                    if (player1.getLastMoveReceived().equals(HTTP_ClientHandler.SIGNAL_FF_WHITE) ||
+                            player1.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_WIN_WHITE) ||
+                            player1.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_WIN_BLACK)
+                    ) {
+                        break;
+                    }
+
+                    player1.establishConnection();
+                    player2.establishConnection();
+                    player1.handleGetRequest(HTTP_ClientHandler.SIGNAL_CONTINUE);
+                    player2.handlePostRequest();
+                    player1.establishConnection();
+                    player1.handleGetRequest(player2.getLastMoveReceived());
+
+                    System.out.println("BLACK Move: " + player2.getLastMoveReceived());
+                    if (player2.getLastMoveReceived().equals(HTTP_ClientHandler.SIGNAL_FF_BLACK) ||
+                            player2.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_WIN_WHITE) ||
+                            player2.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_WIN_BLACK)
+                    ) {
+                        break;
+                    }
+                }
+                System.out.println("Game Finished!");
             }
         }
     }

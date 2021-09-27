@@ -86,6 +86,13 @@ public class SubmitScreen extends JFrame implements IChessFrame {
         });
     }
 
+    /**
+     * Method removes the Button from the screen
+     */
+    public void removeButton(){
+        this.remove(button);
+    }
+
     @Override
     public void initMainFrame() {
         this.setSize(SIZE_WIDTH, SIZE_HEIGHT);

@@ -143,9 +143,10 @@ public class GameWindow implements IChessFrame {
 
     /**
      * Setter for the Text of {@link #title}
+     *
      * @param title
      */
-    public void setTitleText(final String title){
+    public void setTitleText(final String title) {
         this.title.setText(title);
     }
 
@@ -211,6 +212,11 @@ public class GameWindow implements IChessFrame {
             result = EPlayerColor.BLACK;
         }
         return result;
+    }
+
+    /** Determine, whether the GameWindow is still visible **/
+    public boolean getVisible(){
+        return gameFrame.isVisible();
     }
 
     /**
@@ -322,6 +328,14 @@ public class GameWindow implements IChessFrame {
     }
 
     /**
+     * Method disposes the GameWindow
+     */
+    public void disposeGameWindow() {
+        gameFrame.setVisible(false);
+        gameFrame.dispose();
+    }
+
+    /**
      * The Method creates and returns a new Thread, that executes a move
      * (used an individual thread to enable the pawn upgrade)
      *
@@ -420,6 +434,7 @@ public class GameWindow implements IChessFrame {
                     gameFrame.dispose();
                     scoreboard.setMessage("WHITE gave up!");
                     scoreboard.setVisible(true);
+                    notifyClientFF();
                 }
             }
         };
@@ -437,6 +452,7 @@ public class GameWindow implements IChessFrame {
                     gameFrame.dispose();
                     scoreboard.setMessage("BLACK gave up!");
                     scoreboard.setVisible(true);
+                    notifyClientFF();
                 }
             }
         };

@@ -151,6 +151,7 @@ public class ServerLogin extends JFrame implements IChessFrame {
             public void actionPerformed(ActionEvent e) {
                 Thread clientThread = new Thread(new HTTP_Client(getServerLogin()));
                 clientThread.start();
+                dispose();
             }
         });
     }
