@@ -358,17 +358,6 @@ public class GameWindow implements IChessFrame {
     }
 
     /**
-     * Method notifies the corresponding client, that the player has surrendered
-     **/
-    private void notifyClientFF() {
-        if (notifyClient != null) {
-            synchronized (notifyClient) {
-                notifyClient.notify();
-            }
-        }
-    }
-
-    /**
      * Method disposes the GameWindow
      */
     public void disposeGameWindow() {
@@ -477,7 +466,7 @@ public class GameWindow implements IChessFrame {
                     gameFrame.dispose();
                     scoreboard.setMessage("WHITE gave up!");
                     scoreboard.setScoreboardVisible();
-                    notifyClientFF();
+                    notifyClientMove();
                 }
             }
         };
@@ -495,7 +484,7 @@ public class GameWindow implements IChessFrame {
                     gameFrame.dispose();
                     scoreboard.setMessage("BLACK gave up!");
                     scoreboard.setScoreboardVisible();
-                    notifyClientFF();
+                    notifyClientMove();
                 }
             }
         };
