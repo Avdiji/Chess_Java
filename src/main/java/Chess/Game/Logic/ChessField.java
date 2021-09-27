@@ -5,6 +5,8 @@ import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Player.Player;
 
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -109,6 +111,12 @@ public class ChessField {
         field.stream().filter(ChessFieldButton::isMarked).forEach(piece -> piece.setMarked(false));
         field.stream().filter(ChessFieldButton::isEndangered).forEach(piece -> piece.setEndangered(false));
         field.stream().forEach(ChessFieldButton::renderPiece);
+    }
+
+    /** Method resets the Borders of all the fields **/
+    public void resetBorders(){
+        Border defaultBorder = new LineBorder(MainMenu.COLOR_FIELD_MARKED, 0);
+        field.stream().forEach(button -> button.setBorder(defaultBorder));
     }
 
     /**

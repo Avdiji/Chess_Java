@@ -31,6 +31,20 @@ public class HTTP_Server {
     public HTTP_Server() {
     }
 
+    /**
+     * Method checks whether the game has been finished and returns true if that is the case
+     *
+     * @param player player, that has executed the last move
+     * @return true if the game is finished
+     */
+    private boolean gameHasEnded(final HTTP_ServerHandler player) {
+        return player.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_FF_WHITE) ||
+                player.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_WIN_WHITE) ||
+                player.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_WIN_BLACK) ||
+                player.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_STALEMATE) ||
+                player.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_FF_BLACK);
+    }
+
     public void runServer() throws IOException, InterruptedException {
 
         while (true) {
@@ -56,13 +70,8 @@ public class HTTP_Server {
                     player2.handleGetRequest(player1.getLastMoveReceived());
 
                     System.out.println("WHITE Move: " + player1.getLastMoveReceived());
-                    if (player1.getLastMoveReceived().equals(HTTP_ClientHandler.SIGNAL_FF_WHITE) ||
-                            player1.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_WIN_WHITE) ||
-                            player1.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_WIN_BLACK) ||
-                            player1.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_STALEMATE)
-                    ) {
+                    if (gameHasEnded(player1))
                         break;
-                    }
 
                     player1.establishConnection();
                     player2.establishConnection();
@@ -72,13 +81,8 @@ public class HTTP_Server {
                     player1.handleGetRequest(player2.getLastMoveReceived());
 
                     System.out.println("BLACK Move: " + player2.getLastMoveReceived());
-                    if (player2.getLastMoveReceived().equals(HTTP_ClientHandler.SIGNAL_FF_BLACK) ||
-                            player2.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_WIN_WHITE) ||
-                            player2.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_WIN_BLACK) ||
-                            player2.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_STALEMATE)
-                    ) {
+                    if (gameHasEnded(player2))
                         break;
-                    }
                 }
                 System.out.println("Game Finished!");
             }

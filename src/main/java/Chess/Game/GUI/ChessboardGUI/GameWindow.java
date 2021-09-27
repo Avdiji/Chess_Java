@@ -279,6 +279,10 @@ public class GameWindow implements IChessFrame {
         }else if(ChessPieceMovement.isCheck(getActualColor(), chessField.getField())){
             playSound(SOUND_CHECK);
         }
+        chessField.resetBorders();
+        capturedButton.thickenFrame(MainMenu.COLOR_FIELD_MARKED);
+        markedButton.thickenFrame(MainMenu.COLOR_FIELD_MARKED);
+
     }
 
     /**
@@ -339,6 +343,7 @@ public class GameWindow implements IChessFrame {
             }
         }
         adjustPostMove(capturedButton, markedButton);
+        playSound(SOUND_MOVE);
     }
 
     /**
@@ -357,7 +362,6 @@ public class GameWindow implements IChessFrame {
      **/
     private void notifyClientFF() {
         if (notifyClient != null) {
-            notifyClient.setEndedGame(true);
             synchronized (notifyClient) {
                 notifyClient.notify();
             }
@@ -430,7 +434,6 @@ public class GameWindow implements IChessFrame {
                     // if the selected button was endangered
                     if (selectedButton.isEndangered()) {
                         executeMoveThread(selectedButton).start();
-                        playSound(SOUND_MOVE);
                     } else {
                         // if the selected button was not endangered mark all of it's pathing options
                         if (selectedButton.getPlayerColor() == chessField.getCurrentPlayerColor()) {

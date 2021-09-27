@@ -8,6 +8,8 @@ import Chess.Game.Logic.Player.EPlayerColor;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.IOException;
@@ -19,6 +21,8 @@ import java.io.InputStream;
  * Class represents a Button in the Chess Field
  */
 public class ChessFieldButton extends JButton {
+
+    private static final int BORDER_THICKNESS = 3;
 
     /** Position of the Button **/
     private Position position;
@@ -239,6 +243,12 @@ public class ChessFieldButton extends JButton {
         try {
             this.setIcon(new ImageIcon(ImageIO.read(is)));
         }catch (IOException e){}
+    }
+
+    /** Method thickens the Frame of a button **/
+    public void thickenFrame(final Color color){
+        Border border = new LineBorder(color, BORDER_THICKNESS);
+        this.setBorder(border);
     }
 
     /** Method initializes the Button */
