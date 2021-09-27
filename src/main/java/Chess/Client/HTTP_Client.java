@@ -24,7 +24,7 @@ public class HTTP_Client implements Runnable {
     /**
      * initialization path of classic chess
      **/
-    private static final String PATH_INIT = "/initilization/init_default.csv";
+    private static final String PATH_INIT = "/initilization/stalemate.csv";
 
     /**
      * Strings for the submit screen if successfull
@@ -123,6 +123,7 @@ public class HTTP_Client implements Runnable {
             Thread clientThread = new Thread(moveGenerator);
             clientThread.start();
             clientThread.join();
+            gameWindow.playSound(GameWindow.SOUND_END);
             ss.dispose();
 
         } catch (IOException | InterruptedException e) {

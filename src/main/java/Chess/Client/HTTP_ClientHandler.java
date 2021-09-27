@@ -31,6 +31,7 @@ public class HTTP_ClientHandler implements Runnable {
     private static final String STRING_FF_BLACK = "BLACK gave up";
     public static final String STRING_WIN_WHITE = "WHITE Won";
     public static final String STRING_WIN_BLACK = "BLACK Won";
+    public static final String STRING_STALEMATE = "STALEMATE";
 
     /**
      * Signal to continue without altering the game
@@ -218,15 +219,16 @@ public class HTTP_ClientHandler implements Runnable {
         sendGetRequest();
         sendGetRequest();
         lastMove = extractBody();
-        if (lastMove.equals(signal) || lastMove.equals(STRING_WIN_WHITE) || lastMove.equals(STRING_WIN_BLACK)) {
+        if (lastMove.equals(signal) || lastMove.equals(STRING_WIN_WHITE) || lastMove.equals(STRING_WIN_BLACK) || lastMove.equals(STRING_STALEMATE)) {
             gameWindow.disposeGameWindow();
             switch (lastMove) {
                 case STRING_WIN_WHITE -> scoreboard.setMessage(STRING_WIN_WHITE);
                 case STRING_WIN_BLACK -> scoreboard.setMessage(STRING_WIN_BLACK);
+                case STRING_STALEMATE -> scoreboard.setMessage(STRING_STALEMATE);
             }
             if (lastMove.equals(signal))
                 scoreboard.setMessage(message);
-            scoreboard.setVisible(true);
+            scoreboard.setScoreboardVisible();
             result = true;
         } else {
             executeClientMove(lastMove, gameWindow);
@@ -266,7 +268,7 @@ public class HTTP_ClientHandler implements Runnable {
                 }
 
                 if (clientPlayer.getPlayerColor() == EPlayerColor.WHITE) {
-                    if (playerHandling(SIGNAL_FF_BLACK, STRING_FF_WHITE)) {
+                    if (playerHandling(SIGNAL_FF_BLACK, STRING_FF_BLACK)) {
                         break;
                     }
                 }

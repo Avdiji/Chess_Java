@@ -1,5 +1,6 @@
 package Chess.Game.Logic;
 
+import Chess.Game.GUI.ChessboardGUI.GameWindow;
 import Chess.Game.Logic.Pieces.Bishop;
 import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Pieces.Empty;

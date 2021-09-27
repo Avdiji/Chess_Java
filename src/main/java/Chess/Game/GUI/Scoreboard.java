@@ -1,5 +1,7 @@
 package Chess.Game.GUI;
 
+import Chess.Game.GUI.ChessboardGUI.GameWindow;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -71,6 +73,12 @@ public class Scoreboard extends JFrame implements IChessFrame {
         initMainFrame();
         addComponents();
         this.setUndecorated(true);
+    }
+
+    /** Method makes the Scoreboard visible and plays a sound **/
+    public void setScoreboardVisible(){
+        this.setVisible(true);
+        GameWindow.playSound(GameWindow.SOUND_END);
     }
 
     /**

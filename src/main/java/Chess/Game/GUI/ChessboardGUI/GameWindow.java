@@ -12,6 +12,11 @@ import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Player.Player;
 import Chess.Game.Logic.Position;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
@@ -19,6 +24,9 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 
 /**
@@ -27,6 +35,14 @@ import java.util.Arrays;
  * Class includes all the GUI for the Game Window
  */
 public class GameWindow implements IChessFrame {
+
+    /**
+     * Path to the wav files
+     **/
+    public static final String SOUND_END = "/SoundEffects/sound_end.wav";
+    public static final String SOUND_CHECK = "/SoundEffects/sound_check.wav";
+    public static final String SOUND_SELECT = "/SoundEffects/sound_select.wav";
+    public static final String SOUND_MOVE = "/SoundEffects/sound_move.wav";
 
     /**
      * Frame the Game is being played in
@@ -110,6 +126,24 @@ public class GameWindow implements IChessFrame {
         initComponents();
         initMainFrame();
         addComponents();
+    }
+
+    /**
+     * Method plays a sound
+     *
+     * @param soundPath path to the corresponding wav
+     */
+    public static void playSound(final String soundPath) {
+        try {
+            InputStream IS = GameWindow.class.getResourceAsStream(soundPath);
+            InputStream bufferedIS = new BufferedInputStream(IS);
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(bufferedIS);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+        } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -214,8 +248,10 @@ public class GameWindow implements IChessFrame {
         return result;
     }
 
-    /** Determine, whether the GameWindow is still visible **/
-    public boolean getVisible(){
+    /**
+     * Determine, whether the GameWindow is still visible
+     **/
+    public boolean getVisible() {
         return gameFrame.isVisible();
     }
 
@@ -234,12 +270,14 @@ public class GameWindow implements IChessFrame {
             gameFrame.dispose();
             scoreboard.setMessage(String.format("%s Won", Arrays.stream(EPlayerColor.values())
                     .filter(value -> value != getActualColor() && value != EPlayerColor.NONE).findAny().get()));
-            scoreboard.setVisible(true);
+            scoreboard.setScoreboardVisible();
         } else if (ChessPieceMovement.isStalemate(getActualColor(), chessField.getField())) {
             gameFrame.setVisible(false);
             gameFrame.dispose();
             scoreboard.setMessage(STALEMATE);
-            scoreboard.setVisible(true);
+            scoreboard.setScoreboardVisible();
+        }else if(ChessPieceMovement.isCheck(getActualColor(), chessField.getField())){
+            playSound(SOUND_CHECK);
         }
     }
 
@@ -393,10 +431,13 @@ public class GameWindow implements IChessFrame {
                     // if the selected button was endangered
                     if (selectedButton.isEndangered()) {
                         executeMoveThread(selectedButton).start();
+                        playSound(SOUND_MOVE);
                     } else {
                         // if the selected button was not endangered mark all of it's pathing options
-                        if (selectedButton.getPlayerColor() == chessField.getCurrentPlayerColor())
+                        if (selectedButton.getPlayerColor() == chessField.getCurrentPlayerColor()) {
                             chessField.markButtons(selectedButton);
+                            playSound(SOUND_SELECT);
+                        }
                     }
                 }
             }
@@ -433,7 +474,7 @@ public class GameWindow implements IChessFrame {
                     gameFrame.setVisible(false);
                     gameFrame.dispose();
                     scoreboard.setMessage("WHITE gave up!");
-                    scoreboard.setVisible(true);
+                    scoreboard.setScoreboardVisible();
                     notifyClientFF();
                 }
             }
@@ -451,7 +492,7 @@ public class GameWindow implements IChessFrame {
                     gameFrame.setVisible(false);
                     gameFrame.dispose();
                     scoreboard.setMessage("BLACK gave up!");
-                    scoreboard.setVisible(true);
+                    scoreboard.setScoreboardVisible();
                     notifyClientFF();
                 }
             }

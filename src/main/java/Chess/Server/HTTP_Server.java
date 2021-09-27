@@ -58,7 +58,8 @@ public class HTTP_Server {
                     System.out.println("WHITE Move: " + player1.getLastMoveReceived());
                     if (player1.getLastMoveReceived().equals(HTTP_ClientHandler.SIGNAL_FF_WHITE) ||
                             player1.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_WIN_WHITE) ||
-                            player1.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_WIN_BLACK)
+                            player1.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_WIN_BLACK) ||
+                            player1.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_STALEMATE)
                     ) {
                         break;
                     }
@@ -73,7 +74,8 @@ public class HTTP_Server {
                     System.out.println("BLACK Move: " + player2.getLastMoveReceived());
                     if (player2.getLastMoveReceived().equals(HTTP_ClientHandler.SIGNAL_FF_BLACK) ||
                             player2.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_WIN_WHITE) ||
-                            player2.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_WIN_BLACK)
+                            player2.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_WIN_BLACK) ||
+                            player2.getLastMoveReceived().equals(HTTP_ClientHandler.STRING_STALEMATE)
                     ) {
                         break;
                     }
