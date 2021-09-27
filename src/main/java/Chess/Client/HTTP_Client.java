@@ -22,7 +22,7 @@ import java.net.Socket;
 public class HTTP_Client implements Runnable {
 
     /** initialization path of classic chess **/
-    private static final String PATH_INIT = "/initilization/checkmate.csv";
+    private static final String PATH_INIT = "/initilization/init_default.csv";
 
     /** Strings for the submit screen if the Connection was Successfull **/
     private static final String STRING_NOERROR_LABEL = "Waiting for other Player...";
