@@ -5,10 +5,15 @@ import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Pieces.IChessPiece;
 import Chess.Game.Logic.Player.EPlayerColor;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Fitor Avdiji
@@ -17,16 +22,22 @@ import java.awt.Dimension;
  */
 public class ChessFieldButton extends JButton {
 
+    /** Constant int for the thickness of a button in a chessfield **/
+    private static final int BORDER_THICKNESS = 3;
+
     /** Position of the Button **/
     private Position position;
+
     /** Background Color of the button **/
     private final Color backgroundColor;
+
     /** Type of the Piece **/
     private EChessPieces type;
+
     /** EPlayerColor of the Piece in this Button **/
     private EPlayerColor playerColor;
 
-    /** booleans to determine whether the button is marked or endangered **/
+    /** Booleans to determine whether the button is marked or endangered **/
     private boolean marked;
     private boolean endangered;
 
@@ -59,12 +70,9 @@ public class ChessFieldButton extends JButton {
         this.backgroundColor = backgroundColor;
         marked = false;
         endangered = false;
-
         enPassant = false;
-
         kingMoved = false;
         rookMoved = false;
-
         playerColor = type.toString().contains("WHITE") ?
                 EPlayerColor.WHITE : (type.toString().contains("BLACK") ?
                 EPlayerColor.BLACK :
@@ -73,7 +81,6 @@ public class ChessFieldButton extends JButton {
 
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
-
     /**
      * Getter for {@link #marked}
      *
@@ -151,7 +158,6 @@ public class ChessFieldButton extends JButton {
 
     //SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER //
     //SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER //
-
     /**
      * Method sets {@link #marked} to the given parameter and fills the background
      *
@@ -171,7 +177,7 @@ public class ChessFieldButton extends JButton {
         this.endangered = endangered;
         if (type == EChessPieces.EMPTY) {
             if (endangered) {
-                this.setIcon(new ImageIcon(EChessPieces.EMPTY.getPath()));
+                setPieceIcon(EChessPieces.EMPTY.getPath());
             } else {
                 this.setIcon(new ImageIcon());
             }
@@ -227,19 +233,38 @@ public class ChessFieldButton extends JButton {
     //SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER //
     //SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER //
 
-    /** Method initializes the Button */
+    /**
+     * Method sets the icon of a Piece (needed for jar)
+     *
+     * @param path path of the corresponding Image
+     */
+    private void setPieceIcon(final String path) {
+        InputStream is = getClass().getResourceAsStream(path);
+        try {
+            this.setIcon(new ImageIcon(ImageIO.read(is)));
+        } catch (IOException e) {
+        }
+    }
+
+    /** Method thickens the Frame of a button **/
+    public void thickenFrame(final Color color) {
+        Border border = new LineBorder(color, BORDER_THICKNESS);
+        this.setBorder(border);
+    }
+
+    /** Method initializes the Button **/
     public void initPiece() {
         this.setPreferredSize(new Dimension(IChessPiece.SIZE_FIELD, IChessPiece.SIZE_FIELD));
         this.setBackground(backgroundColor);
         renderPiece();
     }
 
-    /** Method renders the Button (sets the icon) */
+    /** Method renders the Button (sets the icon) **/
     public void renderPiece() {
         if (type == EChessPieces.EMPTY) {
             this.setIcon(new ImageIcon());
         } else {
-            this.setIcon(new ImageIcon(type.getPath()));
+            setPieceIcon(type.getPath());
         }
     }
 }

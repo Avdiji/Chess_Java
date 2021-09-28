@@ -5,11 +5,14 @@ import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Player.EPlayerColor;
 import Chess.Game.Logic.Player.Player;
 
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,27 +23,20 @@ import java.util.List;
  */
 public class ChessField {
 
-    /**
-     * field of the Chess Game
-     **/
+    /** Field of the chess game **/
     private List<ChessFieldButton> field;
 
-    /**
-     * Players
-     **/
+    /** Players **/
     private final Player player1;
     private final Player player2;
 
-    /**
-     * Color to determine which players turn it is
-     **/
+    /** Color to determine which players turn it is **/
     private EPlayerColor currentPlayerColor;
 
     /**
      * Constructor initializes:<br>
      * {@link #player1} <br>
      * {@link #player2} <br>
-     * {@link #movement} <br>
      *
      * @param player1 player1
      * @param player2 player2
@@ -53,7 +49,6 @@ public class ChessField {
 
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
-
     /**
      * Getter for {@link #field}
      *
@@ -101,13 +96,17 @@ public class ChessField {
         this.currentPlayerColor = currentPlayerColor;
     }
 
-    /**
-     * Method removes all disables every marking on the field
-     */
+    /** Method removes all disables every marking on the field **/
     public void removeMarkings() {
         field.stream().filter(ChessFieldButton::isMarked).forEach(piece -> piece.setMarked(false));
         field.stream().filter(ChessFieldButton::isEndangered).forEach(piece -> piece.setEndangered(false));
         field.stream().forEach(ChessFieldButton::renderPiece);
+    }
+
+    /** Method resets the Borders of all the fields **/
+    public void resetBorders() {
+        Border defaultBorder = new LineBorder(MainMenu.COLOR_FIELD_MARKED, 0);
+        field.stream().forEach(button -> button.setBorder(defaultBorder));
     }
 
     /**
@@ -134,8 +133,8 @@ public class ChessField {
      */
     public void initField(final String initPath) {
         field = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(initPath))) {
+        InputStream is = getClass().getResourceAsStream(initPath);
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {
 
             String line;
             while ((line = br.readLine()) != null) {
@@ -148,7 +147,6 @@ public class ChessField {
                     case "BLACK" -> MainMenu.COLOR_FIELD_BLACK;
                     default -> throw new IllegalStateException("Unexpected value: " + values[3]);
                 };
-
                 ChessFieldButton tmp_button = new ChessFieldButton(new Position(tmp_row, tmp_column), EChessPieces.valueOf(values[2]), tmp_background);
                 tmp_button.initPiece();
                 field.add(tmp_button);

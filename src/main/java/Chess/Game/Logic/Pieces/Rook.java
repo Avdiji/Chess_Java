@@ -16,11 +16,8 @@ import java.util.stream.Collectors;
  */
 public class Rook implements IChessPiece {
 
-    /**
-     * Default Constructor
-     **/
-    public Rook() {
-    }
+    /** Default Constructor **/
+    public Rook() {}
 
     @Override
     public Set<Position> getActualPositions(Position currentPosition, EPlayerColor currentPlayerColor, List<ChessFieldButton> field) {

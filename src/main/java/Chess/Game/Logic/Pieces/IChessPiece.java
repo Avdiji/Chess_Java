@@ -14,10 +14,8 @@ import java.util.Set;
  */
 public interface IChessPiece {
 
-    /**
-     * Size of a Field in the Chess Board in px
-     **/
-    public static final int SIZE_FIELD = 100;
+    /** Size of a Field in the Chess Board in px **/
+    int SIZE_FIELD = 100;
 
     /**
      * Method returns a Set of Positions the Piece on the current Position can actually capture
@@ -27,7 +25,7 @@ public interface IChessPiece {
      * @param field              Field the Piece is located in
      * @return a Set of Positions the Piece can travel
      */
-    public Set<Position> getActualPositions(final Position currentPosition, final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field);
+    Set<Position> getActualPositions(final Position currentPosition, final EPlayerColor currentPlayerColor, final List<ChessFieldButton> field);
 
     /**
      * Method finds and returns a button with the same Position (in field) as currentPosition
@@ -36,8 +34,10 @@ public interface IChessPiece {
      * @param field           field the button is located in
      * @return button with the same position as currentPosition
      */
-    default public ChessFieldButton getCorrespondingButton(final Position currentPosition, final List<ChessFieldButton> field) {
-        return field.stream().filter(button -> button.getPosition().equals(currentPosition)).findAny().get();
+    default ChessFieldButton getCorrespondingButton(final Position currentPosition, final List<ChessFieldButton> field) {
+        return field.stream()
+                .filter(button -> button.getPosition().equals(currentPosition))
+                .findAny().get();
     }
 
 }

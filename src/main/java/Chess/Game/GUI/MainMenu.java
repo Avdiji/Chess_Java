@@ -14,9 +14,7 @@ import java.awt.Font;
  */
 public class MainMenu extends JFrame implements IChessFrame {
 
-    /**
-     * Currently Selected Colors
-     **/
+    /** Currently Selected Colors **/
     public static Color COLOR_BACKGROUND = COLOR_BACKGROUND_DARKMODE;
     public static Color COLOR_LABEL = COLOR_LABEL_DARKMODE;
     public static Color COLOR_BUTTON_BACKGROUND = COLOR_BUTTON_BACKGROUND_DARKMODE;
@@ -25,41 +23,28 @@ public class MainMenu extends JFrame implements IChessFrame {
     public static Color COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_DARKMODE;
     public final static Color COLOR_FIELD_ENDANGERED = new Color(0xec7c26);
 
-    /**
-     * Sizes, used in the MainMenu
-     **/
+    /** Sizes, used in the MainMenu **/
     private static final int SIZE_WIDTH = 1000;
     private static final int SIZE_LENGTH = 700;
     public static final int SIZE_BUTTON_MAINMENU = 30;
 
-    /**
-     * Margin of the Title
-     **/
+    /** Margin of the Title **/
     private static final int MARGIN_TITLE_MAINMENU[] = {50, 0, 0, 0};
-    /**
-     * Text of the Title
-     **/
+
+    /** Text of the Title **/
     private static final String STRING_TITLE = "Avdiji's Chess";
 
-    /**
-     * JLabel, containing the title
-     **/
+    /** JLabel, containing the title **/
     private JLabel label_title;
 
-    /**
-     * Panels of the Main Menu
-     **/
+    /** Panels of the Main Menu **/
     private MainMenu_Panel_LHS panel_LHS;
     private MainMenu_panel_RHS panel_RHS;
 
-    /**
-     * Scoreboard
-     **/
+    /** corresponding scoreboard of this Menu **/
     private Scoreboard scoreboard;
 
-    /**
-     * Constructor
-     */
+    /** Constructor **/
     public MainMenu() {
         initComponents();
         initMainFrame();
@@ -70,8 +55,15 @@ public class MainMenu extends JFrame implements IChessFrame {
     }
 
     /**
-     * Method initializes {@link #label_title}
+     * Getter for {@link #scoreboard}
+     *
+     * @return scoreboard
      */
+    public Scoreboard getScoreboard() {
+        return this.scoreboard;
+    }
+
+    /** Method initializes {@link #label_title} **/
     private void initTitle() {
         label_title = new JLabel(STRING_TITLE);
         label_title.setBackground(MainMenu.COLOR_BACKGROUND);
@@ -94,7 +86,7 @@ public class MainMenu extends JFrame implements IChessFrame {
     public void initComponents() {
         initTitle();
         scoreboard = new Scoreboard(this);
-        panel_LHS = new MainMenu_Panel_LHS(this, scoreboard);
+        panel_LHS = new MainMenu_Panel_LHS(this);
         panel_RHS = new MainMenu_panel_RHS(this);
     }
 

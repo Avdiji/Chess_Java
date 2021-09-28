@@ -17,11 +17,8 @@ import java.util.stream.Collectors;
  */
 public class Pawn implements IChessPiece {
 
-    /**
-     * Default Constructor
-     **/
-    public Pawn() {
-    }
+    /** Default Constructor **/
+    public Pawn() {}
 
     /**
      * Method returns a Set of all moves the Pawn could theoretically execute

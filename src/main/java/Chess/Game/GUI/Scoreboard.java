@@ -1,5 +1,7 @@
 package Chess.Game.GUI;
 
+import Chess.Game.GUI.ChessboardGUI.GameWindow;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,60 +19,60 @@ import java.awt.event.ActionListener;
  */
 public class Scoreboard extends JFrame implements IChessFrame {
 
-    /**
-     * Width and Length of the scoreboard
-     **/
+    /** Width and Length of the scoreboard **/
     private static final int SIZE_WIDTH = 400;
     private static final int SIZE_LENGTH = 450;
 
-    /**
-     * Margin of the Components in this Frame
-     **/
+    /** Margins of the Components in this Frame **/
     private static final int MARGIN_BUTTONS[] = {10, 40, 10, 40};
     private static final int MARGIN_MESSAGE[] = {0, 50, 50, 50};
 
-    /**
-     * Font Size of the Buttons and the Message
-     **/
+    /** Font Size of the Buttons and the Message **/
     private static final int SIZE_FONT = 40;
 
-    /**
-     * Strings for the Buttons on the Scoreboard
-     **/
+    /** Strings for the Buttons on the Scoreboard **/
     private static final String TEXT_MENU = "Back to Menu";
     private static final String TEXT_EXIT = "Exit Game";
 
-    /**
-     * GridBagConstraints for the Design
-     **/
+    /** GridBagConstraints for the Design **/
     private GridBagConstraints gbc;
 
-    /**
-     * JLabel containing the message of the scoreboard
-     **/
+    /** JLabel containing the message of the scoreboard **/
     private JLabel label_message;
 
-    /**
-     * Buttons to return to the Menu, or to exit the game
-     **/
+    /** Buttons to return to the Menu, or to exit the game **/
     private JButton button_menu;
     private JButton button_exit;
 
-    /**
-     * MainMenu of this Scoreboard
-     **/
+    /** MainMenu of this Scoreboard **/
     private final MainMenu mainMenu;
 
     /**
      * Constructor
-     **/
+     *
+     * @param mm mainMenu of this frame
+     */
     public Scoreboard(final MainMenu mm) {
         mainMenu = mm;
-
         initComponents();
         initMainFrame();
         addComponents();
         this.setUndecorated(true);
+    }
+
+    /** Method makes the Scoreboard visible and plays a sound **/
+    public void setScoreboardVisible() {
+        this.setVisible(true);
+        GameWindow.playSound(GameWindow.SOUND_END);
+    }
+
+    /**
+     * Getter for the Text of {@link #label_message}
+     *
+     * @return label_message.getText
+     */
+    public String getWinner() {
+        return label_message.getText();
     }
 
     /**
@@ -82,9 +84,7 @@ public class Scoreboard extends JFrame implements IChessFrame {
         label_message.setText(message);
     }
 
-    /**
-     * Method initializes {@link #button_menu}
-     **/
+    /** Method initializes {@link #button_menu} **/
     private void initButton_menu() {
         button_menu = new JButton(TEXT_MENU);
         button_menu.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
@@ -96,13 +96,12 @@ public class Scoreboard extends JFrame implements IChessFrame {
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 mainMenu.setVisible(true);
+                GameWindow.playSound(GameWindow.SOUND_SELECT);
             }
         });
     }
 
-    /**
-     * Method initializes {@link #button_exit}
-     */
+    /** Method initializes {@link #button_exit} **/
     private void initButton_exit() {
         button_exit = new JButton(TEXT_EXIT);
         button_exit.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);

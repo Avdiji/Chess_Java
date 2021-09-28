@@ -15,9 +15,7 @@ import java.util.Set;
  */
 public class Empty implements IChessPiece {
 
-    /**
-     * Default Constructor
-     **/
+    /** Default Constructor **/
     public Empty() {
     }
 

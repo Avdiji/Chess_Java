@@ -6,12 +6,12 @@ import Chess.Game.Logic.ChessFieldButton;
 import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Pieces.IChessPiece;
 import Chess.Game.Logic.Player.EPlayerColor;
-import Chess.Game.Logic.Position;
 
 import javax.swing.JPanel;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 /**
  * @author Fitor Avdiji
@@ -20,30 +20,25 @@ import java.awt.event.ActionListener;
  */
 public class UpgradePawn extends JPanel implements IChessFrame {
 
-    /**
-     * Array of all the Pieces the pawn can be upgraded to
-     **/
+    /** Array of all the Pieces the pawn can be upgraded to **/
     private ChessFieldButton button_pieces[];
-    /**
-     * Type the player has selected
-     **/
+
+    /** Type the player has selected **/
     private EChessPieces selectedType;
-    /**
-     * Color of the currentPlayer
-     **/
+
+    /** Color of the currentPlayer **/
     private EPlayerColor playerColor;
 
     /**
      * Constructor
-     **/
+     *
+     * @param al ActionListener to listen to this Panel
+     */
     public UpgradePawn(final ActionListener al) {
         initMainFrame();
         initComponents();
         addComponents();
-
-        for (int i = 0; i < 4; ++i) {
-            button_pieces[i].addActionListener(al);
-        }
+        Arrays.stream(button_pieces).forEach(button -> button.addActionListener(al));
     }
 
     /**
@@ -98,15 +93,14 @@ public class UpgradePawn extends JPanel implements IChessFrame {
         button_pieces[3].setType(playerColor == EPlayerColor.WHITE ?
                 EChessPieces.QUEEN_WHITE :
                 EChessPieces.QUEEN_BLACK);
-        for (int i = 0; i < 4; ++i) {
-            button_pieces[i].renderPiece();
-        }
+
+        Arrays.stream(button_pieces).forEach(ChessFieldButton::renderPiece);
     }
 
     @Override
     public void initMainFrame() {
         this.setLayout(new GridLayout(1, 4));
-        this.setPreferredSize(new Dimension(100, 100));
+        this.setPreferredSize(new Dimension(IChessPiece.SIZE_FIELD, IChessPiece.SIZE_FIELD));
     }
 
     @Override
@@ -146,7 +140,5 @@ public class UpgradePawn extends JPanel implements IChessFrame {
     }
 
     @Override
-    public void reColor() {
-
-    }
+    public void reColor() {}
 }

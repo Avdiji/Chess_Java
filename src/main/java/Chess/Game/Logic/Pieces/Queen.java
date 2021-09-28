@@ -14,11 +14,8 @@ import java.util.Set;
  */
 public class Queen implements IChessPiece {
 
-    /**
-     * Default Constructor
-     **/
-    public Queen() {
-    }
+    /** Default Constructor **/
+    public Queen() {}
 
     @Override
     public Set<Position> getActualPositions(Position currentPosition, EPlayerColor currentPlayerColor, List<ChessFieldButton> field) {
