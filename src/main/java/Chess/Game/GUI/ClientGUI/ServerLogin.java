@@ -1,6 +1,7 @@
 package Chess.Game.GUI.ClientGUI;
 
 import Chess.Client.HTTP_Client;
+import Chess.Game.GUI.ChessboardGUI.GameWindow;
 import Chess.Game.GUI.IChessFrame;
 import Chess.Game.GUI.MainMenu;
 
@@ -24,70 +25,52 @@ import java.awt.event.ActionListener;
  */
 public class ServerLogin extends JFrame implements IChessFrame {
 
-    /**
-     * Sizes used in the ServerLogin
-     **/
+    /** Width and Height of this class **/
     private static final int SIZE_WIDTH = 500;
     private static final int SIZE_HEIGHT = 250;
 
-    /**
-     * Sizes of the Textfields
-     **/
+    /** Sizes of the Textfields in this class **/
     private static final int SIZE_WIDTH_TEXTFIELD = 300;
     private static final int SIZE_HEIGHT_TEXTFIELD = 25;
 
-    /**
-     * margins of this class
-     **/
+    /** Margins of this class **/
     private static final int MARGIN_LABEL[] = {20, 30, 20, 30};
     private static final int MARGIN_BUTTONS[] = {25, 0, 0, 0};
 
-    /**
-     * Strings constants for this class
-     **/
+    /** String constants for this class **/
     private static final String STRING_HOSTNAME = "Hostname:";
     private static final String STRING_PORT = "Port:";
     private static final String STRING_BUTTON_MENU = "Back to Menu";
     private static final String STRING_BUTTON_START = "Start Game";
 
-    /**
-     * Strings for the Submit Screen
-     **/
+    /** Strings for the corresponding submit screen **/
     public static final String STRING_ERROR_LABEL = "Invalid Input!";
     public static final String STRING_ERROR_BUTTON = "Back to Login";
 
-    /**
-     * GridBagConstraints for the Layout of the ServerLogin
-     **/
+    /** GridBagConstraints for the Layout of the ServerLogin **/
     private GridBagConstraints gbc;
 
-    /**
-     * JLabels for the Layout of this class
-     **/
+    /** JLabels for the Layout of this class **/
     private JLabel label_hostname;
     private JLabel label_port;
 
-    /**
-     * Textfields containing the hostname and the port
-     **/
+    /** Textfields containing the hostname and the port **/
     private JTextField textfield_hostname;
     private JTextField textfield_port;
 
-    /**
-     * Buttons to start the game/go back to the main menu
-     **/
+    /** Buttons to start the game/go back to the main menu **/
     private JPanel panel_buttons;
     private JButton button_startGame;
     private JButton button_menu;
 
-    /**
-     * Main Menu
-     **/
+    /** corresponding main menu **/
     private final MainMenu mainMenu;
 
     /**
      * Constructor
-     **/
+     *
+     * @param mm corresponding mainmenu of this serverLogin
+     */
     public ServerLogin(final MainMenu mm) {
         this.mainMenu = mm;
         initComponents();
@@ -115,7 +98,7 @@ public class ServerLogin extends JFrame implements IChessFrame {
     }
 
     /**
-     * Getter for the portnumber from the GUI
+     * Getter for the portnumber from {@link #textfield_port}
      *
      * @return Portnumber
      */
@@ -129,7 +112,7 @@ public class ServerLogin extends JFrame implements IChessFrame {
     }
 
     /**
-     * Getter for the Hostname from the GUI
+     * Getter for the Hostname from {@link #textfield_hostname}
      *
      * @return Hostname
      */
@@ -137,9 +120,7 @@ public class ServerLogin extends JFrame implements IChessFrame {
         return textfield_hostname.getText();
     }
 
-    /**
-     * Button initializes {@link #button_startGame}
-     */
+    /** Button initializes {@link #button_startGame} **/
     private void initButton_startGame() {
         button_startGame = new JButton(STRING_BUTTON_START);
         button_startGame.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
@@ -150,15 +131,14 @@ public class ServerLogin extends JFrame implements IChessFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Thread clientThread = new Thread(new HTTP_Client(getServerLogin()));
+                GameWindow.playSound(GameWindow.SOUND_SELECT);
                 clientThread.start();
                 dispose();
             }
         });
     }
 
-    /**
-     * Button initializes {@link #button_menu}
-     */
+    /** Button initializes {@link #button_menu} **/
     private void initButton_menu() {
         button_menu = new JButton(STRING_BUTTON_MENU);
         button_menu.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
@@ -170,6 +150,7 @@ public class ServerLogin extends JFrame implements IChessFrame {
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 dispose();
+                GameWindow.playSound(GameWindow.SOUND_SELECT);
                 mainMenu.setVisible(true);
             }
         });

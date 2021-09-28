@@ -22,23 +22,15 @@ import java.awt.event.ActionListener;
  */
 public class Grave_Black extends JPanel implements IChessFrame {
 
-    /**
-     * The Grave containing the white pieces
-     **/
+    /** The Grave containing the white pieces **/
     private JPanel grave_black;
-    /**
-     * Surrender button black player
-     **/
+    /** Surrender button black player **/
     private JButton ff_black;
 
-    /**
-     * Text in ff_black
-     **/
+    /** Text in ff_black **/
     private static final String FORFEIT_BLACK = "Forfeit Black";
 
-    /**
-     * Constructor
-     */
+    /** Constructor */
     public Grave_Black() {
         initMainFrame();
         initComponents();
@@ -47,14 +39,15 @@ public class Grave_Black extends JPanel implements IChessFrame {
 
     /**
      * Getter for {@link #grave_black}
+     *
      * @return grave_black
      */
-    public JPanel getPanel_GraveButtons(){
+    public JPanel getPanel_GraveButtons() {
         return grave_black;
     }
 
     /** Method adds an ActionsListener to {@link #ff_black} **/
-    public void addGraveListener(final ActionListener al){
+    public void addGraveListener(final ActionListener al) {
         ff_black.addActionListener(al);
     }
 
@@ -94,7 +87,5 @@ public class Grave_Black extends JPanel implements IChessFrame {
     }
 
     @Override
-    public void reColor() {
-
-    }
+    public void reColor() {}
 }

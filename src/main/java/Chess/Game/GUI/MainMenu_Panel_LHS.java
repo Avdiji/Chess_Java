@@ -26,49 +26,37 @@ import java.util.Arrays;
  */
 public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
 
-    /**
-     * Margin of the Buttons of this Panel
-     **/
+    /** Margin of the Buttons of this Panel **/
     private static final int MARGIN_BUTTONS_MAINMENU[] = {20, 70, 10, 10};
 
-    /**
-     * Strings, needed for the GUI
-     **/
+    /** Strings, needed for the components of this frame **/
     private static final String STRING_BUTTON_LOCAL = "Multiplayer Local";
     private static final String STRING_BUTTON_ONLINE = "Online (Only Classic)";
     private static final String STRING_BUTTON_AI = "Player vs AI";
     private static final String STRING_BUTTON_EXIT = "Exit";
 
-    /**
-     * String used in all the different Gamemodes
-     **/
+    /** String for the different gamemodes of the game **/
     private static final String[] STRING_GAMEMODES = {"Classic", "Rook/Bishop Only", "Pawn/Knight Only"};
+
+    /** Path to the different gamemodes of the game **/
     private static final String STRING_GAMEMODE_PATH[] = {
-            "/initilization/checkmate.csv",
-            "/initilization/stalemate.csv",
+            "/initilization/init_default.csv",
+            "/initilization/init_rook_bishop.csv",
             "/initilization/init_pawn_knight.csv"};
 
-    /**
-     * Components of this Panel
-     **/
+    /** Components of this Panel **/
     private JButton button_local;
     private JButton button_online;
     private JButton button_ai;
     private JButton button_exit;
 
-    /**
-     * MainMenu of this Panel
-     **/
+    /** MainMenu of this Panel **/
     private MainMenu mainMenu;
 
-    /**
-     * Combobox with all the different Gamemodes
-     **/
+    /** Combobox with all the different Gamemodes **/
     private JComboBox<String> combobox_gamemodes;
 
-    /**
-     * GridBagConstraints for the Layout
-     **/
+    /** GridBagConstraints for the Layout **/
     private GridBagConstraints gbc;
 
     /**
@@ -78,15 +66,12 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
      */
     public MainMenu_Panel_LHS(final MainMenu mm) {
         this.mainMenu = mm;
-
         initMainFrame();
         initComponents();
         addComponents();
     }
 
-    /**
-     * Method initializes {@link #button_local}
-     */
+    /** Method initializes {@link #button_local} **/
     private void initButton_local() {
         button_local = new JButton(STRING_BUTTON_LOCAL);
         button_local.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
@@ -100,13 +85,12 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
                 chessField.initField(STRING_GAMEMODE_PATH[combobox_gamemodes.getSelectedIndex()]);
                 new GameWindow(chessField, mainMenu.getScoreboard());
                 mainMenu.setVisible(false);
+                GameWindow.playSound(GameWindow.SOUND_SELECT);
             }
         });
     }
 
-    /**
-     * Method initializes {@link #button_online
-     **/
+    /** Method initializes {@link #button_online} **/
     private void initButton_online() {
         button_online = new JButton(STRING_BUTTON_ONLINE);
         button_online.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
@@ -118,14 +102,12 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
             public void actionPerformed(ActionEvent e) {
                 mainMenu.setVisible(false);
                 new ServerLogin(mainMenu);
+                GameWindow.playSound(GameWindow.SOUND_SELECT);
             }
         });
-
     }
 
-    /**
-     * Method initializes {@link #button_ai}
-     */
+    /** Method initializes {@link #button_ai} **/
     private void initButton_ai() {
         button_ai = new JButton(STRING_BUTTON_AI);
         button_ai.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));
@@ -133,9 +115,7 @@ public class MainMenu_Panel_LHS extends JPanel implements IChessFrame {
         button_ai.setBackground(MainMenu.COLOR_BUTTON_BACKGROUND);
     }
 
-    /**
-     * Method initializes {@link #button_exit}
-     */
+    /** Method initializes {@link #button_exit} **/
     private void initButton_exit() {
         button_exit = new JButton(STRING_BUTTON_EXIT);
         button_exit.setFont(new Font(FONT, FONT_TYPE, MainMenu.SIZE_BUTTON_MAINMENU));

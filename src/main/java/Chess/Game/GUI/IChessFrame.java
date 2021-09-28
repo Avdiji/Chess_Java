@@ -48,19 +48,13 @@ public interface IChessFrame {
     public static final Color COLOR_FIELD_BLACK_GREEN = new Color(0x1E7B56);
     public static final Color COLOR_FIELD_MARKED_GREEN = new Color(0xe0e8d7);
 
-    /**
-     * Method initializes the Main frame of this Window
-     **/
+    /** Method initializes the Main frame of this Window **/
     void initMainFrame();
 
-    /**
-     * Method initializes all the Components, that belong into the MainFrame
-     **/
+    /** Method initializes all the Components, that belong into the MainFrame **/
     void initComponents();
 
-    /**
-     * Method adds all the Components together
-     **/
+    /** Method adds all the Components together **/
     void addComponents();
 
     /** Method recolors all the Components of the frame and the frame itself **/

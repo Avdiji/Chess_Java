@@ -1,5 +1,7 @@
 package Chess.Game.GUI;
 
+import Chess.Game.GUI.ChessboardGUI.GameWindow;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -22,32 +24,23 @@ import java.io.InputStream;
  */
 public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
 
-    /**
-     * Path to the Image of the Main Menu
-     **/
+    /** Path to the Image of the Main Menu **/
     private static final String IMAGE_PATH_DARKMODE = "/Images/MainMenuImage_Darkmode.png";
     private static final String IMAGE_PATH_LIGHTMODE = "/Images/MainMenuImage_Lightmode.png";
     private static final String IMAGE_PATH_BLUE = "/Images/MainMenuImage_Blue.png";
     private static final String IMAGE_PATH_GREEN = "/Images/MainMenuImage_Green.png";
 
-    /**
-     * Margins of the components of this panel
-     **/
+    /** Margins of the components of this panel **/
     private static final int MARGIN_PANEL_COLORMODES[] = {0, 0, 135, 50};
     private static final int MARGIN_LABEL_IMAGE[] = {135, 10, 10, 60};
 
-
-    /**
-     * Text of the corresponding buttons
-     **/
+    /** Text of the corresponding buttons **/
     private static final String STRING_BUTTON_LIGHTMODE = "Lightmode";
     private static final String STRING_BUTTON_DARKMODE = "Darkmode";
     private static final String STRING_BUTTON_blue = "Blue";
     private static final String STRING_BUTTON_GREEN = "Green";
 
-    /**
-     * Components of this class
-     **/
+    /** Components of this class **/
     private JLabel label_image;
     private JPanel panel_colorModes;
     private JButton button_lightmode;
@@ -55,41 +48,38 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
     private JButton button_blue;
     private JButton button_green;
 
-    /**
-     * MainMenu of this panel
-     **/
+    /** MainMenu of this panel **/
     private final MainMenu mainMenu;
 
-    /**
-     * GridBagConstraints for the Layout of this Panel
-     **/
+    /** GridBagConstraints for the Layout of this Panel **/
     private GridBagConstraints gbc;
 
     /**
      * Constructor
-     **/
+     *
+     * @param mm main menu of this panel
+     */
     public MainMenu_panel_RHS(final MainMenu mm) {
         initMainFrame();
         initComponents();
         addComponents();
-
         this.mainMenu = mm;
     }
 
     /**
      * Method sets the Icon of {@link #label_image}
+     *
      * @param path path of the Image
      */
-    private void setLabelIcon(final String path){
+    private void setLabelIcon(final String path) {
         InputStream is = getClass().getResourceAsStream(path);
-        try{
+        try {
             label_image.setIcon(new ImageIcon(ImageIO.read(is)));
-        }catch (IOException e){}
+        } catch (IOException e) {
+        }
     }
 
-    /**
-     * Method initializes {@link #button_lightmode}
-     */
+    /** Method initializes {@link #button_lightmode} **/
     private void initButton_lightmode() {
         button_lightmode = new JButton(STRING_BUTTON_LIGHTMODE);
         button_lightmode.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
@@ -107,13 +97,12 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
                 MainMenu.COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_LIGHTMODE;
                 setLabelIcon(IMAGE_PATH_LIGHTMODE);
                 mainMenu.reColor();
+                GameWindow.playSound(GameWindow.SOUND_MOVE);
             }
         });
     }
 
-    /**
-     * Method initializes {@link #button_darkmode}
-     */
+    /** Method initializes {@link #button_darkmode} **/
     private void initButton_darkmode() {
         button_darkmode = new JButton(STRING_BUTTON_DARKMODE);
         button_darkmode.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
@@ -131,13 +120,12 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
                 MainMenu.COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_DARKMODE;
                 setLabelIcon(IMAGE_PATH_DARKMODE);
                 mainMenu.reColor();
+                GameWindow.playSound(GameWindow.SOUND_MOVE);
             }
         });
     }
 
-    /**
-     * Method initializes {@link #button_blue}
-     */
+    /** Method initializes {@link #button_blue} **/
     private void initButton_blue() {
         button_blue = new JButton(STRING_BUTTON_blue);
         button_blue.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
@@ -154,13 +142,12 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
                 MainMenu.COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_BLUE;
                 setLabelIcon(IMAGE_PATH_BLUE);
                 mainMenu.reColor();
+                GameWindow.playSound(GameWindow.SOUND_MOVE);
             }
         });
     }
 
-    /**
-     * Method initializes {@link #button_green}
-     */
+    /** Method initializes {@link #button_green} **/
     private void initButton_green() {
         button_green = new JButton(STRING_BUTTON_GREEN);
         button_green.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
@@ -178,6 +165,7 @@ public class MainMenu_panel_RHS extends JPanel implements IChessFrame {
                 MainMenu.COLOR_FIELD_MARKED = COLOR_FIELD_MARKED_GREEN;
                 setLabelIcon(IMAGE_PATH_GREEN);
                 mainMenu.reColor();
+                GameWindow.playSound(GameWindow.SOUND_MOVE);
             }
         });
     }

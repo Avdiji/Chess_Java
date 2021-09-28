@@ -3,7 +3,6 @@ package Chess.Game.GUI.ChessboardGUI;
 import Chess.Game.GUI.IChessFrame;
 import Chess.Game.GUI.MainMenu;
 import Chess.Game.Logic.ChessField;
-import Chess.Game.Logic.Pieces.IChessPiece;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -13,7 +12,7 @@ import java.awt.GridLayout;
 
 /**
  * @author Fitor Avdiji
- *
+ * <p>
  * Class implements the entire chessBoard of the Game (with player indicator etc...)
  */
 public class BoardWrapper extends JPanel implements IChessFrame {
@@ -21,20 +20,14 @@ public class BoardWrapper extends JPanel implements IChessFrame {
     /** Margin of the Board Wrapper **/
     private static final int MARGIN_BOARD[] = {50, 160, 100, 160};
 
-    /**
-     * Panels to indicate, which players turn it is
-     **/
+    /** Panels to indicate, which players turn it is **/
     private JPanel indicator_black;
     private JPanel indicator_white;
 
-    /**
-     * Wrapper Panel
-     **/
+    /** Wrapper Panel, which contains the panel with the chessfield **/
     private JPanel panel_chessBoard;
 
-    /**
-     * The Chess Board with the pieces only
-     **/
+    /** Panel, which containss the chessfield **/
     private JPanel panel_chessPieces;
 
     /** ChessField with all the Buttons **/
@@ -42,8 +35,10 @@ public class BoardWrapper extends JPanel implements IChessFrame {
 
     /**
      * Constructor
+     *
+     * @param chessField chessfield with all the pieces
      */
-    public BoardWrapper(final ChessField chessField){
+    public BoardWrapper(final ChessField chessField) {
         this.chessField = chessField;
         initMainFrame();
         initComponents();
@@ -52,17 +47,19 @@ public class BoardWrapper extends JPanel implements IChessFrame {
 
     /**
      * Setter for {@link #indicator_white}
+     *
      * @param color new Color for the white indicator
      */
-    public void setIndicator_white(final Color color){
+    public void setIndicator_white(final Color color) {
         indicator_white.setBackground(color);
     }
 
     /**
      * Setter for {@link #indicator_black}
+     *
      * @param color new Color for the white indicator
      */
-    public void setIndicator_black(final Color color){
+    public void setIndicator_black(final Color color) {
         indicator_black.setBackground(color);
     }
 
@@ -96,7 +93,5 @@ public class BoardWrapper extends JPanel implements IChessFrame {
     }
 
     @Override
-    public void reColor() {
-
-    }
+    public void reColor() {}
 }

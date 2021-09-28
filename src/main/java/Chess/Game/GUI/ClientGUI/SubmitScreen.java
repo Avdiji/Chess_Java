@@ -27,7 +27,7 @@ public class SubmitScreen extends JFrame implements IChessFrame {
     private final int SIZE_HEIGHT = 200;
 
     /** Margin of the Components of this class **/
-    private final int MARGIN_COMPONENTS[] = {10,10,10,10};
+    private final int MARGIN_COMPONENTS[] = {10, 10, 10, 10};
 
     /** Components of this Frame **/
     private JLabel label_message;
@@ -41,36 +41,35 @@ public class SubmitScreen extends JFrame implements IChessFrame {
 
     /**
      * Constructor
+     *
+     * @param sl corresponding serverLogin
      */
     public SubmitScreen(final ServerLogin sl) {
         this.sl = sl;
         initComponents();
         initMainFrame();
         addComponents();
-
         this.setVisible(true);
     }
 
     /**
      * Setter for the text of {@link #label_message}
+     *
      * @param string string displayed in label
      */
-    public void setString_label(final String string){
+    public void setString_label(final String string) {
         label_message.setText(string);
     }
 
     /**
      * Setter for the text of {@link #button}
+     *
      * @param string string displayed in the button
      */
-    public void setString_button(final String string){
-        button.setText(string);
-    }
+    public void setString_button(final String string) { button.setText(string); }
 
-    /**
-     * Method initializes {@link #button}
-     */
-    private void initButton(){
+    /** Method initializes {@link #button} **/
+    private void initButton() {
         button = new JButton();
         button.setFont(new Font(FONT, FONT_TYPE, SIZE_BUTTON_LABEL));
         button.setForeground(MainMenu.COLOR_LABEL);
@@ -86,10 +85,8 @@ public class SubmitScreen extends JFrame implements IChessFrame {
         });
     }
 
-    /**
-     * Method removes the Button from the screen
-     */
-    public void removeButton(){
+    /** Method removes the Button from this frame **/
+    public void removeButton() {
         this.remove(button);
     }
 
