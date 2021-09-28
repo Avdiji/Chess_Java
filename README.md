@@ -146,7 +146,7 @@ This section is all about how to get the game, as well as the server, running
 
 ### 3.1 Downloading and executing the Game
 
-1. Download this Repository
+1. Download the runnable jar files in the "out" - folder of this repository
 2. Download the Latest JDK Version (at least jdk 16.0.2)
 3. Add JDK to your environment variables (PATH)
     - Copy the path to the bin folder of the installed jdk version
@@ -154,7 +154,7 @@ This section is all about how to get the game, as well as the server, running
     - Click environment variables
     - find the PATH environment variable and select it
     - click new and paste the Path to your previously copied bin folder
-4. You can now run the Game by double-clicking the runnable jar in the repository, which you can find in the "out" - folder
+4. You can now run the Game by double-clicking the previously downloaded jar file, which you can find in the "out" - folder
 
 ### 3.2 Running the Server and Playing online
 
