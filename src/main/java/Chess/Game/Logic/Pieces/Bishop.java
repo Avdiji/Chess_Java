@@ -16,9 +16,7 @@ import java.util.stream.Collectors;
  */
 public class Bishop implements IChessPiece {
 
-    /**
-     * Default Constructor
-     **/
+    /** Default Constructor **/
     public Bishop() {
     }
 

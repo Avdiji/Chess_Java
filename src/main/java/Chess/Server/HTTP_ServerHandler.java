@@ -17,26 +17,18 @@ import java.net.Socket;
  */
 public class HTTP_ServerHandler {
 
-    /**
-     * Color of the Player
-     **/
+    /** Color of the Player **/
     private final EPlayerColor playerColor;
 
-    /**
-     * Corresponding Serversocket
-     **/
+    /** Corresponding Serversocket **/
     private final ServerSocket serverSocket;
 
-    /**
-     * Socket of the Player
-     **/
+    /** Socket of the Player **/
     private Socket playerSocket;
     private BufferedReader br;
     private BufferedWriter bw;
 
-    /**
-     * Last move received from the Clients
-     **/
+    /** Last move received from the Clients **/
     private String lastMoveReceived;
 
     /**
@@ -61,18 +53,14 @@ public class HTTP_ServerHandler {
         return lastMoveReceived;
     }
 
-    /**
-     * Method establishes a new socket connection
-     **/
+    /** Method establishes a new socket connection **/
     protected void establishConnection() throws IOException {
         playerSocket = serverSocket.accept();
         br = new BufferedReader(new InputStreamReader(playerSocket.getInputStream()));
         bw = new BufferedWriter(new OutputStreamWriter(playerSocket.getOutputStream()));
     }
 
-    /**
-     * Method handles Get requests
-     **/
+    /** Method handles Get requests **/
     protected void handleGetRequest(String message) throws IOException {
         while (!br.readLine().isEmpty()) ;
         message += "\r\n";
@@ -89,9 +77,7 @@ public class HTTP_ServerHandler {
         br.close();
     }
 
-    /**
-     * Method handles Put requests
-     **/
+    /** Method handles Put requests **/
     protected void handlePostRequest() throws IOException {
         String line;
         while (!br.readLine().isEmpty()) ;

@@ -21,9 +21,7 @@ public enum EChessPieces {
     KING_BLACK("/Pieces/Black/king_black.png"),
     EMPTY("/Pieces/empty.png");
 
-    /**
-     * variable contains the path to the corresponding piece
-     **/
+    /** variable contains the path to the corresponding piece **/
     private final String path;
 
     /**

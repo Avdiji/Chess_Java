@@ -10,13 +10,10 @@ import Chess.Game.Logic.Pieces.EChessPieces;
  */
 public class Player {
 
-    /**
-     * Color of the Player
-     **/
+    /** Color of the Player **/
     private final EPlayerColor playerColor;
-    /**
-     * Last move the Player executed e.g.: "A1:B3"
-     **/
+
+    /** Last move the Player executed e.g.: "A1:B3" **/
     private String lastMove;
 
     /**

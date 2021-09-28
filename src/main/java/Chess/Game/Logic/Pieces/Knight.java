@@ -16,11 +16,8 @@ import java.util.stream.Collectors;
  */
 public class Knight implements IChessPiece {
 
-    /**
-     * Default Constructor
-     **/
-    public Knight() {
-    }
+    /** Default Constructor **/
+    public Knight() {}
 
     /**
      * Method returns a Set of Positions the Knight could theoretically execute

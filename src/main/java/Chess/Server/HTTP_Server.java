@@ -14,22 +14,14 @@ import java.util.Random;
  */
 public class HTTP_Server {
 
-
-    /**
-     * Port of this Server
-     **/
+    /** Port of this Server **/
     private static final int PORT = 80;
 
-    /**
-     * Random object
-     **/
+    /** Random object **/
     private final static Random random = new Random();
 
-    /**
-     * Constructor
-     **/
-    public HTTP_Server() {
-    }
+    /** Constructor **/
+    public HTTP_Server() {}
 
     /**
      * Method checks whether the game has been finished and returns true if that is the case
@@ -46,7 +38,6 @@ public class HTTP_Server {
     }
 
     public void runServer() throws IOException, InterruptedException {
-
         while (true) {
             try (ServerSocket serverSocket = new ServerSocket(PORT)) {
                 System.out.println("Starting New Game");

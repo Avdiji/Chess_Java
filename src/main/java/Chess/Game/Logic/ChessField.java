@@ -23,27 +23,20 @@ import java.util.List;
  */
 public class ChessField {
 
-    /**
-     * field of the Chess Game
-     **/
+    /** Field of the chess game **/
     private List<ChessFieldButton> field;
 
-    /**
-     * Players
-     **/
+    /** Players **/
     private final Player player1;
     private final Player player2;
 
-    /**
-     * Color to determine which players turn it is
-     **/
+    /** Color to determine which players turn it is **/
     private EPlayerColor currentPlayerColor;
 
     /**
      * Constructor initializes:<br>
      * {@link #player1} <br>
      * {@link #player2} <br>
-     * {@link #movement} <br>
      *
      * @param player1 player1
      * @param player2 player2
@@ -56,7 +49,6 @@ public class ChessField {
 
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
-
     /**
      * Getter for {@link #field}
      *
@@ -104,9 +96,7 @@ public class ChessField {
         this.currentPlayerColor = currentPlayerColor;
     }
 
-    /**
-     * Method removes all disables every marking on the field
-     */
+    /** Method removes all disables every marking on the field **/
     public void removeMarkings() {
         field.stream().filter(ChessFieldButton::isMarked).forEach(piece -> piece.setMarked(false));
         field.stream().filter(ChessFieldButton::isEndangered).forEach(piece -> piece.setEndangered(false));
@@ -114,7 +104,7 @@ public class ChessField {
     }
 
     /** Method resets the Borders of all the fields **/
-    public void resetBorders(){
+    public void resetBorders() {
         Border defaultBorder = new LineBorder(MainMenu.COLOR_FIELD_MARKED, 0);
         field.stream().forEach(button -> button.setBorder(defaultBorder));
     }
@@ -157,7 +147,6 @@ public class ChessField {
                     case "BLACK" -> MainMenu.COLOR_FIELD_BLACK;
                     default -> throw new IllegalStateException("Unexpected value: " + values[3]);
                 };
-
                 ChessFieldButton tmp_button = new ChessFieldButton(new Position(tmp_row, tmp_column), EChessPieces.valueOf(values[2]), tmp_background);
                 tmp_button.initPiece();
                 field.add(tmp_button);

@@ -22,18 +22,22 @@ import java.io.InputStream;
  */
 public class ChessFieldButton extends JButton {
 
+    /** Constant int for the thickness of a button in a chessfield **/
     private static final int BORDER_THICKNESS = 3;
 
     /** Position of the Button **/
     private Position position;
+
     /** Background Color of the button **/
     private final Color backgroundColor;
+
     /** Type of the Piece **/
     private EChessPieces type;
+
     /** EPlayerColor of the Piece in this Button **/
     private EPlayerColor playerColor;
 
-    /** booleans to determine whether the button is marked or endangered **/
+    /** Booleans to determine whether the button is marked or endangered **/
     private boolean marked;
     private boolean endangered;
 
@@ -66,12 +70,9 @@ public class ChessFieldButton extends JButton {
         this.backgroundColor = backgroundColor;
         marked = false;
         endangered = false;
-
         enPassant = false;
-
         kingMoved = false;
         rookMoved = false;
-
         playerColor = type.toString().contains("WHITE") ?
                 EPlayerColor.WHITE : (type.toString().contains("BLACK") ?
                 EPlayerColor.BLACK :
@@ -80,7 +81,6 @@ public class ChessFieldButton extends JButton {
 
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
     //GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER GETTER //
-
     /**
      * Getter for {@link #marked}
      *
@@ -158,7 +158,6 @@ public class ChessFieldButton extends JButton {
 
     //SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER //
     //SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER SETTER //
-
     /**
      * Method sets {@link #marked} to the given parameter and fills the background
      *
@@ -236,29 +235,31 @@ public class ChessFieldButton extends JButton {
 
     /**
      * Method sets the icon of a Piece (needed for jar)
+     *
      * @param path path of the corresponding Image
      */
-    private void setPieceIcon(final String path){
+    private void setPieceIcon(final String path) {
         InputStream is = getClass().getResourceAsStream(path);
         try {
             this.setIcon(new ImageIcon(ImageIO.read(is)));
-        }catch (IOException e){}
+        } catch (IOException e) {
+        }
     }
 
     /** Method thickens the Frame of a button **/
-    public void thickenFrame(final Color color){
+    public void thickenFrame(final Color color) {
         Border border = new LineBorder(color, BORDER_THICKNESS);
         this.setBorder(border);
     }
 
-    /** Method initializes the Button */
+    /** Method initializes the Button **/
     public void initPiece() {
         this.setPreferredSize(new Dimension(IChessPiece.SIZE_FIELD, IChessPiece.SIZE_FIELD));
         this.setBackground(backgroundColor);
         renderPiece();
     }
 
-    /** Method renders the Button (sets the icon) */
+    /** Method renders the Button (sets the icon) **/
     public void renderPiece() {
         if (type == EChessPieces.EMPTY) {
             this.setIcon(new ImageIcon());

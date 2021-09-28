@@ -1,6 +1,5 @@
 package Chess.Game.Logic;
 
-import Chess.Game.GUI.ChessboardGUI.GameWindow;
 import Chess.Game.Logic.Pieces.Bishop;
 import Chess.Game.Logic.Pieces.EChessPieces;
 import Chess.Game.Logic.Pieces.Empty;
@@ -25,9 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class ChessPieceMovement {
 
-    /**
-     * All the possible pieces
-     **/
+    /** All the possible pieces **/
     private static final IChessPiece PAWN = new Pawn();
     private static final IChessPiece ROOK = new Rook();
     private static final IChessPiece BISHOP = new Bishop();
@@ -36,11 +33,8 @@ public class ChessPieceMovement {
     private static final IChessPiece QUEEN = new Queen();
     private static final IChessPiece EMPTY = new Empty();
 
-    /**
-     * Default Constructor
-     **/
-    public ChessPieceMovement() {
-    }
+    /** Default Constructor **/
+    public ChessPieceMovement() {}
 
     /**
      * Method returns a Set of potential moves thePiece could make
@@ -98,8 +92,7 @@ public class ChessPieceMovement {
                         if (moves.contains(kingsPosition))
                             result.set(true);
                     });
-        } catch (NoSuchElementException e) {
-        }
+        } catch (NoSuchElementException e) {}
         return result.get();
     }
 
@@ -115,7 +108,6 @@ public class ChessPieceMovement {
         field.stream()
                 .filter(button -> button.getPlayerColor() == currentColor)
                 .forEach(button -> allPossibleMoves.addAll(getSafePositions(button.getPosition(), currentColor, field)));
-
         return (allPossibleMoves.size() == 0 && isCheck(currentColor, field));
     }
 
@@ -131,12 +123,10 @@ public class ChessPieceMovement {
         field.stream()
                 .filter(button -> button.getPlayerColor() == currentColor)
                 .forEach(button -> allPossibleMoves.addAll(getSafePositions(button.getPosition(), currentColor, field)));
-
         int amountOfPieces = (int) field.stream()
                 .filter(button -> button.getType() != EChessPieces.KING_WHITE && button.getType() != EChessPieces.KING_BLACK)
                 .filter(button -> button.getPlayerColor() != EPlayerColor.NONE)
                 .count();
-
         return (allPossibleMoves.size() == 0 && !isCheck(currentColor, field) || amountOfPieces == 0);
     }
 
@@ -170,9 +160,8 @@ public class ChessPieceMovement {
             capturedPiece.setType(currentType);
             capturedPiece.setPlayerColor(currentPlayerColor);
 
-            if (isCheck(currentPlayerColor, field)) {
+            if (isCheck(currentPlayerColor, field))
                 toRemove.add(position);
-            }
 
             currentPiece.setType(currentType);
             currentPiece.setPlayerColor(currentPlayerColor);
