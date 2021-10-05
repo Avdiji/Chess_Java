@@ -38,10 +38,10 @@ enemy.
 
 Knight movement set:
 
-- Forward, Forward, Forward, Left/Right
-- Back, Back, Back, Left/Right
-- Left, Left, Left, Forward/Back
-- Right, Right, Right, Forward/Back
+- Forward, Forward, Left/Right
+- Back, Back, Left/Right
+- Left, Left, Forward/Back
+- Right, Right, Forward/Back
 
 #### 1.2.6 The Pawn
 
